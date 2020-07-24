@@ -1,7 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/html_parser.dart';
+import 'package:flutter_html/style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:video_box/video_box.dart';
@@ -144,7 +146,12 @@ class PostsFutureBuilder extends StatelessWidget {
                                             Container(
                                               alignment: Alignment.centerLeft,
                                               padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
-                                              child: HtmlWidget( p['content'], hyperlinkColor: Colors.lightBlue, textStyle: TextStyle(height: 1.6)),
+                                              child: Html(
+                                                data: p['content'],
+                                                style: {
+                                                  "p" : Style( height: 1.4 )
+                                                }
+                                              )
                                             ),
                                         Row(
                                           children: <Widget>[
