@@ -49,7 +49,7 @@ class PostsFutureBuilder extends StatelessWidget {
                       Container(
                           padding: const EdgeInsets.fromLTRB(0, 22, 0, 10),
                           decoration: BoxDecoration(
-                            
+
                           ),
                           child: Container(
                               color: Colors.white,
