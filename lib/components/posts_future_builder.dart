@@ -40,130 +40,131 @@ class PostsFutureBuilder extends StatelessWidget {
             return new ListView(
                 children: <Widget>[
                   for (var p in snapshot.data)
-                    Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Card(
-                            elevation: 7,
-                            shadowColor: Colors.black26,
-                            child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border(
-//                                    top: BorderSide(width: 2.0, color: Colors.blueGrey),
+                    if(!p['hidden'])
+                      Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Card(
+                              elevation: 7,
+                              shadowColor: Colors.black26,
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+  //                                    top: BorderSide(width: 2.0, color: Colors.blueGrey),
+                                    ),
                                   ),
-                                ),
-                                child: Column(
-                                    children: <Widget>[
-                                      if(p['shared'])
-                                        Container(
-                                          child: Column(
-                                            children: <Widget>[
-                                              Row(
-                                                children: <Widget>[
-                                                   Align(
-                                                       child:Container(
-                                                         width:70,
-                                                         padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
-                                                         child: GestureDetector(
-                                                            child:  Image.network(C.API_URI + p['sharedImageUri'], width: 50),
-                                                            onTap: () => {
-                                                              _setProfileId(p['sharedAccountId']).then((data){
-                                                                navigationService.navigateTo('/profile');
-                                                              })
-                                                            },
-                                                          )
-                                                      ),
-                                                     alignment: Alignment.topLeft,
-                                                  ),
-                                                  Align(
-                                                    child: Column(
-                                                      children: <Widget> [
-                                                        Container(
-                                                          padding:EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                                          child: GestureDetector(
-                                                            child:Text(p['sharedAccount'], style: TextStyle( color: Colors.white ),textAlign: TextAlign.left,),
-                                                            onTap: () => {
-                                                              _setProfileId(p['sharedAccountId']).then((data){
-                                                                navigationService.navigateTo('/profile');
-                                                              })
-                                                            },
+                                  child: Column(
+                                      children: <Widget>[
+                                        if(p['shared'])
+                                          Container(
+                                            child: Column(
+                                              children: <Widget>[
+                                                Row(
+                                                  children: <Widget>[
+                                                     Align(
+                                                         child:Container(
+                                                           width:70,
+                                                           padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                                                           child: GestureDetector(
+                                                              child:  Image.network(C.API_URI + p['sharedImageUri'], width: 50),
+                                                              onTap: () => {
+                                                                _setProfileId(p['sharedAccountId']).then((data){
+                                                                  navigationService.navigateTo('/profile');
+                                                                })
+                                                              },
+                                                            )
+                                                        ),
+                                                       alignment: Alignment.topLeft,
+                                                    ),
+                                                    Align(
+                                                      child: Column(
+                                                        children: <Widget> [
+                                                          Container(
+                                                            padding:EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                                            child: GestureDetector(
+                                                              child:Text(p['sharedAccount'], style: TextStyle( color: Colors.white ),textAlign: TextAlign.left,),
+                                                              onTap: () => {
+                                                                _setProfileId(p['sharedAccountId']).then((data){
+                                                                  navigationService.navigateTo('/profile');
+                                                                })
+                                                              },
+                                                            ),
+                                                            alignment: Alignment.centerLeft,
                                                           ),
-                                                          alignment: Alignment.centerLeft,
-                                                        ),
-                                                        Container(
-                                                            padding:EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                                            child: Text(p['timeSharedAgo'], style: TextStyle( color: Colors.white ), textAlign: TextAlign.left,),
-                                                            alignment: Alignment.centerLeft,
-                                                        ),
-                                                        Container(
-                                                            width: _width,
-                                                            padding:EdgeInsets.fromLTRB(0, 0, 10, 20),
-                                                            child: Text(p['sharedComment'], style: TextStyle( color: Colors.white ), textAlign: TextAlign.left,),
-                                                            alignment: Alignment.centerLeft,
-                                                        )
-                                                      ],
-                                                        mainAxisAlignment: MainAxisAlignment.start,
-                                                        crossAxisAlignment: CrossAxisAlignment.start
+                                                          Container(
+                                                              padding:EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                                              child: Text(p['timeSharedAgo'], style: TextStyle( color: Colors.white ), textAlign: TextAlign.left,),
+                                                              alignment: Alignment.centerLeft,
+                                                          ),
+                                                          Container(
+                                                              width: _width,
+                                                              padding:EdgeInsets.fromLTRB(0, 0, 10, 20),
+                                                              child: Text(p['sharedComment'], style: TextStyle( color: Colors.white ), textAlign: TextAlign.left,),
+                                                              alignment: Alignment.centerLeft,
+                                                          )
+                                                        ],
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.start
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Align(
-                                                    child: Container(
-                                                        width: 70,
-                                                        padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
-                                                        child: Text("Shared", style: TextStyle(color: Colors.white, fontSize:10), textAlign: TextAlign.right,)
+                                                    Align(
+                                                      child: Container(
+                                                          width: 70,
+                                                          padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
+                                                          child: Text("Shared", style: TextStyle(color: Colors.white, fontSize:10), textAlign: TextAlign.right,)
+                                                      ),
+                                                      alignment: Alignment.topRight,
                                                     ),
-                                                    alignment: Alignment.topRight,
-                                                  ),
+                                                  ],
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  )
                                                 ],
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                )
-                                              ],
+                                            ),
+                                            color: Colors.lightBlue,
                                           ),
-                                          color: Colors.lightBlue,
+                                        if(p['videoFileUri'] != null)
+                                          Container(
+                                            child: AspectRatio(
+                                              aspectRatio: _calculateAspectRatio(context),
+                                              child: new VideoBox(controller: _getVideoController(C.API_URI + p['videoFileUri'])),
+                                            ),
+                                          ),
+                                        if(p['imageFileUris'] != null)
+                                          for(var imageUri in p['imageFileUris'])
+                                            Container( child: Image.network(C.API_URI + imageUri, fit: BoxFit.cover, width: mediaQuery.size.width)),
+                                        if(p['content'] != null)
+                                          Container( child: Text(p['content']), padding: EdgeInsets.fromLTRB(30, 20, 40, 20), alignment: Alignment.topLeft,),
+                                        Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                              flex: 6, // 60% of space => (6/(6 + 4))
+                                              child: Container(
+                                                height: 5,
+                                                color: Colors.lightBlue,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 3, // 60% of space => (6/(6 + 4))
+                                              child: Container(
+                                                height: 5,
+                                                color: Colors.lightGreen,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1, // 60% of space => (6/(6 + 4))
+                                              child: Container(
+                                                height: 5,
+                                                color: Colors.yellow,
+                                              ),
+                                            )
+                                          ],
                                         ),
-                                      if(p['videoFileUri'] != null)
-                                        Container(
-                                          child: AspectRatio(
-                                            aspectRatio: _calculateAspectRatio(context),
-                                            child: new VideoBox(controller: _getVideoController(C.API_URI + p['videoFileUri'])),
-                                          ),
-                                        ),
-                                      if(p['imageFileUris'] != null)
-                                        for(var imageUri in p['imageFileUris'])
-                                          Container( child: Image.network(C.API_URI + imageUri, fit: BoxFit.cover, width: mediaQuery.size.width)),
-                                      if(p['content'] != null)
-                                        Container( child: Text(p['content']), padding: EdgeInsets.fromLTRB(30, 20, 40, 20), alignment: Alignment.topLeft,),
-                                      Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            flex: 6, // 60% of space => (6/(6 + 4))
-                                            child: Container(
-                                              height: 5,
-                                              color: Colors.lightBlue,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 3, // 60% of space => (6/(6 + 4))
-                                            child: Container(
-                                              height: 5,
-                                              color: Colors.lightGreen,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 1, // 60% of space => (6/(6 + 4))
-                                            child: Container(
-                                              height: 5,
-                                              color: Colors.yellow,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      PostsBottomContent(p),
-                                    ]
-                                )
-                            )
-                        )
-                    ),
+                                        PostsBottomContent(p),
+                                      ]
+                                  )
+                              )
+                          )
+                      )
                 ]
             );
           } else if (snapshot.hasError) {

@@ -30,7 +30,7 @@ class _PostsState extends BaseState<Posts>{
       body: new Stack(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.fromLTRB(0, 37, 0, 0),
+            padding: EdgeInsets.fromLTRB(0, 37, 0, 70),
             child: PostsFutureBuilder()
           ),
           SearchBox(false),

@@ -133,25 +133,29 @@ class PostsBottomContent extends StatelessWidget {
             ),
           )
         ),
-        if(post['shared'])
-          if(post['deletable'])
+        if(post['shared'] && post['deletable'])
             Align(
                 alignment: Alignment.bottomLeft,
                 child: Container(
                     padding: EdgeInsets.fromLTRB(20, 110, 0, 20),
-                    child: GestureDetector(
-                        child: Text("x", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black12))
+                    child: MaterialButton(
+                        child: Text("x", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black12)),
+                        onPressed: () => {
+                          unshare(post['postShareId'])
+                        }
                     )
                 )
             )
-        else
-          if(post['deletable'])
+        else if(post['deletable'])
             Align(
                 alignment: Alignment.bottomLeft,
                 child: Container(
                     padding: EdgeInsets.fromLTRB(20, 110, 0, 20),
-                    child: GestureDetector(
-                        child: Text("x", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black12))
+                    child: MaterialButton(
+                        child: Text("x", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black12)),
+                        onPressed: () => {
+                          deletePost(post['id'])
+                        }
                     )
                 )
             )
@@ -194,4 +198,53 @@ class PostsBottomContent extends StatelessWidget {
     prefs.setString(C.ID, id.toString());
   }
 
+  Future deletePost(id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final session = prefs.get(C.SESSION);
+    http.Response getResponse;
+
+    try {
+      getResponse = await http.delete(
+          C.API_URI + "post/remove/$id",
+          headers: {
+            "cookie": session
+          }
+      );
+      print(getResponse.body.toString());
+      dynamic status = jsonDecode(getResponse.body.toString());
+      if(status['success']){
+      }
+
+      navigationService.navigateTo('/posts');
+
+    }catch(e){
+      print("error $e");
+    }
+    return null;
+  }
+
+
+  Future unshare(id) async {
+    print("unshare");
+    final prefs = await SharedPreferences.getInstance();
+    final session = prefs.get(C.SESSION);
+    http.Response getResponse;
+
+    try {
+      getResponse = await http.delete(
+          C.API_URI + "post/unshare/$id",
+          headers: {
+            "cookie": session
+          }
+      );
+      print(getResponse.body.toString());
+      dynamic status = jsonDecode(getResponse.body.toString());
+      if(status['success']){
+      }
+      navigationService.navigateTo('/posts');
+    }catch(e){
+      print("error $e");
+    }
+    return null;
+  }
 }
