@@ -9,8 +9,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
-        android:label="zeus"
+        android:name="xyz.ioc.ZeusMobile"
+        android:label="Zeus"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
