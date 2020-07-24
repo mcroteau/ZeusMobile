@@ -142,7 +142,8 @@ class PostsBottomContent extends StatelessWidget {
                         child: Text("x", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black12)),
                         onPressed: () => {
                           unshare(post['postShareId'])
-                        }
+                        },
+                        minWidth: 15,
                     )
                 )
             )
@@ -155,7 +156,8 @@ class PostsBottomContent extends StatelessWidget {
                         child: Text("x", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black12)),
                         onPressed: () => {
                           deletePost(post['id'])
-                        }
+                        },
+                        minWidth: 15,
                     )
                 )
             )
