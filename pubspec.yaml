@@ -23,10 +23,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_widget_from_html:
   shared_preferences:
   flutter_modular:
   search_app_bar:
-  image_picker:
+  image_picker: 0.6.7+3
   file_picker:
   video_box:
   get_it:
