@@ -30,14 +30,15 @@ class _PostsState extends BaseState<Posts>{
       body: new Stack(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.fromLTRB(0, 37, 0, 70),
-            child: PostsFutureBuilder()
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: PostsFutureBuilder(),
+            color: Colors.black12,
           ),
-          SearchBox(false),
+          SearchBox(true),
         ],
       ),
       floatingActionButton: Container(
-        padding: EdgeInsets.fromLTRB(30, 40, 0, 0),
+        padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
         child: new RaisedButton(
           onPressed: () => {
               Navigator.pushReplacement(
@@ -55,7 +56,6 @@ class _PostsState extends BaseState<Posts>{
               ]
             )
         ),
-        alignment: Alignment.topCenter,
       ),
     );
   }

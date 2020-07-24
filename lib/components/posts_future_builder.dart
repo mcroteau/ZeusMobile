@@ -31,21 +31,28 @@ class PostsFutureBuilder extends StatelessWidget {
     this.mediaQuery = MediaQuery.of(context);
     this.controller = new TextEditingController();
 
-    double _width = MediaQuery.of(context).size.width*0.50;
+    double _width = MediaQuery.of(context).size.width*0.57;
 
     return new FutureBuilder<dynamic>(
         future: _fetch(),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data.length > 0) {
             return new ListView(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 171),
                 children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.fromLTRB(1, 91, 0, 0),
+                    child: Text("Latest Posts", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
+                  ),
                   for (var p in snapshot.data)
                     if(!p['hidden'])
                       Container(
-                          padding: const EdgeInsets.all(10),
-                          child: Card(
-                              elevation: 7,
-                              shadowColor: Colors.black26,
+                          padding: const EdgeInsets.fromLTRB(0, 22, 0, 10),
+                          decoration: BoxDecoration(
+                            
+                          ),
+                          child: Container(
+                              color: Colors.white,
                               child: Container(
                                   decoration: BoxDecoration(
                                     border: Border(
@@ -133,7 +140,7 @@ class PostsFutureBuilder extends StatelessWidget {
                                           for(var imageUri in p['imageFileUris'])
                                             Container( child: Image.network(C.API_URI + imageUri, fit: BoxFit.cover, width: mediaQuery.size.width)),
                                         if(p['content'] != null)
-                                          Container( child: Text(p['content']), padding: EdgeInsets.fromLTRB(30, 20, 40, 20), alignment: Alignment.topLeft,),
+                                          Container( child: Text(p['content']), padding: EdgeInsets.fromLTRB(20, 25, 40, 20), alignment: Alignment.topLeft,),
                                         Row(
                                           children: <Widget>[
                                             Expanded(

@@ -32,7 +32,7 @@ class PostsBottomContent extends StatelessWidget {
               })
             },
             child: Container(
-              padding: EdgeInsets.fromLTRB(30, 10, 0, 0),
+              padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
               child: Image.network(C.API_URI + post['imageUri'], width: 50),
             ),
           ),
@@ -46,7 +46,7 @@ class PostsBottomContent extends StatelessWidget {
                 })
               },
               child: Container(
-                padding: EdgeInsets.fromLTRB(100, 10, 0, 0),
+                padding: EdgeInsets.fromLTRB(82, 10, 0, 0),
                 child: GestureDetector(
                   child: Text(post['name'], style: TextStyle( fontWeight: FontWeight.w700, fontSize: 14 )),
                   onTap: () => {
@@ -67,7 +67,7 @@ class PostsBottomContent extends StatelessWidget {
                 });
               },
               child: Container(
-                padding: EdgeInsets.fromLTRB(100, 30, 0, 0),
+                padding: EdgeInsets.fromLTRB(82, 30, 0, 0),
                 child: Text(post['timeAgo'])
               )
           )
@@ -137,7 +137,7 @@ class PostsBottomContent extends StatelessWidget {
             Align(
                 alignment: Alignment.bottomLeft,
                 child: Container(
-                    padding: EdgeInsets.fromLTRB(20, 110, 0, 20),
+                    padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
                     child: MaterialButton(
                         child: Text("x", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black12)),
                         onPressed: () => {
@@ -151,7 +151,7 @@ class PostsBottomContent extends StatelessWidget {
             Align(
                 alignment: Alignment.bottomLeft,
                 child: Container(
-                    padding: EdgeInsets.fromLTRB(20, 110, 0, 20),
+                    padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
                     child: MaterialButton(
                         child: Text("x", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black12)),
                         onPressed: () => {

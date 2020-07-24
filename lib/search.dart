@@ -24,9 +24,10 @@ class _SearchState extends BaseState<Search>{
       body: new Stack(
         children: <Widget>[
           Container(
+            padding: EdgeInsets.fromLTRB(0, 53, 0, 0),
             child: new SearchResultsFutureBuilder(),
           ),
-          SearchBox(false)
+          SearchBox(true)
         ],
       ),
     );

@@ -23,9 +23,9 @@ class SearchBox extends StatelessWidget{
   Widget build(BuildContext context) {
     if(alignUp)
       return new Positioned(
-          top:27,
-          left:10,
-          right: 10,
+          top:17,
+          left:2,
+          right: 2,
           child: SearchBoxContent()
       );
     if(!alignUp)
