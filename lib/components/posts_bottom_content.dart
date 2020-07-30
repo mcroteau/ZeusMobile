@@ -32,7 +32,7 @@ class PostsBottomContent extends StatelessWidget {
               })
             },
             child: Container(
-              padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+              padding: EdgeInsets.fromLTRB(4, 10, 0, 0),
               child: Image.network(C.API_URI + post['imageUri'], width: 50),
             ),
           ),
@@ -46,7 +46,7 @@ class PostsBottomContent extends StatelessWidget {
                 })
               },
               child: Container(
-                padding: EdgeInsets.fromLTRB(82, 10, 0, 0),
+                padding: EdgeInsets.fromLTRB(67, 10, 0, 0),
                 child: GestureDetector(
                   child: Text(post['name'], style: TextStyle( fontWeight: FontWeight.w700, fontSize: 14 )),
                   onTap: () => {
@@ -67,7 +67,7 @@ class PostsBottomContent extends StatelessWidget {
                 });
               },
               child: Container(
-                padding: EdgeInsets.fromLTRB(82, 30, 0, 0),
+                padding: EdgeInsets.fromLTRB(67, 30, 0, 0),
                 child: Text(post['timeAgo'])
               )
           )
@@ -98,7 +98,7 @@ class PostsBottomContent extends StatelessWidget {
                                navigationService.navigateTo('/share_post');
                              });
                            },
-                           child: Text("∆", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: Colors.deepOrangeAccent)),
+                           child: Text("∆", style: TextStyle(fontSize: 29, fontWeight: FontWeight.w700, color: Colors.deepOrangeAccent)),
                          )
                        )
                      ],
@@ -123,7 +123,7 @@ class PostsBottomContent extends StatelessWidget {
                               navigationService.navigateTo('/posts');
                             });
                           },
-                          child: Text("π", style: TextStyle( fontSize: 27, fontWeight: FontWeight.w700, color: Colors.lightBlue)),
+                          child: Text("π", style: TextStyle( fontSize: 32, fontWeight: FontWeight.w700, color: Colors.lightBlue)),
                         )
                       )
                     ],

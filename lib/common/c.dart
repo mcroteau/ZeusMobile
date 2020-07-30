@@ -27,9 +27,8 @@ class C {
     ThirdItem,
   ];
 
-//  static const API_URI = "http://zeus.social/b/";
+//  static const API_URI = "zeus.social/b/";
 //  static const API_URI = "http://192.168.1.20:8080/b/";
-//  static const API_URI = "http://144.202.111.162:8080/z/";
   static const API_URI = "http://192.168.1.76:8080/b/";
 //  static const API_URI = "http://192.168.227.12:8080/b/";
 }

@@ -1,4 +1,4 @@
-import 'package:get_it/get_it.dart';
+import 'package:flutter_html/style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/posts_bottom_content.dart';
+import 'package:zeus/components/posts_header.dart';
 import 'package:zeus/services/navigation_service.dart';
 
 
@@ -41,24 +42,23 @@ class PostsFutureBuilder extends StatelessWidget {
             return new ListView(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 171),
                 children: <Widget>[
+                  PostsHeader(),
                   Container(
-                    padding: EdgeInsets.fromLTRB(1, 91, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0, 91, 0, 0),
                     child: Text("Latest Posts", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
                   ),
                   for (var p in snapshot.data)
                     if(!p['hidden'])
-                      Container(
-                          padding: const EdgeInsets.fromLTRB(0, 22, 0, 10),
-                          decoration: BoxDecoration(
-
-                          ),
-                          child: Container(
-                              color: Colors.white,
+                      Card(
+//                          child: Container(
+//                              padding: const EdgeInsets.fromLTRB(0, 22, 0, 10),
+//                              color: Colors.white,
                               child: Container(
                                   decoration: BoxDecoration(
-                                    border: Border(
-  //                                    top: BorderSide(width: 2.0, color: Colors.blueGrey),
+                                    border: Border.all(
+                                      color: Colors.black12
                                     ),
+                                    color: Colors.white54,
                                   ),
                                   child: Column(
                                       children: <Widget>[
@@ -143,9 +143,13 @@ class PostsFutureBuilder extends StatelessWidget {
                                         if(p['content'] != null)
                                             Container(
                                               alignment: Alignment.centerLeft,
-                                              padding: EdgeInsets.fromLTRB(10, 15, 0, 10),
+                                              padding: EdgeInsets.fromLTRB(0, 15, 20, 10),
                                               child: Html(
-                                                data: p['content']
+                                                data: p['content'],
+                                                style: {
+                                                  "a" : Style( fontSize: FontSize.xLarge ),
+                                                  "html" : Style( fontSize: FontSize.xLarge, fontWeight: FontWeight.w300)
+                                                },
                                               )
                                             ),
                                         Row(
@@ -175,9 +179,11 @@ class PostsFutureBuilder extends StatelessWidget {
                                         ),
                                         PostsBottomContent(p),
                                       ]
-                                  )
-                              )
-                          )
+                                  ),
+//                              )
+                          ),
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        elevation: 0,
                       )
                 ]
             );

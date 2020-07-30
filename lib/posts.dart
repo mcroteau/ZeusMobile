@@ -30,11 +30,10 @@ class _PostsState extends BaseState<Posts>{
       body: new Stack(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            color:Colors.white54,
             child: PostsFutureBuilder(),
-            color: Colors.black12,
           ),
-          SearchBox(true),
+//          SearchBox(true),
         ],
       ),
       floatingActionButton: Container(
