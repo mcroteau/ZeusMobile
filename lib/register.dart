@@ -94,7 +94,16 @@ class _RegisterState extends BaseState<Register>{
                 color: Colors.lightBlue,
                 child: new Text("Register", style: TextStyle(color: Colors.white)),
               ),
-            )
+            ),
+             Container(
+                 padding: EdgeInsets.fromLTRB(30, 30, 0, 50),
+                 child: GestureDetector(
+                   child: Text("Signin", style: TextStyle(color: Colors.blueAccent)),
+                   onTap: () => {
+                     _navigateSignin()
+                   },
+                 )
+             )
           ]
         )
       )
@@ -141,6 +150,10 @@ class _RegisterState extends BaseState<Register>{
   }
 
   navigateAuthenticate() {
+    navigationService.navigateTo('/authenticate');
+  }
+
+  _navigateSignin() {
     navigationService.navigateTo('/authenticate');
   }
 }

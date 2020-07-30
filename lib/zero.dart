@@ -17,6 +17,7 @@ class _ZeroState extends State<Zero> {
     return new Scaffold(
       body: Container(
         padding: EdgeInsets.fromLTRB(30, 67, 30, 0),
+        color: Colors.yellowAccent,
         child: Column(
           children: <Widget>[
             Container(
