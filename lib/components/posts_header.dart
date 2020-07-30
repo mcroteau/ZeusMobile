@@ -28,11 +28,12 @@ class PostsHeader extends StatelessWidget{
     return Stack(
         children: <Widget>[
           Container(
-              padding: EdgeInsets.fromLTRB(4, 42, 5, 0),
+              padding: EdgeInsets.fromLTRB(0, 42, 5, 0),
               child: TextField(
                 style: TextStyle(fontSize:24, fontWeight: FontWeight.w300),
                 decoration: InputDecoration(
                   hintText: "Search",
+//                  border: InputBorder.none,
                 ),
                 controller: controller,
                 onSubmitted: (value){
@@ -50,7 +51,7 @@ class PostsHeader extends StatelessWidget{
                 Container(
                 padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
                   child: PopupMenuButton<String>(
-                    icon: Icon(Icons.apps, color: Colors.black12),
+                    icon: Icon(Icons.menu, color: Colors.black12),
                     onSelected: choiceAction,
                     itemBuilder: (BuildContext context) {
                       return C.choices.map((String choice) {

@@ -44,7 +44,7 @@ class PostsFutureBuilder extends StatelessWidget {
                 children: <Widget>[
                   PostsHeader(),
                   Container(
-                    padding: EdgeInsets.fromLTRB(0, 91, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0, 9, 0, 0),
                     child: Text("Latest Posts", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
                   ),
                   for (var p in snapshot.data)

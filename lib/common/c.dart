@@ -16,15 +16,17 @@ class C {
   static const BLUE_BUTTON = TextStyle( fontSize: 17, fontWeight: FontWeight.w200, color: Color.fromRGBO(255, 255, 255, 1.0));
 
   static const H1 = TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Color.fromRGBO(0, 182, 255, 1.0));
-  
-  static const String FirstItem = "Profile";
-  static const String SecondItem = "Invites";
-  static const String ThirdItem = "Logout";
+
+  static const String FirstItem = "Latest Posts";
+  static const String SecondItem = "Profile";
+  static const String ThirdItem = "Invites";
+  static const String FourthItem = "Logout";
 
   static const List<String> choices = <String>[
     FirstItem,
     SecondItem,
     ThirdItem,
+    FourthItem,
   ];
 
 //  static const API_URI = "zeus.social/b/";
