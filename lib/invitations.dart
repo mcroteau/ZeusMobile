@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
+import 'package:zeus/components/posts_header.dart';
 import 'package:zeus/components/searchbox.dart';
 import 'package:zeus/services/navigation_service.dart';
 
@@ -35,13 +36,18 @@ class _InvitationsState extends BaseState<Invitations> {
       body: Stack(
         children: <Widget> [
           Container(
-            padding: EdgeInsets.fromLTRB(10, 72, 10, 10),
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
             child: FutureBuilder(
               future: _fetch(),
               builder: (context, snapshot) {
                 if(snapshot.hasData && snapshot.data.length > 0) {
                   return new ListView(
                     children:<Widget> [
+                      PostsHeader(),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(0, 9, 0, 0),
+                        child: Text("Latest Posts", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
+                      ),
                       for(var invitation in snapshot.data)
                        Card(
                            child: Container(
@@ -97,12 +103,20 @@ class _InvitationsState extends BaseState<Invitations> {
                 }else if(snapshot.hasError){
                   return Center(child: Text("Something went wrong..."));
                 }else{
-                  return Center( child: Text("No invitations as of now!"));
+                  return Column(
+                    children: <Widget>[
+                      PostsHeader(),
+                      Container(
+                          padding: EdgeInsets.fromLTRB(10, 101, 10, 10),
+                          child: Text("No invitations as of now!"))
+                    ],
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  );
                 }
               },
             )
           ),
-          SearchBox(true)
         ]
       )
     );

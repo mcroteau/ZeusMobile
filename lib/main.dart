@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/register.dart';
 import 'package:zeus/share_post.dart';
+import 'package:zeus/suspended.dart';
 import 'package:zeus/zero.dart';
 import 'package:zeus/profile.dart';
 import 'package:zeus/publish.dart';
@@ -58,6 +59,8 @@ class ZeusAppState extends State<ZeusApp>{
                 return MaterialPageRoute(builder: (context) => Authenticate());
               case '/register':
                 return MaterialPageRoute(builder: (context) => Register());
+              case '/suspended':
+                return MaterialPageRoute(builder: (context) => Suspended());
               default:
                 return MaterialPageRoute(builder: (context) => Zero());
             }

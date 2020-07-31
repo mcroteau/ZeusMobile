@@ -48,7 +48,7 @@ class PostsFutureBuilder extends StatelessWidget {
                     child: Text("Latest Posts", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
                   ),
                   for (var p in snapshot.data)
-                    if(!p['hidden'])
+                    if(!p['hidden'] && !p['flagged'])
                       Card(
 //                          child: Container(
 //                              padding: const EdgeInsets.fromLTRB(0, 22, 0, 10),

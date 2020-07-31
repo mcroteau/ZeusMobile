@@ -11,6 +11,7 @@ import 'package:zeus/services/navigation_service.dart';
 class PostsBottomContent extends StatelessWidget {
 
   dynamic post;
+  BuildContext context;
   NavigationService navigationService;
 
   PostsBottomContent(post){
@@ -20,6 +21,7 @@ class PostsBottomContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    this.context = context;
     return Stack(
       alignment: Alignment.topLeft,
       children: <Widget>[
@@ -134,33 +136,76 @@ class PostsBottomContent extends StatelessWidget {
           )
         ),
         if(post['shared'] && post['deletable'])
-            Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                    padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
-                    child: MaterialButton(
-                        child: Text("x", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black12)),
-                        onPressed: () => {
-                          unshare(post['postShareId'])
-                        },
-                        minWidth: 15,
-                    )
-                )
-            )
+          Row(
+              children: <Widget> [
+              Container(
+                  padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
+                  child: MaterialButton(
+                    child: Text("x", style: TextStyle(fontSize: 19,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black12)),
+                    onPressed: () =>
+                    {
+                      unshare(post['postShareId'])
+                    },
+                    minWidth: 15,
+                  )
+              ),
+              Container(
+                  padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
+                  child: MaterialButton(
+                    child: Icon(Icons.flag, size: 13, color: Colors.black12),
+                    onPressed: () =>
+                    {
+                      _confirmation("Are you sure you would like to flag this post?")
+                    },
+                    minWidth: 15,
+                  )
+              )
+            ],
+            mainAxisAlignment: MainAxisAlignment.start,
+          )
         else if(post['deletable'])
-            Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                    padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
-                    child: MaterialButton(
-                        child: Text("x", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.black12)),
-                        onPressed: () => {
-                          deletePost(post['id'])
-                        },
-                        minWidth: 15,
-                    )
+          Row(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
+                  child: MaterialButton(
+                    child: Text("x", style: TextStyle(fontSize: 19,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black12)),
+                    onPressed: () =>
+                    {
+                      deletePost(post['id'])
+                    },
+                    minWidth: 15,
+                  )
+              ),
+              Container(
+                  padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
+                  child: MaterialButton(
+                    child: Icon(Icons.flag, size: 13, color:Colors.black12),
+                    onPressed: () =>
+                    {
+                      _confirmation("Are you sure you would like to flag this post?")
+                    },
+                    minWidth: 15,
+                  )
                 )
-            )
+              ]
+          )
+        else
+          Container(
+              padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
+              child: MaterialButton(
+                child: Icon(Icons.flag, size: 13, color:Colors.black12),
+                onPressed: () =>
+                {
+                  _confirmation("Are you sure you would like to flag this post?")
+                },
+                minWidth: 15,
+              )
+          )
       ]
     );
   }
@@ -248,5 +293,85 @@ class PostsBottomContent extends StatelessWidget {
       print("error $e");
     }
     return null;
+  }
+
+  Future _flag(id, shared) async {
+    print("flag post/flag/$id/$shared");
+    final prefs = await SharedPreferences.getInstance();
+    final session = prefs.get(C.SESSION);
+    http.Response getResponse;
+
+    try {
+      getResponse = await http.post(
+          C.API_URI + "post/flag/$id/$shared",
+          headers: {
+            "cookie": session
+          }
+      );
+      print(getResponse.body.toString());
+      dynamic status = jsonDecode(getResponse.body.toString());
+      if(status['success']){
+        showGlobalDialog("Successfully flagged it! Thank you!", navigatePosts);
+      }
+    }catch(e){
+      print("error $e");
+    }
+    return null;
+  }
+
+  void navigatePosts(){
+    navigationService.navigateTo('/posts');
+  }
+
+  void showGlobalDialog(String content, Function funct){
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            // return object of type Dialog
+            return AlertDialog(
+              title: new Text("Message"),
+              content: new Text(content),
+              actions: <Widget>[
+                // usually buttons at the bottom of the dialog
+                new FlatButton(
+                  child: new Text("Okay!"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    if(funct != null)
+                      funct.call();
+                  },
+                ),
+              ],
+            );
+          }
+      );
+  }
+
+  void _confirmation(message){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Message"),
+            content: new Text(message),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }
+              ),
+              new FlatButton(
+                child: new Text("Flag Post!"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _flag(post['id'], false);
+                },
+              ),
+            ],
+          );
+        }
+    );
   }
 }

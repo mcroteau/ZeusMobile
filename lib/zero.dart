@@ -51,8 +51,8 @@ class _ZeroState extends State<Zero> {
             Container(
               child: RaisedButton(
                 onPressed: () => navigateSignin(),
-                color: Colors.lightBlue,
-                child: new Text("Start Sharing", style: TextStyle(color: Colors.white)),
+                color: Colors.white,
+                child: new Text("Start Sharing", style: TextStyle(color: Colors.black)),
               ),
             )
           ],

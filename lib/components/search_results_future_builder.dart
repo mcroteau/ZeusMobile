@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:zeus/base.dart';
 import 'dart:convert';
 import 'package:zeus/common/c.dart';
+import 'package:zeus/components/posts_header.dart';
 import 'package:zeus/services/navigation_service.dart';
 
 
@@ -48,6 +49,7 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
           if (snapshot != null && snapshot.data != null && snapshot.hasData && snapshot.data['accounts'] != null) {
             return new ListView(
                 children: <Widget>[
+                  PostsHeader(),
                   Container(
                     padding: EdgeInsets.all(10),
                     child: Text("Search Results", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),

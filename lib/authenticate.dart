@@ -32,11 +32,10 @@ class _AuthenticateState extends BaseState<Authenticate>{
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: Container(
-          padding: EdgeInsets.fromLTRB(30, 120, 90, 0),
-          child: Column(
+      body: Flex(
            children: <Widget>[
              Container(
+               padding: EdgeInsets.fromLTRB(10, 72, 53, 0),
                alignment: Alignment.center,
                child:
                Ink(
@@ -61,16 +60,18 @@ class _AuthenticateState extends BaseState<Authenticate>{
                ),
              ),
              Container(
-                 padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                 padding: EdgeInsets.fromLTRB(10, 20, 53, 0),
                  child: Text("Signin", style: TextStyle( fontSize: 42))
              ),
              Container(
+               padding: EdgeInsets.fromLTRB(10, 20, 72, 0),
                 child: TextField(
                   decoration: InputDecoration(hintText: "Email"),
                   controller: emailController,
                 ),
              ),
              Container(
+                 padding: EdgeInsets.fromLTRB(10, 10, 72, 0),
                 child: TextField(
                   decoration: InputDecoration(hintText: "Password"),
                   controller: passwordController,
@@ -96,9 +97,9 @@ class _AuthenticateState extends BaseState<Authenticate>{
                   },
                 )
               )
-          ]
+          ],
+        direction: Axis.vertical,
         )
-      )
     );
   }
 
@@ -126,16 +127,30 @@ class _AuthenticateState extends BaseState<Authenticate>{
       print(response.body.toString());
       print("session: $session");
 
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString("session", session);
 
-      if(session != null && session != ""){
-        navigationService.navigateTo('/posts');
+      dynamic account = jsonDecode(response.body.toString());
+
+      if(account['profile']['disabled']){
+        navigationService.navigateTo('/suspended');
+      }else{
+        _setSession(session).then((data){
+          navigationService.navigateTo('/posts');
+        });
       }
     }catch(e){
       print("error : $e");
       navigationService.navigateTo('/');
     }
+  }
+
+  Future _setSession(session) async{
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("session", session);
+  }
+
+  Future _setProfileId(id) async{
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("id", id.toString());
   }
 
   void _navigateRegister() {
