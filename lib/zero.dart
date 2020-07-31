@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zeus/services/navigation_service.dart';
+import 'package:zeus/authenticate.dart';
+import 'package:zeus/model/zeus_data.dart';
+import 'package:zeus/posts.dart';
+//import 'package:zeus/services/navigation_service.dart';
 import 'package:zeus/assets/zeus_icons.dart';
 
 import 'common/c.dart';
 
 class Zero extends StatefulWidget{
+
   @override
   _ZeroState createState() => _ZeroState();
 }
 
 class _ZeroState extends State<Zero> {
 
+
   String session;
-  NavigationService navigationService;
+//  NavigationService navigationService;
 
   @override
   void initState(){
@@ -24,7 +30,8 @@ class _ZeroState extends State<Zero> {
 
   @override
   Widget build(BuildContext context) {
-    this.navigationService = Modular.get<NavigationService>();
+//    this.navigationService = Modular.get<NavigationService>();
+    Get.put(ZeusData());
     return new Scaffold(
       body: Container(
         padding: EdgeInsets.fromLTRB(30, 67, 30, 0),
@@ -78,9 +85,11 @@ class _ZeroState extends State<Zero> {
     print('navigate authenticate');
     setAuthenticated().then((date) {
       if(session != null) {
-        navigationService.navigateTo('/posts');
+//        navigationService.navigateTo('/posts');
+        Get.to(Posts());
       }else{
-        navigationService.navigateTo('/authenticate');
+//        navigationService.navigateTo('/authenticate');
+        Get.to(Authenticate());
       }
     });
 

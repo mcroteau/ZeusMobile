@@ -16,7 +16,7 @@ class PostsBottomContent extends StatelessWidget {
 
   PostsBottomContent(post){
     this.post = post;
-    navigationService = Modular.get<NavigationService>();
+//    navigationService = Modular.get<NavigationService>();
   }
 
   @override

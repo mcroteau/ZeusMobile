@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/base.dart';
 import 'package:http/http.dart' as http;
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/zeus_header.dart';
 import 'package:zeus/components/zeus_highlight.dart';
+import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/services/navigation_service.dart';
 import 'dart:convert';
 
@@ -20,16 +22,20 @@ class Profile extends StatefulWidget{
 
 class _ProfileState extends BaseState<Profile>{
 
+//  _ProfileState({Key key, @required this.zeusData});
+
   var radius = 70.0;
   var topHeight = 170.0;
 
   var id;
   var session;
 
+  ZeusData zeusData;
+
   dynamic profile;
   var friends = [];
 
-  var requesSent = false;
+  var requestSent = false;
 
   NavigationService navigationService;
 
@@ -39,10 +45,15 @@ class _ProfileState extends BaseState<Profile>{
     setSession().then((data){
       setState(() {});
     });
+
   }
 
   @override
   Widget build(BuildContext context) {
+//    this.navigationService = Modular.get<NavigationService>();
+    this.zeusData = Get.find();
+    print("setting zeus data: " + zeusData?.id.toString());
+    print("profile build : " + zeusData?.id.toString());
     return Scaffold(
       body: new FutureBuilder(
         future: _fetch(),
@@ -80,7 +91,7 @@ class _ProfileState extends BaseState<Profile>{
                                     elevation: 3,
                                     color: Colors.yellow,
                                     textColor: Colors.black,
-                                    onPressed: !requesSent ? () => _sendReq(snapshot.data['profile']['id'].toString()) : null
+                                    onPressed: !requestSent ? () => _sendReq(snapshot.data['profile']['id'].toString()) : null
                                 )
                               ),
 
@@ -159,7 +170,7 @@ class _ProfileState extends BaseState<Profile>{
 
 
   Future setProf(String id) async{
-    print("set id $id");
+    print("set id $id ");
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(C.ID, id);
   }
@@ -168,13 +179,12 @@ class _ProfileState extends BaseState<Profile>{
   Future setSession() async{
     final prefs = await SharedPreferences.getInstance();
     this.session = prefs.get(C.SESSION);
-    this.id = prefs.get(C.ID);
-    navigationService = Modular.get<NavigationService>();
+    //this.id = prefs.get(C.ID);
   }
 
   Future<dynamic> _fetch() async {
     http.Response profileData = await http.get(
-        C.API_URI + "profile/" + id,
+        C.API_URI + "profile/" + zeusData.id.toString(),
         headers : {
           "content-type": "application/json",
           "accept": "application/json",
@@ -206,7 +216,7 @@ class _ProfileState extends BaseState<Profile>{
       super.showGlobalDialog("Successfully sent buddy request.", null);
     }else{
       super.showGlobalDialog("Whoa, apologies, there was an issue, please try again...", null);
-      requesSent = true;
+      requestSent = true;
       return null;
     }
 

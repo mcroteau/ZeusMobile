@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/components/posts_future_builder.dart';
 import 'package:zeus/components/searchbox.dart';
 import 'package:zeus/components/zeus_header.dart';
 import 'package:zeus/components/zeus_highlight.dart';
+import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/publish.dart';
 import 'package:zeus/base.dart';
 import 'package:zeus/services/navigation_service.dart';
@@ -17,10 +20,14 @@ class Posts extends StatefulWidget{
 
 class _PostsState extends BaseState<Posts>{
 
+  NavigationService navigationService;
+
+
   @override
   void initState() {
     try{
       super.initState();
+//      navigationService = Modular.get<NavigationService>();
     }catch(e){
       print('Unexpected error : $e');
     }
@@ -48,10 +55,7 @@ class _PostsState extends BaseState<Posts>{
           margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
           child: RaisedButton(
             onPressed: () => {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => new Publish(), fullscreenDialog: false),
-                )
+                navigationService.navigateTo('/publish')
               },
               focusColor: Colors.pinkAccent,
               elevation: 10.0,
@@ -68,27 +72,6 @@ class _PostsState extends BaseState<Posts>{
               ),
           ),
         ),
-
-//      Container(
-//        margin: EdgeInsets.fromLTRB(30, 0, 0, 10),
-//        child: new RaisedButton(
-//          onPressed: () => {
-//              Navigator.pushReplacement(
-//                context,
-//                MaterialPageRoute(builder: (context) => new Publish(), fullscreenDialog: false),
-//              )
-//            },
-//            elevation: 10.0,
-//            textColor: Colors.white,
-//            color: Colors.lightBlue,
-//            child: Row(
-//              children:<Widget> [
-//                Icon(Icons.add),
-//                Text("Publish New")
-//              ]
-//            )
-//        ),
-//      ),
     );
   }
 }

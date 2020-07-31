@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:zeus/assets/zeus_icons.dart';
 import 'package:zeus/base.dart';
 import 'dart:convert';
 import 'package:zeus/common/c.dart';
+import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/services/navigation_service.dart';
 
 
@@ -27,6 +29,9 @@ class _AuthenticateState extends BaseState<Authenticate>{
     this.emailController = new TextEditingController();
     this.passwordController = new TextEditingController();
     navigationService = Modular.get<NavigationService>();
+    ZeusData zeusData = Get.find();
+    if(zeusData.toString() == "")
+      zeusData = Get.put(ZeusData());
   }
 
   @override
@@ -76,7 +81,6 @@ class _AuthenticateState extends BaseState<Authenticate>{
                 child: TextField(
                   decoration: InputDecoration(hintText: "Password"),
                   controller: passwordController,
-                  obscureText: true,
                )
              ),
              Container(

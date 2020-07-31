@@ -2,6 +2,7 @@ import 'package:flutter_html/style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:video_box/video_box.dart';
@@ -12,7 +13,8 @@ import 'dart:convert';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/posts_bottom_content.dart';
 import 'package:zeus/components/zeus_header.dart';
-import 'package:zeus/services/navigation_service.dart';
+import 'package:zeus/model/zeus_data.dart';
+//import 'package:zeus/services/navigation_service.dart';
 
 
 class PostsFutureBuilder extends StatelessWidget {
@@ -20,10 +22,11 @@ class PostsFutureBuilder extends StatelessWidget {
   BuildContext context;
   MediaQueryData mediaQuery;
   TextEditingController controller;
-  NavigationService navigationService;
+//  NavigationService navigationService;
 
   PostsFutureBuilder(){
-    navigationService = Modular.get<NavigationService>();
+//    navigationService = Modular.get<NavigationService>();
+    ZeusData zeusData = Get.find();
   }
 
 
@@ -32,9 +35,7 @@ class PostsFutureBuilder extends StatelessWidget {
     this.context = context;
     this.mediaQuery = MediaQuery.of(context);
     this.controller = new TextEditingController();
-
     double _width = MediaQuery.of(context).size.width*0.57;
-
     return new FutureBuilder<dynamic>(
         future: _fetch(),
         builder: (context, snapshot) {
@@ -74,7 +75,7 @@ class PostsFutureBuilder extends StatelessWidget {
                                                               child:  Image.network(C.API_URI + p['sharedImageUri'], width: 50),
                                                               onTap: () => {
                                                                 _setProfileId(p['sharedAccountId']).then((data){
-                                                                  navigationService.navigateTo('/profile');
+//                                                                  navigationService.navigateTo('/profile');
                                                                 })
                                                               },
                                                             )
@@ -90,7 +91,7 @@ class PostsFutureBuilder extends StatelessWidget {
                                                               child:Text(p['sharedAccount'], style: TextStyle( color: Colors.white ),textAlign: TextAlign.left,),
                                                               onTap: () => {
                                                                 _setProfileId(p['sharedAccountId']).then((data){
-                                                                  navigationService.navigateTo('/profile');
+//                                                                  navigationService.navigateTo('/profile');
                                                                 })
                                                               },
                                                             ),
@@ -244,7 +245,8 @@ class PostsFutureBuilder extends StatelessWidget {
       return posts;
 
     }catch(e){
-      navigationService.navigateTo('/authenticate');
+      print(e);
+//      navigationService.navigateTo('/authenticate');
     }
     return [];
   }

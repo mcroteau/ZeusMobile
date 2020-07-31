@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -10,8 +11,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/assets/zeus_icons.dart';
 import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
-import 'package:zeus/components/latest_posts_text.dart';
-import 'package:zeus/services/navigation_service.dart';
+import 'package:zeus/model/zeus_data.dart';
+import 'package:zeus/posts.dart';
+import 'package:zeus/profile.dart';
+import 'package:zeus/zero.dart';
+//import 'package:zeus/services/navigation_service.dart';
 
 class ZeusHeader extends StatefulWidget {
   _ZeusHeaderState createState() => _ZeusHeaderState();
@@ -26,20 +30,26 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   var latestPosts;
   var invitationsCount;
 
+  ZeusData zeusData;
+
   TextEditingController controller;
-  NavigationService navigationService;
+//  NavigationService navigationService;
 
 
   @override
   void initState(){
     super.initState();
     setSession();
+
   }
 
   @override
   Widget build(BuildContext context) {
+    _fetch();
+    this.zeusData = Get.find();
     this.controller = new TextEditingController();
-    this.navigationService = Modular.get<NavigationService>();
+//    this.navigationService = Modular.get<NavigationService>();
+//    this.zeusData = Modular.get<ZeusData>();
     return Stack(
         children: <Widget>[
           Container(
@@ -53,7 +63,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
                 controller: controller,
                 onSubmitted: (value){
                   _search(context, controller).then((data){
-                    navigationService.navigateTo('/search');
+//                    navigationService.navigateTo('/search');
                   });
                 },
               )
@@ -94,29 +104,12 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
                             onTap: navigatePosts,
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.bottomRight,
-                            child: FutureBuilder(
-                              future : latestAndGreatest(),
-                              builder: (context, snapshot) {
-                                return Text(snapshot.hasData ? '${snapshot.data}' : '');
-                              },
-                            )
-                        )
                       ],
                     )
                   )
                 )
               ]
             ),
-            FutureBuilder(
-              future: _fetch(),
-              builder: (context, snapshot) {
-                if(snapshot.hasData)
-                  this.id = snapshot.data['id'];
-                return Text("");
-              }
-          )
       ]
     );
   }
@@ -126,26 +119,8 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
     this.session = prefs.get(C.SESSION);
   }
 
-  Future<dynamic> latestAndGreatest() async {
-    print("get latest & greatest");
-    http.Response response = await http.get(
-        C.API_URI + "profile/data",
-        headers : {
-          "content-type": "application/json",
-          "accept": "application/json",
-          "cookie" : session
-        }
-    );
-
-    var data = jsonDecode(response.body.toString());
-    print(data.toString());
-
-    return getLatestPosts(latestPosts);
-
-  }
-
-
-  Future setProfileId() async{
+  Future setProfileId(id) async{
+    this.id = id;
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(C.ID, id.toString());
     this.session = prefs.get(C.SESSION);
@@ -158,41 +133,50 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   }
 
   Future<dynamic> _fetch() async {
-    http.Response postResponse = await http.get(
-        C.API_URI + "account/info",
-        headers : {
-          "content-type": "application/json",
-          "accept": "application/json",
-          "cookie" : session
-        }
-    );
+    try {
+      http.Response postResponse = await http.get(
+          C.API_URI + "account/info",
+          headers: {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "cookie": session
+          }
+      );
 
-    var info = jsonDecode(postResponse.body.toString());
-    return info;
+      var data = jsonDecode(postResponse.body.toString());
+      print("set " + data['id'].toString());
+      zeusData.id = data['id'];
+      return data;
+    }catch(e){
+      print("error $e");
+    }
   }
 
   void choiceAction(String choice) {
 
 //    this.timer.cancel();
+    print("header $id");
 
     if (choice == C.FirstItem) {
-      navigationService.navigateTo('/posts');
+//      navigationService.navigateTo('/posts');
+      Get.to(Posts());
     } else if (choice == C.SecondItem) {
-      setProfileId().then((data){
-        navigationService.navigateTo('/profile');
-      });
+      print("z: " + zeusData.toString());
+//      navigationService.navigateTo('/profile');
+      Get.to(Profile());
     } else if (choice == C.ThirdItem) {
-      navigationService.navigateTo('/invitations');
+//      navigationService.navigateTo('/invitations');
     } else if (choice == C.FourthItem) {
       _logout().then((data){
-        navigationService.navigateTo('/');
+//        navigationService.navigateTo('/');
+          Get.to(Zero());
       });
     }
   }
 
   void navigatePosts() {
 //    this.timer.cancel();
-    navigationService.navigateTo('/posts');
+//    navigationService.navigateTo('/posts');
   }
 
   Future _logout() async{
