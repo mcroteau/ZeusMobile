@@ -107,6 +107,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
                                     Container(
                                       child: Icon(Zeus.icon, size: 23),
                                     ),
+                                    Text(latestPosts)
                                   ],
                                 )
                             ),
@@ -125,12 +126,11 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 
   Future _storeProfileId(id) async{
     this.id = id;
-//    Get.find<ZeusData>().setId(id);
     GetStorage().write(C.ID, id);
   }
 
 
-  Future<dynamic> _fetch() async {
+  Future<Map<String, dynamic>> _fetch() async {
     try {
       http.Response resp = await http.get(
           C.API_URI + "account/info",
@@ -146,10 +146,27 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 
       GetStorage().write(C.ID, data['id'].toString());
 
+      http.Response respDos = await http.get(
+          C.API_URI + "profile/data",
+          headers: {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "cookie": this.session
+          }
+      );
+//
+      Map<String, dynamic> dataDos = jsonDecode(respDos.body.toString());
+//      print("data:" + dataDos.toString());
+//
+//      setState(() {
+//        latestPosts = dataDos['latestPosts']?.length.toString();
+//      });
+      latestPosts = dataDos['latestPosts']?.length.toString();
+
       return data;
 
     }catch(e){
-      print("error $e");
+      print("header error $e");
     }
   }
 

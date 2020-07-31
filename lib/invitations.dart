@@ -22,17 +22,19 @@ class _InvitationsState extends BaseState<Invitations> {
   bool accepted = false;
   bool declined = false;
 
-//  NavigationService navigationService;
+  NavigationService navigationService;
 
   @override
   void initState(){
     super.initState();
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context){
+
     this.session = GetStorage().read(C.SESSION);
+    this.navigationService = Modular.get<NavigationService>();
+
     return new Scaffold(
       body: Stack(
         children: <Widget> [

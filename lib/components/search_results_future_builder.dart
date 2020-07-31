@@ -45,6 +45,8 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
     this.context = context;
     this.mediaQuery = MediaQuery.of(context);
 
+    this.navigationService = Modular.get<NavigationService>();
+
     return new FutureBuilder<dynamic>(
         future: _fetch(),
         builder: (context, snapshot) {
