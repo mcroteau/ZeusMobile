@@ -20,7 +20,7 @@ class C {
   static const String FirstItem = "Latest Posts";
   static const String SecondItem = "My Profile";
   static const String ThirdItem = "My Invites";
-  static const String FourthItem = "Logout";
+  static const String FourthItem = "Signout";
 
   static const List<String> choices = <String>[
     FirstItem,

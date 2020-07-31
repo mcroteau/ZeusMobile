@@ -250,7 +250,7 @@ class PostsFutureBuilder extends StatelessWidget {
 
     }catch(e){
       print(e);
-//      navigationService.navigateTo('/authenticate');
+      navigationService.navigateTo('/authenticate');
     }
     return [];
   }

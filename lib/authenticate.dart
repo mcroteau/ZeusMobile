@@ -29,14 +29,15 @@ class _AuthenticateState extends BaseState<Authenticate>{
   @override
   void initState() {
     super.initState();
-    this.emailController = new TextEditingController();
-    this.passwordController = new TextEditingController();
-//    navigationService = Modular.get<NavigationService>();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("build authenticate");
+
+    this.emailController = new TextEditingController();
+    this.passwordController = new TextEditingController();
+    this.navigationService = Modular.get<NavigationService>();
+
     return new Scaffold(
       body: Flex(
            children: <Widget>[

@@ -16,6 +16,12 @@ class Register extends StatefulWidget{
 
 class _RegisterState extends BaseState<Register>{
 
+  var eulaMessage = "I agree not to post anything rude or abusive. " +
+          "I agree not to be rude to others, \n" +
+          "If you agree to these requirements, you may continue.";
+
+  bool agreed = false;
+
   TextEditingController nameController;
   TextEditingController emailController;
   TextEditingController passwordController;
@@ -35,7 +41,7 @@ class _RegisterState extends BaseState<Register>{
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
-          padding: EdgeInsets.fromLTRB(30, 120, 90, 0),
+          padding: EdgeInsets.fromLTRB(30, 62, 90, 0),
           child: Column(
            children: <Widget>[
              Container(
@@ -85,14 +91,34 @@ class _RegisterState extends BaseState<Register>{
                   obscureText: true,
                )
              ),
+             Row(
+               children: <Widget>[
+                 Checkbox(
+                   onChanged: (value) => {
+                      setState(() {
+                        agreed = value;
+                      })
+                   },
+                   value: agreed,
+
+                 ),
+                 GestureDetector(
+                  child: Text("I Agree to Eula", style: TextStyle(color: Colors.lightBlue)),
+                   onTap: () => {
+                     _confirmation(eulaMessage)
+                   },
+                 )
+               ],
+             ),
              Container(
               padding: EdgeInsets.fromLTRB(30, 50, 0, 0),
               child: RaisedButton(
                 onPressed: () => {
-                  _confirmation("I agree not to be rude to others, " +
-                  "I agree not to post anything rude or abusive, " +
-                  "Basically I agree not to do doodoo stuff while on the site. " +
-                  "If you agree to these requirements, you may proceed.")
+                  if(agreed){
+                    _register()
+                  }else{
+                    super.showGlobalDialog("You must agree with the End-User License Agreement.", null)
+                  }
                 },
                 color: Colors.lightBlue,
                 child: new Text("Register", style: TextStyle(color: Colors.white)),
@@ -166,20 +192,13 @@ class _RegisterState extends BaseState<Register>{
         builder: (BuildContext context) {
           // return object of type Dialog
           return AlertDialog(
-            title: new Text("Message"),
+            title: new Text("End-User License Agreement"),
             content: new Text(message),
             actions: <Widget>[
               new FlatButton(
-                  child: new Text("Cancel"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }
-              ),
-              new FlatButton(
-                child: new Text("I Agree!"),
+                child: new Text("Okay!"),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  _register();
                 },
               ),
             ],

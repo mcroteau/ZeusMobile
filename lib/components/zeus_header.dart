@@ -180,7 +180,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 //    this.timer.cancel();
 
     http.Response resp = await http.get(
-        C.API_URI + "logout",
+        C.API_URI + "signout",
         headers : {
           "content-type": "application/json",
           "accept": "application/json",
