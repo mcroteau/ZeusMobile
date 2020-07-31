@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +8,7 @@ import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/zeus_header.dart';
 import 'package:zeus/components/searchbox.dart';
+import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/services/navigation_service.dart';
 
 class Invitations extends StatefulWidget{
@@ -20,13 +22,12 @@ class _InvitationsState extends BaseState<Invitations> {
   bool accepted = false;
   bool declined = false;
 
-  NavigationService navigationService;
-
+//  NavigationService navigationService;
 
   @override
   void initState(){
     super.initState();
-    setSession().then((data){
+    _setSession().then((data){
       setState(() {});
     });
   }
@@ -126,19 +127,17 @@ class _InvitationsState extends BaseState<Invitations> {
 
   Future<List<dynamic>> _fetch() async {
 
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
-    http.Response getResponse;
+    http.Response resp;
 
     try {
-      getResponse = await http.get(
+      resp = await http.get(
           C.API_URI + "friend/invitations",
           headers: {
-            "cookie": session
+            "cookie": this.session
           }
       );
 
-      dynamic status = jsonDecode(getResponse.body.toString());
+      dynamic status = jsonDecode(resp.body.toString());
       return status;
 
     }catch(e){
@@ -150,19 +149,17 @@ class _InvitationsState extends BaseState<Invitations> {
 
   Future _accept(id) async {
 
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
-    http.Response getResponse;
+    http.Response resp;
 
     try {
-      getResponse = await http.post(
+      resp = await http.post(
           C.API_URI + "friend/accept/" + id,
           headers: {
-            "cookie": session
+            "cookie": this.session
           }
       );
-      print(getResponse.body.toString());
-      dynamic status = jsonDecode(getResponse.body.toString());
+      print(resp.body.toString());
+      dynamic status = jsonDecode(resp.body.toString());
       if(status['success']){
         accepted = true;
         declined = true;
@@ -177,21 +174,20 @@ class _InvitationsState extends BaseState<Invitations> {
 
 
   void refresh(){
-    navigationService.navigateTo("/invitations");
+//    navigationService.navigateTo("/invitations");
+    Get.to(Invitations());
   }
 
 
   Future _decline(id) async {
 
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
     http.Response getResponse;
 
     try {
       getResponse = await http.post(
           C.API_URI + "friend/decline/" + id,
           headers: {
-            "cookie": session
+            "cookie": this.session
           }
       );
 
@@ -209,11 +205,8 @@ class _InvitationsState extends BaseState<Invitations> {
   }
 
 
-  Future setSession() async{
-    final prefs = await SharedPreferences.getInstance();
-    this.session = prefs.get(C.SESSION);
-    navigationService = Modular.get<NavigationService>();
-    setState(() {});
+  Future _setSession() async{
+    this.session = Get.find<ZeusData>().session;
   }
 
 }

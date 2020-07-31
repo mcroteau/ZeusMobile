@@ -39,91 +39,98 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   @override
   void initState(){
     super.initState();
-    setSession();
-
+    _setSession();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     _fetch();
-    this.zeusData = Get.find();
     this.controller = new TextEditingController();
 //    this.navigationService = Modular.get<NavigationService>();
 //    this.zeusData = Modular.get<ZeusData>();
-    return Stack(
-        children: <Widget>[
-          Container(
-              padding: EdgeInsets.fromLTRB(3, 42, 5, 0),
-              child: TextField(
-                style: TextStyle(fontSize:24, fontWeight: FontWeight.w300),
-                decoration: InputDecoration(
-                  hintText: "Search",
+    return FutureBuilder(
+      future:_fetch(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData)
+          return Stack(
+              children: <Widget>[
+                Container(
+                    padding: EdgeInsets.fromLTRB(3, 42, 5, 0),
+                    child: TextField(
+                      style: TextStyle( fontSize: 24, fontWeight: FontWeight.w300),
+                      decoration: InputDecoration(
+                        hintText: "Search",
 //                  border: InputBorder.none,
-                ),
-                controller: controller,
-                onSubmitted: (value){
-                  _search(context, controller).then((data){
-//                    navigationService.navigateTo('/search');
-                  });
-                },
-              )
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                      child: PopupMenuButton<String>(
-                        icon: Icon(Icons.menu, color: Colors.black12),
-                        onSelected: choiceAction,
-                        itemBuilder: (BuildContext context) {
-                          return C.choices.map((String choice) {
-                            return PopupMenuItem<String>(
-                              value: choice,
-                              child: Text(choice),
-                            );
-                          }).toList();
-                        },
                       ),
-                    ),
-                    Text(invitationsCount != null && invitationsCount.toString() != "0" ? invitationsCount.toString() : "", )
-                  ]
-                ),
-                Align(
-                  child: Container(
-                    color: Colors.yellowAccent,
-                    padding: EdgeInsets.all(20),
-                    margin: EdgeInsets.fromLTRB(0, 10, 4, 0),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          child: GestureDetector(
-                            child: Icon(Zeus.icon, size: 23),
-                            onTap: navigatePosts,
-                          ),
-                        ),
-                      ],
+                      controller: controller,
+                      onSubmitted: (value) {
+                        _search(context, controller).then((data) {
+//                    navigationService.navigateTo('/search');
+                        });
+                      },
                     )
-                  )
-                )
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Column(
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                              child: PopupMenuButton<String>(
+                                icon: Icon(Icons.menu, color: Colors.black12),
+                                onSelected: choiceAction,
+                                itemBuilder: (BuildContext context) {
+                                  return C.choices.map((String choice) {
+                                    return PopupMenuItem<String>(
+                                      value: choice,
+                                      child: Text(choice),
+                                    );
+                                  }).toList();
+                                },
+                              ),
+                            ),
+                            Text(invitationsCount != null &&
+                                invitationsCount.toString() != "0"
+                                ? invitationsCount.toString()
+                                : "",)
+                          ]
+                      ),
+                      Align(
+                          child: GestureDetector(
+                            child: Container(
+                                color: Colors.yellowAccent,
+                                padding: EdgeInsets.all(20),
+                                margin: EdgeInsets.fromLTRB(0, 10, 4, 0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      child: Icon(Zeus.icon, size: 23),
+                                    ),
+                                  ],
+                                )
+                            ),
+                            onTap: () => navigatePosts(),
+                          )
+                      ),
+                    ]
+                ),
               ]
-            ),
-      ]
+          );
+        else
+          return Center(child: CircularProgressIndicator());
+      }
     );
   }
 
-  Future setSession() async{
-    final prefs = await SharedPreferences.getInstance();
-    this.session = prefs.get(C.SESSION);
+  Future _setSession() async{
+    this.session = Get.find<ZeusData>().session;
   }
 
-  Future setProfileId(id) async{
+  Future _storeProfileId(id) async{
     this.id = id;
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(C.ID, id.toString());
-    this.session = prefs.get(C.SESSION);
+    Get.find<ZeusData>().setId(id);
   }
 
   Future<dynamic> _search(BuildContext context, TextEditingController controller) async {
@@ -139,13 +146,14 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
           headers: {
             "content-type": "application/json",
             "accept": "application/json",
-            "cookie": session
+            "cookie": this.session
           }
       );
 
+      print(postResponse.body.toString());
       var data = jsonDecode(postResponse.body.toString());
       print("set " + data['id'].toString());
-      zeusData.id = data['id'];
+      Get.find<ZeusData>().id = data['id'];
       return data;
     }catch(e){
       print("error $e");
@@ -177,19 +185,18 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   void navigatePosts() {
 //    this.timer.cancel();
 //    navigationService.navigateTo('/posts');
+    Get.to(Posts());
   }
 
   Future _logout() async{
 //    this.timer.cancel();
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
 
     http.Response logoutResponse = await http.get(
         C.API_URI + "logout",
         headers : {
           "content-type": "application/json",
           "accept": "application/json",
-          "cookie" : session
+          "cookie" : this.session
         }
     );
   }

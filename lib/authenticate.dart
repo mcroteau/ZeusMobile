@@ -8,7 +8,10 @@ import 'package:zeus/base.dart';
 import 'dart:convert';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/model/zeus_data.dart';
+import 'package:zeus/posts.dart';
+import 'package:zeus/register.dart';
 import 'package:zeus/services/navigation_service.dart';
+import 'package:zeus/suspended.dart';
 
 
 class Authenticate extends StatefulWidget{
@@ -28,10 +31,7 @@ class _AuthenticateState extends BaseState<Authenticate>{
     super.initState();
     this.emailController = new TextEditingController();
     this.passwordController = new TextEditingController();
-    navigationService = Modular.get<NavigationService>();
-    ZeusData zeusData = Get.find();
-    if(zeusData.toString() == "")
-      zeusData = Get.put(ZeusData());
+//    navigationService = Modular.get<NavigationService>();
   }
 
   @override
@@ -136,10 +136,12 @@ class _AuthenticateState extends BaseState<Authenticate>{
       dynamic account = jsonDecode(response.body.toString());
 
       if(account['profile']['disabled']){
-        navigationService.navigateTo('/suspended');
+//        navigationService.navigateTo('/suspended');
+        Get.to(Suspended());
       }else{
         _setSession(session).then((data){
-          navigationService.navigateTo('/posts');
+//          navigationService.navigateTo('/posts');
+          Get.to(Posts());
         });
       }
     }catch(e){
@@ -148,18 +150,17 @@ class _AuthenticateState extends BaseState<Authenticate>{
     }
   }
 
-  Future _setSession(session) async{
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString("session", session);
+  Future _setSession(session) async {
+    Get.find<ZeusData>().setSession(session);
   }
 
   Future _setProfileId(id) async{
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString("id", id.toString());
+    Get.find<ZeusData>().setId(id);
   }
 
   void _navigateRegister() {
-    navigationService.navigateTo('/register');
+//    navigationService.navigateTo('/register');
+    Get.to(Register());
   }
 }
 

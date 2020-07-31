@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zeus/authenticate.dart';
 import 'package:zeus/base.dart';
 import 'package:http/http.dart' as http;
 import 'package:zeus/common/c.dart';
@@ -22,7 +23,7 @@ class Profile extends StatefulWidget{
 
 class _ProfileState extends BaseState<Profile>{
 
-//  _ProfileState({Key key, @required this.zeusData});
+  _ProfileState({Key key, @required this.zeusData});
 
   var radius = 70.0;
   var topHeight = 170.0;
@@ -42,23 +43,22 @@ class _ProfileState extends BaseState<Profile>{
   @override
   void initState(){
     super.initState();
-    setSession().then((data){
+    _setSession().then((data){
       setState(() {});
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
 //    this.navigationService = Modular.get<NavigationService>();
-    this.zeusData = Get.find();
+    this.zeusData = Get.find<ZeusData>();
     print("setting zeus data: " + zeusData?.id.toString());
     print("profile build : " + zeusData?.id.toString());
     return Scaffold(
       body: new FutureBuilder(
         future: _fetch(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.hasData && snapshot.data['profile'] != null) {
             return new Container(
                 child: new Stack(
                   alignment: Alignment.topCenter,
@@ -67,24 +67,24 @@ class _ProfileState extends BaseState<Profile>{
                       padding: EdgeInsets.fromLTRB(0, 110, 0, 0),
                       child: new CircleAvatar(
                           radius: radius,
-                          backgroundImage: NetworkImage(C.API_URI + profile['imageUri'])
+                          backgroundImage: NetworkImage(C.API_URI + snapshot.data['profile']['imageUri'])
                       ),
                     ),
                     Container(
                         padding: EdgeInsets.fromLTRB(0, 270, 0, 0),
                         child: Column(
                           children: [
-                            Text(profile['name'], style: TextStyle(color: Colors.black, fontSize: 27, fontWeight: FontWeight.w700, decoration: TextDecoration.none, fontFamily: "Roboto")),
+                            Text(snapshot.data['profile']['name'], style: TextStyle(color: Colors.black, fontSize: 27, fontWeight: FontWeight.w700, decoration: TextDecoration.none, fontFamily: "Roboto")),
                             Container(
-                              child: Text(profile['location'] != null ? profile['location'] : "", style: TextStyle(color: Colors.black, fontSize: 14, decoration: TextDecoration.none))
+                              child: Text(snapshot.data['profile']['location'] != null ? snapshot.data['profile']['location'] : "", style: TextStyle(color: Colors.black, fontSize: 14, decoration: TextDecoration.none))
                             ),
 
-                            if(profile['isFriend'])
+                            if(snapshot.data['profile']['isFriend'])
                               Container(
                                   child: Text("Friends")
                               ),
 
-                            if(!profile['isFriend'] && !profile['isOwnersAccount'])
+                            if(!snapshot.data['profile']['isFriend'] && !snapshot.data['profile']['isOwnersAccount'])
                               Container(
                                 child:  RaisedButton(
                                     child: Text("Send Buddy Request"),
@@ -95,7 +95,7 @@ class _ProfileState extends BaseState<Profile>{
                                 )
                               ),
 
-                            if(friends.length > 0)
+                            if(snapshot.data['friends'].length > 0)
                               Container(
                                 padding: EdgeInsets.fromLTRB(30, 20, 0, 0),
                                 alignment: Alignment.centerLeft,
@@ -112,8 +112,9 @@ class _ProfileState extends BaseState<Profile>{
                                         padding: EdgeInsets.fromLTRB(30, 10, 0, 0),
                                         child: GestureDetector(
                                           onTap: (){
-                                            setProf(friend['friendId'].toString()).then((data){
-                                              navigationService.navigateTo('/profile');
+                                            _storeProfileId(friend['friendId'].toString()).then((data){
+//                                              navigationService.navigateTo('/profile');
+                                              Get.to(Profile());
                                             });
                                           },
                                           child: CircleAvatar(
@@ -126,8 +127,9 @@ class _ProfileState extends BaseState<Profile>{
                                           padding: EdgeInsets.fromLTRB(40, 10, 0, 0),
                                           child: GestureDetector(
                                             onTap: (){
-                                              setProf(friend['friendId'].toString()).then((data){
-                                                navigationService.navigateTo('/profile');
+                                              _storeProfileId(friend['friendId'].toString()).then((data){
+//                                                navigationService.navigateTo('/profile');
+                                                Get.to(Profile());
                                               });
 
                                             },
@@ -169,17 +171,15 @@ class _ProfileState extends BaseState<Profile>{
   }
 
 
-  Future setProf(String id) async{
+  Future _storeProfileId(String id) async{
     print("set id $id ");
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(C.ID, id);
+    Get.find<ZeusData>().setId(id);
   }
 
 
-  Future setSession() async{
-    final prefs = await SharedPreferences.getInstance();
-    this.session = prefs.get(C.SESSION);
-    //this.id = prefs.get(C.ID);
+  Future _setSession() async{
+    this.id = Get.find<ZeusData>().id;
+    this.session = Get.find<ZeusData>().session;
   }
 
   Future<dynamic> _fetch() async {
@@ -188,13 +188,18 @@ class _ProfileState extends BaseState<Profile>{
         headers : {
           "content-type": "application/json",
           "accept": "application/json",
-          "cookie" : session
+          "cookie" : this.session
         }
     );
 
     var data = jsonDecode(profileData.body.toString());
     profile = data['profile'];
     friends = data['friends'];
+
+    if(data['error'] != null){
+      Get.to(Authenticate());
+    }
+
     return data;
   }
 
@@ -205,7 +210,7 @@ class _ProfileState extends BaseState<Profile>{
         headers: {
           "content-type": "application/json",
           "accept": "application/json",
-          "cookie": session
+          "cookie": this.session
         }
     );
 

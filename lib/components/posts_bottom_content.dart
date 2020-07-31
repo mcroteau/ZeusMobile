@@ -2,11 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:zeus/common/c.dart';
+import 'package:zeus/model/zeus_data.dart';
+import 'package:zeus/posts.dart';
+import 'package:zeus/profile.dart';
 import 'package:zeus/services/navigation_service.dart';
+import 'package:zeus/share_post.dart';
 
 class PostsBottomContent extends StatelessWidget {
 
@@ -30,7 +35,8 @@ class PostsBottomContent extends StatelessWidget {
           child: GestureDetector(
             onTap: () => {
               _setProfileId(post['accountId']).then((data){
-                navigationService.navigateTo('/profile');
+//                navigationService.navigateTo('/profile');
+                Get.to(Profile());
               })
             },
             child: Container(
@@ -44,16 +50,18 @@ class PostsBottomContent extends StatelessWidget {
             child: GestureDetector(
               onTap: () => {
                 _setProfileId(post['accountId']).then((data){
-                  navigationService.navigateTo('/profile');
+//                  navigationService.navigateTo('/profile');
+                  Get.to(Profile());
                 })
               },
               child: Container(
                 padding: EdgeInsets.fromLTRB(67, 10, 0, 0),
                 child: GestureDetector(
-                  child: Text(post['name'], style: TextStyle( fontWeight: FontWeight.w700, fontSize: 14 )),
+                  child: Text(post['name'], style: TextStyle( fontSize: 19, fontWeight: FontWeight.w700 )),
                   onTap: () => {
                     _setProfileId(post['accountId']).then((data){
-                      navigationService.navigateTo('/profile');
+//                      navigationService.navigateTo('/profile');
+                      Get.to(Profile());
                     })
                   },
                 )
@@ -65,12 +73,13 @@ class PostsBottomContent extends StatelessWidget {
             child: GestureDetector(
               onTap: (){
                 _setProfileId(post['accountId']).then((data){
-                  navigationService.navigateTo('/profile');
+//                  navigationService.navigateTo('/profile');
+                  Get.to(Profile());
                 });
               },
               child: Container(
-                padding: EdgeInsets.fromLTRB(67, 30, 0, 0),
-                child: Text(post['timeAgo'])
+                padding: EdgeInsets.fromLTRB(67, 34, 0, 0),
+                child: Text(post['timeAgo'], style: TextStyle(fontSize: 16))
               )
           )
         ),
@@ -97,7 +106,8 @@ class PostsBottomContent extends StatelessWidget {
                          child: GestureDetector(
                            onTap: () {
                              _setPostId(post['id']).then((data){
-                               navigationService.navigateTo('/share_post');
+//                               navigationService.navigateTo('/share_post');
+                               Get.to(SharePost());
                              });
                            },
                            child: Text("∆", style: TextStyle(fontSize: 29, fontWeight: FontWeight.w700, color: Colors.deepOrangeAccent)),
@@ -122,7 +132,8 @@ class PostsBottomContent extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             _like(post['id']).then((data){
-                              navigationService.navigateTo('/posts');
+//                              navigationService.navigateTo('/posts');
+                              Get.to(Posts());
                             });
                           },
                           child: Text("π", style: TextStyle( fontSize: 32, fontWeight: FontWeight.w700, color: Colors.lightBlue)),
@@ -240,10 +251,15 @@ class PostsBottomContent extends StatelessWidget {
     return null;
   }
 
-  Future _setProfileId(id) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(C.ID, id.toString());
+
+  Future _setProfileId(id) async{
+    Get.find<ZeusData>().setId(id);
   }
+
+//  Future _setProfileId(id) async {
+//    final prefs = await SharedPreferences.getInstance();
+//    prefs.setString(C.ID, id.toString());
+//  }
 
   Future deletePost(id) async {
     final prefs = await SharedPreferences.getInstance();
@@ -262,7 +278,8 @@ class PostsBottomContent extends StatelessWidget {
       if(status['success']){
       }
 
-      navigationService.navigateTo('/posts');
+//      navigationService.navigateTo('/posts');
+      Get.to(Posts());
 
     }catch(e){
       print("error $e");
@@ -288,7 +305,9 @@ class PostsBottomContent extends StatelessWidget {
       dynamic status = jsonDecode(getResponse.body.toString());
       if(status['success']){
       }
-      navigationService.navigateTo('/posts');
+//      navigationService.navigateTo('/posts');
+      Get.to(Posts());
+
     }catch(e){
       print("error $e");
     }
@@ -320,7 +339,8 @@ class PostsBottomContent extends StatelessWidget {
   }
 
   void navigatePosts(){
-    navigationService.navigateTo('/posts');
+//    navigationService.navigateTo('/posts');
+    Get.to(Posts());
   }
 
   void showGlobalDialog(String content, Function funct){
