@@ -89,7 +89,10 @@ class _RegisterState extends BaseState<Register>{
               padding: EdgeInsets.fromLTRB(30, 50, 0, 0),
               child: RaisedButton(
                 onPressed: () => {
-                  _register()
+                  _confirmation("I agree not to be rude to others, " +
+                  "I agree not to post anything rude or abusive, " +
+                  "Basically I agree not to do doodoo stuff while on the site. " +
+                  "If you agree to these requirements, you may proceed.")
                 },
                 color: Colors.lightBlue,
                 child: new Text("Register", style: TextStyle(color: Colors.white)),
@@ -155,5 +158,33 @@ class _RegisterState extends BaseState<Register>{
 
   _navigateSignin() {
     navigationService.navigateTo('/authenticate');
+  }
+
+  void _confirmation(message){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Message"),
+            content: new Text(message),
+            actions: <Widget>[
+              new FlatButton(
+                  child: new Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }
+              ),
+              new FlatButton(
+                child: new Text("I Agree!"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _register();
+                },
+              ),
+            ],
+          );
+        }
+    );
   }
 }
