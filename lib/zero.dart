@@ -86,10 +86,8 @@ class _ZeroState extends State<Zero> {
     setAuthenticated().then((date) {
       if(session != null) {
         navigationService.navigateTo('/posts');
-//        Get.to(Posts());
       }else{
         navigationService.navigateTo('/authenticate');
-//        Get.to(Authenticate());
       }
     });
 

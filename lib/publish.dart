@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:zeus/base.dart';
@@ -18,27 +19,30 @@ class Publish extends StatefulWidget{
 
 class _PublishState extends BaseState<Publish>{
 
-  File video;
+  File _video;
   File _image;
   final picker = ImagePicker();
   String message = "";
+  String session;
 
   TextEditingController controller;
   NavigationService navigationService;
-
 
   @override
   void initState(){
     super.initState();
     _image = null;
-    video = null;
-    controller = new TextEditingController();
-    navigationService = Modular.get<NavigationService>();
+    _video = null;
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    this.session = GetStorage().read(C.SESSION);
+    this.controller = new TextEditingController();
+    this.navigationService = Modular.get<NavigationService>();
+
     return new Scaffold(
       appBar: new AppBar(
         elevation: 0,
@@ -129,15 +133,13 @@ class _PublishState extends BaseState<Publish>{
   }
 
   Future<dynamic> _fetch() async {
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
 
     http.Response postResponse = await http.get(
         C.API_URI + "account/info",
         headers : {
           "content-type": "application/json",
           "accept": "application/json",
-          "cookie" : session
+          "cookie" : this.session
         }
     );
 
@@ -158,7 +160,7 @@ class _PublishState extends BaseState<Publish>{
   }
 
   Future openVideoExplorer() async {
-    video = await FilePicker.getFile(
+    _video = await FilePicker.getFile(
       type: FileType.custom,
       allowedExtensions: ['mp4']
     );
@@ -166,13 +168,10 @@ class _PublishState extends BaseState<Publish>{
 
 
   Future _publish() async {
-    var pref = await SharedPreferences.getInstance();
-    String session = pref.get(C.SESSION);
-    
     print("publish $_image");
     
     var req = http.MultipartRequest('post', Uri.parse(C.API_URI + "post/share"));
-    req.headers['cookie'] = session;
+    req.headers['cookie'] = this.session;
     req.headers['Content-Type'] = "application/json";
     req.headers['Accept'] = "application/json";
     
@@ -196,7 +195,7 @@ class _PublishState extends BaseState<Publish>{
 
     if(controller.text == "" &&
         _image == null &&
-          video == null){
+          _video == null){
       super.showGlobalDialog("You didn't say anything, what's up?", null);
       return false;
     }
@@ -204,8 +203,8 @@ class _PublishState extends BaseState<Publish>{
     var response;
 
     try {
-      http.StreamedResponse res = await req.send();
-      response = await res.stream.bytesToString();
+      http.StreamedResponse resp = await req.send();
+      response = await resp.stream.bytesToString();
       print("response $response");
 
       var json = jsonDecode(response);

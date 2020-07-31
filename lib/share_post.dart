@@ -165,7 +165,6 @@ class _SharePostState extends BaseState<SharePost>{
   }
 
   _navigatePosts() {
-//    navigationService.navigateTo('/posts');
-    Get.to(Posts());
+    navigationService.navigateTo('/posts');
   }
 }

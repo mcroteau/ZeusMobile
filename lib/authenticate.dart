@@ -137,27 +137,22 @@ class _AuthenticateState extends BaseState<Authenticate>{
       dynamic account = jsonDecode(resp.body.toString());
 
       if(account['profile']['disabled']){
-//        navigationService.navigateTo('/suspended');
-        Get.to(Suspended());
+        navigationService.navigateTo('/suspended');
       }else{
-//          navigationService.navigateTo('/posts');
-          Get.to(Posts());
+          navigationService.navigateTo('/posts');
       }
     }catch(e){
       print("error : $e");
-//      navigationService.navigateTo('');
-      Get.to(Authenticate());
+      navigationService.navigateTo('/authenticate');
     }
   }
 
   Future _setProfileId(id) async{
-//    Get.find<ZeusData>().setId(id);
-    GetStorage().write(C.ID, id);
+    await GetStorage().write(C.ID, id);
   }
 
   void _navigateRegister() {
-//    navigationService.navigateTo('/register');
-    Get.to(Register());
+    navigationService.navigateTo('/register');
   }
 }
 

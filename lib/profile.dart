@@ -109,8 +109,7 @@ class _ProfileState extends BaseState<Profile>{
                                         child: GestureDetector(
                                           onTap: (){
                                             _storeProfileId(friend['friendId'].toString()).then((data){
-//                                              navigationService.navigateTo('/profile');
-                                              Get.to(Profile());
+                                              navigationService.navigateTo('/profile');
                                             });
                                           },
                                           child: CircleAvatar(
@@ -124,8 +123,7 @@ class _ProfileState extends BaseState<Profile>{
                                           child: GestureDetector(
                                             onTap: (){
                                               _storeProfileId(friend['friendId'].toString()).then((data){
-//                                                navigationService.navigateTo('/profile');
-                                                Get.to(Profile());
+                                                navigationService.navigateTo('/profile');
                                               });
 
                                             },
@@ -172,7 +170,7 @@ class _ProfileState extends BaseState<Profile>{
 
   Future<dynamic> _fetch() async {
     http.Response profileData = await http.get(
-        C.API_URI + "profile/" + this.id,
+        C.API_URI + "profile/" + this.id.toString(),
         headers : {
           "content-type": "application/json",
           "accept": "application/json",
@@ -185,7 +183,7 @@ class _ProfileState extends BaseState<Profile>{
     friends = data['friends'];
 
     if(data['error'] != null){
-      Get.to(Authenticate());
+      navigationService.navigateTo('/authenticate');
     }
 
     return data;

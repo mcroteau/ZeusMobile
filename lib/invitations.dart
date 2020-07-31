@@ -173,8 +173,7 @@ class _InvitationsState extends BaseState<Invitations> {
 
 
   void refresh(){
-//    navigationService.navigateTo("/invitations");
-    Get.to(Invitations());
+    navigationService.navigateTo("/invitations");
   }
 
 

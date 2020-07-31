@@ -132,10 +132,7 @@ class PostsBottomContent extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             _like(post['id']).then((data){
-//                              navigationService.navigateTo('/posts');
-//                              Get.to(Posts());
-
-                              Get.toNamed('/posts');
+                              navigationService.navigateTo('/posts');
                             });
                           },
                           child: Text("π", style: TextStyle( fontSize: 32, fontWeight: FontWeight.w700, color: Colors.lightBlue)),
@@ -224,7 +221,7 @@ class PostsBottomContent extends StatelessWidget {
   }
 
   Future _storeProfileId(id) async{
-    GetStorage().write(C.ID, id);
+    await GetStorage().write(C.ID, id);
   }
 
 
@@ -272,9 +269,7 @@ class PostsBottomContent extends StatelessWidget {
       if(status['success']){
       }
 
-//      navigationService.navigateTo('/posts');
-//      Get.to(Posts());
-      Get.toNamed('/posts');
+      navigationService.navigateTo('/posts');
 
     }catch(e){
       print("error $e");
@@ -300,8 +295,6 @@ class PostsBottomContent extends StatelessWidget {
       if(status['success']){
       }
       navigationService.navigateTo('/posts');
-//      Get.to(Posts());
-//      Get.toNamed('/posts');
     }catch(e){
       print("error $e");
     }
@@ -333,8 +326,6 @@ class PostsBottomContent extends StatelessWidget {
 
   void navigatePosts(){
     navigationService.navigateTo('/posts');
-//    Get.to(Posts());
-//    Get.toNamed('/posts');
   }
 
   void showGlobalDialog(String content, Function funct){

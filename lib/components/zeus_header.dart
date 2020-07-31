@@ -64,11 +64,9 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
                       ),
                       controller: controller,
                       onSubmitted: (value) {
-//                        _search(context, controller).then((data) {
-//                    navigationService.navigateTo('/search');
                           print("searching... $value");
-//                          Get.to(Search());
-//                        });
+                          GetStorage().write(C.Q, controller.text);
+                          navigationService.navigateTo('/search');
                       },
                     )
                 ),
@@ -131,13 +129,6 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
     GetStorage().write(C.ID, id);
   }
 
-  Future<dynamic> _search(BuildContext context, TextEditingController controller) async {
-    print("search " + controller.text);
-//    var prefs = await SharedPreferences.getInstance();
-//    prefs.setString(C.Q, controller.text);
-//    Get.find<ZeusData>().setQ(controller.text);
-    GetStorage().write(C.Q, controller.text);
-  }
 
   Future<dynamic> _fetch() async {
     try {
@@ -169,31 +160,27 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 
     if (choice == C.FirstItem) {
       navigationService.navigateTo('/posts');
-//      Get.to(Posts());
     } else if (choice == C.SecondItem) {
       print("z: " + GetStorage().read(C.ID));
-//      navigationService.navigateTo('/profile');
-      Get.to(Profile());
+      navigationService.navigateTo('/profile');
     } else if (choice == C.ThirdItem) {
-//      navigationService.navigateTo('/invitations');
+      navigationService.navigateTo('/invitations');
     } else if (choice == C.FourthItem) {
       _logout().then((data){
-//        navigationService.navigateTo('/');
-          Get.to(Zero());
+        navigationService.navigateTo('/');
       });
     }
   }
 
   void navigatePosts() {
 //    this.timer.cancel();
-//    navigationService.navigateTo('/posts');
-    Get.to(Posts());
+    navigationService.navigateTo('/posts');
   }
 
   Future _logout() async{
 //    this.timer.cancel();
 
-    http.Response logoutResponse = await http.get(
+    http.Response resp = await http.get(
         C.API_URI + "logout",
         headers : {
           "content-type": "application/json",
@@ -201,6 +188,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
           "cookie" : this.session
         }
     );
+    print("logout : " + resp.body.toString());
   }
 
   String getLatestPosts(latestPosts){
