@@ -51,7 +51,7 @@ class PostsFutureBuilder extends StatelessWidget {
                     if(!p['hidden'] && !p['flagged'])
                       Card(
                               child: Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 13),
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                       color: Color(0xffefefef)

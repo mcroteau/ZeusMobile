@@ -17,9 +17,9 @@ class C {
 
   static const H1 = TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Color.fromRGBO(0, 182, 255, 1.0));
 
-  static const String FirstItem = "Latest Posts";
-  static const String SecondItem = "Profile";
-  static const String ThirdItem = "Invites";
+  static const String FirstItem = "Post Feed";
+  static const String SecondItem = "My Profile";
+  static const String ThirdItem = "My Invites";
   static const String FourthItem = "Logout";
 
   static const List<String> choices = <String>[
