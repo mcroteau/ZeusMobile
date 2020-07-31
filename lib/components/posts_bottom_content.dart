@@ -143,7 +143,7 @@ class PostsBottomContent extends StatelessWidget {
                   child: MaterialButton(
                     child: Text("x", style: TextStyle(fontSize: 19,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black12)),
+                        color: Colors.black26)),
                     onPressed: () =>
                     {
                       unshare(post['postShareId'])
@@ -154,7 +154,7 @@ class PostsBottomContent extends StatelessWidget {
               Container(
                   padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
                   child: MaterialButton(
-                    child: Icon(Icons.flag, size: 13, color: Colors.black12),
+                    child: Icon(Icons.flag, size: 13, color: Color(0xffefefef)),
                     onPressed: () =>
                     {
                       _confirmation("Are you sure you would like to flag this post?")
@@ -173,7 +173,7 @@ class PostsBottomContent extends StatelessWidget {
                   child: MaterialButton(
                     child: Text("x", style: TextStyle(fontSize: 19,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black12)),
+                        color: Colors.black26)),
                     onPressed: () =>
                     {
                       deletePost(post['id'])
@@ -184,7 +184,7 @@ class PostsBottomContent extends StatelessWidget {
               Container(
                   padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
                   child: MaterialButton(
-                    child: Icon(Icons.flag, size: 13, color:Colors.black12),
+                    child: Icon(Icons.flag, size: 13, color: Color(0xffefefef)),
                     onPressed: () =>
                     {
                       _confirmation("Are you sure you would like to flag this post?")
@@ -198,7 +198,7 @@ class PostsBottomContent extends StatelessWidget {
           Container(
               padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
               child: MaterialButton(
-                child: Icon(Icons.flag, size: 13, color:Colors.black12),
+                child: Icon(Icons.flag, size: 13, color:Color(0xffefefef)),
                 onPressed: () =>
                 {
                   _confirmation("Are you sure you would like to flag this post?")

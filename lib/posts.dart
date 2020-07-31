@@ -30,7 +30,7 @@ class _PostsState extends BaseState<Posts>{
       body: new Stack(
         children: <Widget>[
           Container(
-            color:Colors.white54,
+            color:Colors.white,
             child: PostsFutureBuilder(),
           ),
 //          SearchBox(true),

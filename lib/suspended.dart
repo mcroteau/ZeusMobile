@@ -1,15 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/base.dart';
-import 'package:http/http.dart' as http;
-import 'package:zeus/common/c.dart';
 import 'package:zeus/services/navigation_service.dart';
-import 'dart:convert';
 
-import 'components/searchbox.dart';
 
 class Suspended extends StatefulWidget{
   _SuspendedState createState() => _SuspendedState();
