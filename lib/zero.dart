@@ -7,6 +7,7 @@ import 'package:zeus/authenticate.dart';
 import 'package:zeus/posts.dart';
 //import 'package:zeus/services/navigation_service.dart';
 import 'package:zeus/assets/zeus_icons.dart';
+import 'package:zeus/services/navigation_service.dart';
 
 import 'common/c.dart';
 
@@ -20,7 +21,7 @@ class _ZeroState extends State<Zero> {
 
 
   String session;
-//  NavigationService navigationService;
+  NavigationService navigationService;
 
   @override
   void initState(){
@@ -30,7 +31,7 @@ class _ZeroState extends State<Zero> {
 
   @override
   Widget build(BuildContext context) {
-//    this.navigationService = Modular.get<NavigationService>();
+    this.navigationService = Modular.get<NavigationService>();
     return new Scaffold(
       body: Container(
         padding: EdgeInsets.fromLTRB(30, 67, 30, 0),
@@ -84,11 +85,11 @@ class _ZeroState extends State<Zero> {
     print('navigate authenticate');
     setAuthenticated().then((date) {
       if(session != null) {
-//        navigationService.navigateTo('/posts');
-        Get.to(Posts());
+        navigationService.navigateTo('/posts');
+//        Get.to(Posts());
       }else{
-//        navigationService.navigateTo('/authenticate');
-        Get.to(Authenticate());
+        navigationService.navigateTo('/authenticate');
+//        Get.to(Authenticate());
       }
     });
 

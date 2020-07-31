@@ -24,7 +24,8 @@ class PostsBottomContent extends StatelessWidget {
 
   PostsBottomContent(post){
     this.post = post;
-//    navigationService = Modular.get<NavigationService>();
+    navigationService = Modular.get<NavigationService>();
+    print("posts butt: " + this.navigationService.toString());
   }
 
   @override
@@ -38,9 +39,8 @@ class PostsBottomContent extends StatelessWidget {
           alignment: Alignment.topLeft,
           child: GestureDetector(
             onTap: () => {
-              _setProfileId(post['accountId']).then((data){
-//                navigationService.navigateTo('/profile');
-                Get.to(Profile());
+              _storeProfileId(post['accountId']).then((data){
+                navigationService.navigateTo('/profile');
               })
             },
             child: Container(
@@ -53,9 +53,8 @@ class PostsBottomContent extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: GestureDetector(
               onTap: () => {
-                _setProfileId(post['accountId']).then((data){
-//                  navigationService.navigateTo('/profile');
-                  Get.to(Profile());
+                _storeProfileId(post['accountId']).then((data){
+                  navigationService.navigateTo('/profile');
                 })
               },
               child: Container(
@@ -63,9 +62,8 @@ class PostsBottomContent extends StatelessWidget {
                 child: GestureDetector(
                   child: Text(post['name'], style: TextStyle( fontSize: 19, fontWeight: FontWeight.w700 )),
                   onTap: () => {
-                    _setProfileId(post['accountId']).then((data){
-//                      navigationService.navigateTo('/profile');
-                      Get.to(Profile());
+                    _storeProfileId(post['accountId']).then((data){
+                      navigationService.navigateTo('/profile');
                     })
                   },
                 )
@@ -76,9 +74,8 @@ class PostsBottomContent extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: GestureDetector(
               onTap: (){
-                _setProfileId(post['accountId']).then((data){
-//                  navigationService.navigateTo('/profile');
-                  Get.to(Profile());
+                _storeProfileId(post['accountId']).then((data){
+                  navigationService.navigateTo('/profile');
                 });
               },
               child: Container(
@@ -110,8 +107,7 @@ class PostsBottomContent extends StatelessWidget {
                          child: GestureDetector(
                            onTap: () {
                              _storePostId(post['id']).then((data){
-//                               navigationService.navigateTo('/share_post');
-                               Get.to(SharePost());
+                               navigationService.navigateTo('/share_post');
                              });
                            },
                            child: Text("∆", style: TextStyle(fontSize: 29, fontWeight: FontWeight.w700, color: Colors.deepOrangeAccent)),
@@ -227,6 +223,11 @@ class PostsBottomContent extends StatelessWidget {
     );
   }
 
+  Future _storeProfileId(id) async{
+    GetStorage().write(C.ID, id);
+  }
+
+
   Future _storePostId(id) async{
     GetStorage().write(C.POST_ID, id);
   }
@@ -252,11 +253,6 @@ class PostsBottomContent extends StatelessWidget {
       print("error $e");
     }
     return null;
-  }
-
-
-  Future _setProfileId(id) async{
-    GetStorage().write(C.ID, id);
   }
 
 
@@ -303,9 +299,9 @@ class PostsBottomContent extends StatelessWidget {
       dynamic status = jsonDecode(resp.body.toString());
       if(status['success']){
       }
-//      navigationService.navigateTo('/posts');
+      navigationService.navigateTo('/posts');
 //      Get.to(Posts());
-      Get.toNamed('/posts');
+//      Get.toNamed('/posts');
     }catch(e){
       print("error $e");
     }

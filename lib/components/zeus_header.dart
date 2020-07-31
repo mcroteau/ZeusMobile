@@ -15,6 +15,7 @@ import 'package:zeus/common/c.dart';
 import 'package:zeus/posts.dart';
 import 'package:zeus/profile.dart';
 import 'package:zeus/search.dart';
+import 'package:zeus/services/navigation_service.dart';
 import 'package:zeus/zero.dart';
 //import 'package:zeus/services/navigation_service.dart';
 
@@ -32,7 +33,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   var invitationsCount;
 
   TextEditingController controller;
-//  NavigationService navigationService;
+  NavigationService navigationService;
 
 
   @override
@@ -46,8 +47,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
     _fetch();
     this.session = GetStorage().read(C.SESSION);
     this.controller = new TextEditingController();
-//    this.navigationService = Modular.get<NavigationService>();
-//    this.zeusData = Modular.get<ZeusData>();
+    this.navigationService = Modular.get<NavigationService>();
     return FutureBuilder(
       future:_fetch(),
       builder: (context, snapshot) {
@@ -67,7 +67,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 //                        _search(context, controller).then((data) {
 //                    navigationService.navigateTo('/search');
                           print("searching... $value");
-                          Get.to(Search());
+//                          Get.to(Search());
 //                        });
                       },
                     )
@@ -168,8 +168,8 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
     print("header $id");
 
     if (choice == C.FirstItem) {
-//      navigationService.navigateTo('/posts');
-      Get.to(Posts());
+      navigationService.navigateTo('/posts');
+//      Get.to(Posts());
     } else if (choice == C.SecondItem) {
       print("z: " + GetStorage().read(C.ID));
 //      navigationService.navigateTo('/profile');

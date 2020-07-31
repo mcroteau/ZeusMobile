@@ -1,5 +1,4 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -19,22 +18,8 @@ import 'invitations.dart';
 
 
 Future<void> main() async {
-//  runApp(ModularApp(module: InitModule()));
   await GetStorage.init();
-  runApp(GetMaterialApp(
-    home: ZeusApp(),
-//    initialRoute: '/',
-//    getPages: [
-//      GetPage(name: '/', page: () => Zero()),
-//      GetPage(name: '/posts', page: () => Posts()),
-//      GetPage(name: '/search', page: () => Search(), transition: Transition.fadeIn),
-//      GetPage(
-//          name: '/profile',
-//          page: () => Profile(),
-//          transition: Transition.zoom
-//      ),
-//    ],
-  ));
+  runApp(ModularApp(module: InitModule()));
 }
 
 class ZeusApp extends StatefulWidget {
@@ -43,18 +28,22 @@ class ZeusApp extends StatefulWidget {
 
 class ZeusAppState extends State<ZeusApp>{
 
-  final NavigationService navigationService = Get.put(NavigationService());
+  NavigationService navigationService;
 
   @override
   void initState(){
     super.initState();
+    initiateAuthenticationCheck().then((data) {
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    navigationService = Modular.get<NavigationService>();
     return MaterialApp(
+      navigatorKey: navigationService.navigatorKey,
       debugShowCheckedModeBanner: false,
-      home: Zero(),
       onGenerateRoute: (routeSettings) {
         switch (routeSettings.name) {
           case '/':
@@ -63,6 +52,8 @@ class ZeusAppState extends State<ZeusApp>{
             return MaterialPageRoute(builder: (context) => Search());
           case '/posts':
             return MaterialPageRoute(builder: (context) => Posts());
+          case '/publish':
+            return MaterialPageRoute(builder: (context) => Publish());
           case '/share_post':
             return MaterialPageRoute(builder: (context) => SharePost());
           case '/profile':
@@ -78,87 +69,34 @@ class ZeusAppState extends State<ZeusApp>{
           default:
             return MaterialPageRoute(builder: (context) => Zero());
         }
-      }
+      },
     );
+  }
+
+  Future initiateAuthenticationCheck() async {
+    var session = GetStorage().read(C.SESSION);
+    NavigationService navigationService = Modular.get<NavigationService>();
+    print("session $session");
+    if (session == null || session == "") {
+      navigationService.navigateTo('/authenticate');
+    } else {
+      navigationService.navigateTo('/posts');
+    }
   }
 
 }
 
-//class ZeusApp extends StatefulWidget {
-//  ZeusAppState createState() => ZeusAppState();
-//}
-//
-//class ZeusAppState extends State<ZeusApp>{
-//
-//  NavigationService navigationService;
-//
-//  @override
-//  void initState(){
-//    super.initState();
-//    initiateAuthenticationCheck().then((data) {
-//      setState(() {});
-//    });
-//  }
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    navigationService = Modular.get<NavigationService>();
-//    return MaterialApp(
-//          navigatorKey: navigationService.navigatorKey,
-//          debugShowCheckedModeBanner: false,
-//          onGenerateRoute: (routeSettings) {
-//            switch (routeSettings.name) {
-//              case '/':
-//                return MaterialPageRoute(builder: (context) => Zero());
-//              case '/search':
-//                return MaterialPageRoute(builder: (context) => Search());
-//              case '/posts':
-//                return MaterialPageRoute(builder: (context) => Posts());
-//              case '/share_post':
-//                return MaterialPageRoute(builder: (context) => SharePost());
-//              case '/profile':
-//                return MaterialPageRoute(builder: (context) => Profile());
-//              case '/invitations':
-//                return MaterialPageRoute(builder: (context) => Invitations());
-//              case '/authenticate':
-//                return MaterialPageRoute(builder: (context) => Authenticate());
-//              case '/register':
-//                return MaterialPageRoute(builder: (context) => Register());
-//              case '/suspended':
-//                return MaterialPageRoute(builder: (context) => Suspended());
-//              default:
-//                return MaterialPageRoute(builder: (context) => Zero());
-//            }
-//        },
-//    );
-//  }
-//
-//  Future initiateAuthenticationCheck() async {
-//    final prefs = await SharedPreferences.getInstance();
-//    String session = prefs.getString(C.SESSION);
-//
-//    NavigationService navigationService = Modular.get<NavigationService>();
-//    print("session $session");
-//    if (session == null || session == "") {
-//      navigationService.navigateTo('/authenticate');
-//    } else {
-//      navigationService.navigateTo('/posts');
-//    }
-//  }
-//
-//}
-//
-//class InitModule extends MainModule {
-//
-//  @override
-//  List<Bind> get binds => [
-//    Bind((_) => NavigationService()),
-//    Bind((_) => ZeusData(), singleton: true),
-//  ];
-//
-//  @override
-//  List<Router> get routers => [];
-//
-//  Widget get bootstrap => ZeusApp();
-//}
+
+class InitModule extends MainModule {
+
+  @override
+  List<Bind> get binds => [
+    Bind((_) => NavigationService()),
+  ];
+
+  @override
+  List<Router> get routers => [];
+
+  Widget get bootstrap => ZeusApp();
+}
 

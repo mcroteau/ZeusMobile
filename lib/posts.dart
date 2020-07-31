@@ -24,16 +24,12 @@ class _PostsState extends BaseState<Posts>{
 
   @override
   void initState() {
-    try{
-      super.initState();
-//      navigationService = Modular.get<NavigationService>();
-    }catch(e){
-      print('Unexpected error : $e');
-    }
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    this.navigationService = Modular.get<NavigationService>();
     return Scaffold(
       body: new Stack(
         children: <Widget>[
@@ -54,8 +50,7 @@ class _PostsState extends BaseState<Posts>{
           margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
           child: RaisedButton(
             onPressed: () => {
-//                navigationService.navigateTo('/publish')
-                Get.to(Publish())
+                navigationService.navigateTo('/publish')
               },
               focusColor: Colors.pinkAccent,
               elevation: 10.0,

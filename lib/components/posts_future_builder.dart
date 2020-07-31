@@ -14,6 +14,7 @@ import 'dart:convert';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/posts_bottom_content.dart';
 import 'package:zeus/components/zeus_header.dart';
+import 'package:zeus/services/navigation_service.dart';
 //import 'package:zeus/services/navigation_service.dart';
 
 
@@ -23,10 +24,10 @@ class PostsFutureBuilder extends StatelessWidget {
   BuildContext context;
   MediaQueryData mediaQuery;
   TextEditingController controller;
-//  NavigationService navigationService;
+  NavigationService navigationService;
 
   PostsFutureBuilder(){
-//    navigationService = Modular.get<NavigationService>();
+    navigationService = Modular.get<NavigationService>();
   }
 
 
