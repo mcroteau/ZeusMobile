@@ -22,23 +22,20 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   var timer;
   var session;
 
-  var postsCount;
+  var latestPosts;
   var invitationsCount;
 
   TextEditingController controller;
   NavigationService navigationService;
 
-  _ZeusHeaderState(){
-    setSession();
-    const oneSec = const Duration(seconds:3);
-    if(timer == null)
-      timer = new Timer.periodic(oneSec, getData);
-  }
 
   @override
-  void dispose(){
-    super.dispose();
-    timer.cancel();
+  void initState(){
+    super.initState();
+    const oneSec = const Duration(seconds:13);
+    if(timer == null)
+      timer = new Timer.periodic(oneSec, getData);
+    setSession();
   }
 
   @override
@@ -83,21 +80,30 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
                         },
                       ),
                     ),
-                    Text(this.invitationsCount.toString(), )
+                    Text(invitationsCount != null && invitationsCount.toString() != "0" ? invitationsCount.toString() : "", )
                   ]
                 ),
                 Align(
-                    child:Container(
-                      color: Colors.yellowAccent,
-                      child: GestureDetector(
-                          child: Icon(Zeus.icon, size: 23),
-                          onTap: navigatePosts,
+                  child: Container(
+                    color: Colors.yellowAccent,
+                    padding: EdgeInsets.all(20),
+                    margin: EdgeInsets.fromLTRB(0, 10, 4, 0),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          child: GestureDetector(
+                            child: Icon(Zeus.icon, size: 23),
+                            onTap: navigatePosts,
+                          ),
                         ),
-                        padding: EdgeInsets.all(12),
-                        margin: EdgeInsets.fromLTRB(4, 30, 4, 0),
-                      )
-                  ),
-
+                        Container(
+                          alignment: Alignment.bottomRight,
+                            child: Text(getLatestPosts())
+                        )
+                      ],
+                    )
+                  )
+                )
               ]
             ),
           FutureBuilder(
@@ -136,8 +142,9 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
       timer.cancel();
       navigationService.navigateTo('/authenticate');
     }else {
-      postsCount = data['latestPosts'];
-      invitationsCount = data['invitationsCount'] != null ? data['invitationsCount'] : "";
+      latestPosts = data['latestPosts'];
+      print(latestPosts?.length);
+      invitationsCount = data['invitationsCount'];
     }
   }
 
@@ -205,5 +212,14 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
           "cookie" : session
         }
     );
+  }
+
+  String getLatestPosts(){
+    print("get latest posts" + latestPosts?.length.toString());
+    if(latestPosts != null && latestPosts?.length.toString() != "0"){
+      return latestPosts.length.toString();
+    }else{
+      return "";
+    }
   }
 }

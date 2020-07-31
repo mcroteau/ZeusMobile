@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/components/posts_future_builder.dart';
 import 'package:zeus/components/searchbox.dart';
+import 'package:zeus/components/zeus_header.dart';
 import 'package:zeus/components/zeus_highlight.dart';
 import 'package:zeus/publish.dart';
 import 'package:zeus/base.dart';
@@ -34,7 +35,6 @@ class _PostsState extends BaseState<Posts>{
             color:Colors.white,
             child: PostsFutureBuilder(),
           ),
-//          SearchBox(true),
           Positioned(
             bottom:0,
             left:0,

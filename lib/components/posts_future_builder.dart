@@ -190,15 +190,26 @@ class PostsFutureBuilder extends StatelessWidget {
           }else{
             return Center(
               child: Container(
-                padding: EdgeInsets.fromLTRB(20, 49, 40, 0),
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child:Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                    Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...", textAlign: TextAlign.left,),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: Text("all of this means you need to share something!", textAlign: TextAlign.left,),
-                      color: Colors.yellowAccent,
-                    )
+                      ZeusHeader(),
+                      Container(
+                        padding: EdgeInsets.fromLTRB(7, 12, 0, 20),
+                        child: Text("Latest Posts", textAlign: TextAlign.left, style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
+                      ),
+                      Container(
+                        child: Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur...", textAlign: TextAlign.left,),
+                        margin: EdgeInsets.fromLTRB(7, 0, 34, 0),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(7, 0, 34, 0),
+                        alignment: Alignment.centerLeft,
+                        child: Text("all of this means you need to share something!", textAlign: TextAlign.left,),
+                        color: Colors.yellowAccent,
+                      )
                   ],
                 ),
               ),
