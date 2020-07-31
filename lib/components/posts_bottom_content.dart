@@ -40,7 +40,7 @@ class PostsBottomContent extends StatelessWidget {
               })
             },
             child: Container(
-              padding: EdgeInsets.fromLTRB(4, 10, 0, 0),
+              padding: EdgeInsets.fromLTRB(4, 13, 0, 0),
               child: Image.network(C.API_URI + post['imageUri'], width: 50),
             ),
           ),
@@ -55,7 +55,7 @@ class PostsBottomContent extends StatelessWidget {
                 })
               },
               child: Container(
-                padding: EdgeInsets.fromLTRB(67, 10, 0, 0),
+                padding: EdgeInsets.fromLTRB(67, 13, 0, 0),
                 child: GestureDetector(
                   child: Text(post['name'], style: TextStyle( fontSize: 19, fontWeight: FontWeight.w700 )),
                   onTap: () => {
@@ -78,7 +78,7 @@ class PostsBottomContent extends StatelessWidget {
                 });
               },
               child: Container(
-                padding: EdgeInsets.fromLTRB(67, 34, 0, 0),
+                padding: EdgeInsets.fromLTRB(67, 36, 0, 0),
                 child: Text(post['timeAgo'], style: TextStyle(fontSize: 16))
               )
           )

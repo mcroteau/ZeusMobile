@@ -142,7 +142,7 @@ class PostsFutureBuilder extends StatelessWidget {
                                         if(p['content'] != null)
                                             Container(
                                               alignment: Alignment.centerLeft,
-                                              padding: EdgeInsets.fromLTRB(0, 15, 20, 10),
+                                              padding: EdgeInsets.fromLTRB(0, 15, 20, 21),
                                               child: Html(
                                                 data: p['content'],
                                                 style: {

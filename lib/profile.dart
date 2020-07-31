@@ -105,7 +105,7 @@ class _ProfileState extends BaseState<Profile>{
                             Expanded(
                               child: ListView(
                                 children: <Widget>[
-                                  for(var friend in friends)
+                                  for(var friend in snapshot.data['friends'])
                                     Row(
                                     children: <Widget>[
                                       Container(

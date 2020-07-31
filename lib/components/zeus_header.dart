@@ -14,6 +14,7 @@ import 'package:zeus/common/c.dart';
 import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/posts.dart';
 import 'package:zeus/profile.dart';
+import 'package:zeus/search.dart';
 import 'package:zeus/zero.dart';
 //import 'package:zeus/services/navigation_service.dart';
 
@@ -65,9 +66,13 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
                       ),
                       controller: controller,
                       onSubmitted: (value) {
-                        _search(context, controller).then((data) {
+//                        _search(context, controller).then((data) {
 //                    navigationService.navigateTo('/search');
-                        });
+                          print("searching... $value");
+                          Get.find<ZeusData>().setQ(controller.text);
+                          Get.to(Search());
+                          _fetch();
+//                        });
                       },
                     )
                 ),
@@ -135,8 +140,9 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 
   Future<dynamic> _search(BuildContext context, TextEditingController controller) async {
     print("search " + controller.text);
-    var prefs = await SharedPreferences.getInstance();
-    prefs.setString(C.Q, controller.text);
+//    var prefs = await SharedPreferences.getInstance();
+//    prefs.setString(C.Q, controller.text);
+    Get.find<ZeusData>().setQ(controller.text);
   }
 
   Future<dynamic> _fetch() async {

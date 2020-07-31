@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:video_box/video_box.dart';
@@ -12,6 +13,7 @@ import 'package:zeus/base.dart';
 import 'dart:convert';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/zeus_header.dart';
+import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/services/navigation_service.dart';
 
 
@@ -33,7 +35,7 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
   @override
   void initState(){
     super.initState();
-    setQ().then((data) {
+    _setQuery().then((data) {
       setState(() {});
     });
   }
@@ -66,7 +68,7 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
                                         padding: const EdgeInsets.all(10),
                                           child: GestureDetector(
                                             onTap: (){
-                                              setProf(p['id'].toString()).then((data){
+                                              _storeProfileId(p['id'].toString()).then((data){
                                                  navigationService.navigateTo('/profile');
                                               });
                                             },
@@ -84,7 +86,7 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
                                               padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                                               child:  GestureDetector(
                                                 onTap: (){
-                                                  setProf(p['id'].toString()).then((data){
+                                                  _storeProfileId(p['id'].toString()).then((data){
                                                     navigationService.navigateTo('/profile');
                                                   });
                                                 },
@@ -128,27 +130,30 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
 
   FutureOr<dynamic> _fetch() async {
     print("_fetch $q");
-    http.Response postResponse = await http.get(
+    http.Response resp = await http.get(
         C.API_URI + "search?q=" + q,
         headers : {
-          "cookie" : session
+          "cookie" : this.session
         }
     );
     print("getting data");
-    dynamic data = jsonDecode(postResponse.body.toString());
+    dynamic data = jsonDecode(resp.body.toString());
     return data;
   }
 
-  Future setQ() async{
-    final prefs = await SharedPreferences.getInstance();
-    this.session = prefs.get(C.SESSION);
-    this.q = prefs.get(C.Q);
-    navigationService = Modular.get<NavigationService>();
+  Future _setQuery() async{
+//    final prefs = await SharedPreferences.getInstance();
+//    this.session = prefs.get(C.SESSION);
+//    this.q = prefs.get(C.Q);
+//    navigationService = Modular.get<NavigationService>();
+    this.q = Get.find<ZeusData>().q;
+    this.session = Get.find<ZeusData>().session;
   }
 
-  Future setProf(String id) async{
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(C.ID, id);
+  Future _storeProfileId(String id) async{
+//    final prefs = await SharedPreferences.getInstance();
+//    prefs.setString(C.ID, id);
+    Get.find<ZeusData>().setId(id);
   }
 
 }
