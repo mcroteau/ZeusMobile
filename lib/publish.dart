@@ -75,13 +75,19 @@ class _PublishState extends BaseState<Publish>{
                            )
                        ),
                        Expanded(
-                         child: TextField(
-                           decoration: InputDecoration(
-                               hintText: "What's on your mind?"
+                         child: Container(
+                           padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                           child: TextField(
+                             decoration: InputDecoration(
+                                 hintText: "What's on your mind?",
+                             ),
+                             controller: controller,
+                             keyboardType: TextInputType.multiline,
+                             minLines: 1,//Normal textInputField will be displayed
+                             maxLines: 13,
                            ),
-                           controller: controller,
                          ),
-                       ),
+                       )
                      ]
                  ),
                  Container(

@@ -22,6 +22,7 @@ class _InvitationsState extends BaseState<Invitations> {
 
   NavigationService navigationService;
 
+
   @override
   void initState(){
     super.initState();

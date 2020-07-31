@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -18,10 +19,27 @@ class ZeusHeader extends StatefulWidget {
 class _ZeusHeaderState extends BaseState<ZeusHeader>{
 
   var id;
+  var timer;
+  var session;
+
+  var postsCount;
+  var invitationsCount;
 
   TextEditingController controller;
   NavigationService navigationService;
 
+  _ZeusHeaderState(){
+    setSession();
+    const oneSec = const Duration(seconds:3);
+    if(timer == null)
+      timer = new Timer.periodic(oneSec, getData);
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    timer.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,24 +66,25 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Row(
+              Column(
                 children: <Widget>[
-                Container(
-                padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
-                  child: PopupMenuButton<String>(
-                    icon: Icon(Icons.menu, color: Colors.black12),
-                    onSelected: choiceAction,
-                    itemBuilder: (BuildContext context) {
-                      return C.choices.map((String choice) {
-                        return PopupMenuItem<String>(
-                          value: choice,
-                          child: Text(choice),
-                        );
-                      }).toList();
-                    },
-                  ),
-                )
-                ]
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
+                      child: PopupMenuButton<String>(
+                        icon: Icon(Icons.menu, color: Colors.black12),
+                        onSelected: choiceAction,
+                        itemBuilder: (BuildContext context) {
+                          return C.choices.map((String choice) {
+                            return PopupMenuItem<String>(
+                              value: choice,
+                              child: Text(choice),
+                            );
+                          }).toList();
+                        },
+                      ),
+                    ),
+                    Text(this.invitationsCount.toString(), )
+                  ]
                 ),
                 Align(
                     child:Container(
@@ -93,9 +112,40 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
     );
   }
 
+  Future setSession() async{
+    final prefs = await SharedPreferences.getInstance();
+    this.session = prefs.get(C.SESSION);
+  }
+
+  Future getData(t) async {
+    print("get data");
+    http.Response response = await http.get(
+        C.API_URI + "profile/data",
+        headers : {
+          "content-type": "application/json",
+          "accept": "application/json",
+          "cookie" : session
+        }
+    );
+
+    var data = jsonDecode(response.body.toString());
+
+    print(data.toString());
+
+    if(data['error'] != null){
+      timer.cancel();
+      navigationService.navigateTo('/authenticate');
+    }else {
+      postsCount = data['latestPosts'];
+      invitationsCount = data['invitationsCount'] != null ? data['invitationsCount'] : "";
+    }
+  }
+
+
   Future setProfileId() async{
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(C.ID, id.toString());
+    this.session = prefs.get(C.SESSION);
   }
 
   Future<dynamic> _search(BuildContext context, TextEditingController controller) async {
@@ -105,9 +155,6 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   }
 
   Future<dynamic> _fetch() async {
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
-
     http.Response postResponse = await http.get(
         C.API_URI + "account/info",
         headers : {
@@ -122,6 +169,8 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   }
 
   void choiceAction(String choice) {
+
+    this.timer.cancel();
 
     if (choice == C.FirstItem) {
       navigationService.navigateTo('/posts');
@@ -139,15 +188,16 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   }
 
   void navigatePosts() {
+    this.timer.cancel();
     navigationService.navigateTo('/posts');
   }
 
   Future _logout() async{
-    print("logout");
+    this.timer.cancel();
     final prefs = await SharedPreferences.getInstance();
     final session = prefs.get(C.SESSION);
 
-    http.Response postResponse = await http.get(
+    http.Response logoutResponse = await http.get(
         C.API_URI + "logout",
         headers : {
           "content-type": "application/json",

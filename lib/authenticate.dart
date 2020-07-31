@@ -31,6 +31,7 @@ class _AuthenticateState extends BaseState<Authenticate>{
 
   @override
   Widget build(BuildContext context) {
+    print("build authenticate");
     return new Scaffold(
       body: Flex(
            children: <Widget>[
