@@ -91,7 +91,7 @@ class PostsHeader extends StatelessWidget{
     );
   }
 
-  Future setProf() async{
+  Future setProfileId() async{
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(C.ID, id.toString());
   }
@@ -124,7 +124,7 @@ class PostsHeader extends StatelessWidget{
     if (choice == C.FirstItem) {
       navigationService.navigateTo('/posts');
     } else if (choice == C.SecondItem) {
-      setProf().then((data){
+      setProfileId().then((data){
         navigationService.navigateTo('/profile');
       });
     } else if (choice == C.ThirdItem) {
