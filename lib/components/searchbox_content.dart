@@ -121,7 +121,7 @@ class SearchBoxContent extends StatelessWidget{
     );
   }
 
-  Future setProf() async{
+  Future setProfileId() async{
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(C.ID, id.toString());
   }
@@ -151,15 +151,17 @@ class SearchBoxContent extends StatelessWidget{
 
   void choiceAction(String choice) {
     if (choice == C.FirstItem) {
-      setProf().then((data){
+      navigationService.navigateTo('/posts');
+    } else if (choice == C.SecondItem) {
+      setProfileId().then((data){
         navigationService.navigateTo('/profile');
       });
-    } else if (choice == C.SecondItem) {
-        navigationService.navigateTo('/invitations');
     } else if (choice == C.ThirdItem) {
-        _logout().then((data){
-          navigationService.navigateTo('/');
-        });
+      navigationService.navigateTo('/invitations');
+    } else if (choice == C.FourthItem) {
+      _logout().then((data){
+        navigationService.navigateTo('/');
+      });
     }
   }
 

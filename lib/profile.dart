@@ -41,8 +41,8 @@ class _ProfileState extends BaseState<Profile>{
 
   @override
   Widget build(BuildContext context) {
-    return
-      new FutureBuilder(
+    return Scaffold(
+      body: new FutureBuilder(
         future: _fetch(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -139,6 +139,7 @@ class _ProfileState extends BaseState<Profile>{
           else
             return new Center(child: CircularProgressIndicator());
         }
+      )
     );
   }
 

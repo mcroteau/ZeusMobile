@@ -41,6 +41,7 @@ class ZeusAppState extends State<ZeusApp>{
     navigationService = Modular.get<NavigationService>();
     return MaterialApp(
           navigatorKey: navigationService.navigatorKey,
+          debugShowCheckedModeBanner: false,
           onGenerateRoute: (routeSettings) {
             switch (routeSettings.name) {
               case '/':
