@@ -47,7 +47,7 @@ class _PostsState extends BaseState<Posts>{
             },
             elevation: 10.0,
             textColor: Colors.white,
-            color: Colors.black,
+            color: Colors.lightBlue,
             child: Row(
               children:<Widget> [
                 Icon(Icons.add),
