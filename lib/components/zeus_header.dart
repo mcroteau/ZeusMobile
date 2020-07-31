@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/assets/zeus_icons.dart';
 import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
+import 'package:zeus/components/latest_posts_text.dart';
 import 'package:zeus/services/navigation_service.dart';
 
 class ZeusHeader extends StatefulWidget {
@@ -32,9 +33,6 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   @override
   void initState(){
     super.initState();
-    const oneSec = const Duration(seconds:13);
-    if(timer == null)
-      timer = new Timer.periodic(oneSec, getData);
     setSession();
   }
 
@@ -98,7 +96,12 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
                         ),
                         Container(
                           alignment: Alignment.bottomRight,
-                            child: Text(getLatestPosts())
+                            child: FutureBuilder(
+                              future : latestAndGreatest(),
+                              builder: (context, snapshot) {
+                                return Text(snapshot.hasData ? '${snapshot.data}' : '');
+                              },
+                            )
                         )
                       ],
                     )
@@ -106,7 +109,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
                 )
               ]
             ),
-          FutureBuilder(
+            FutureBuilder(
               future: _fetch(),
               builder: (context, snapshot) {
                 if(snapshot.hasData)
@@ -123,8 +126,8 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
     this.session = prefs.get(C.SESSION);
   }
 
-  Future getData(t) async {
-    print("get data");
+  Future<dynamic> latestAndGreatest() async {
+    print("get latest & greatest");
     http.Response response = await http.get(
         C.API_URI + "profile/data",
         headers : {
@@ -135,17 +138,10 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
     );
 
     var data = jsonDecode(response.body.toString());
-
     print(data.toString());
 
-    if(data['error'] != null){
-      timer.cancel();
-      navigationService.navigateTo('/authenticate');
-    }else {
-      latestPosts = data['latestPosts'];
-      print(latestPosts?.length);
-      invitationsCount = data['invitationsCount'];
-    }
+    return getLatestPosts(latestPosts);
+
   }
 
 
@@ -177,7 +173,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 
   void choiceAction(String choice) {
 
-    this.timer.cancel();
+//    this.timer.cancel();
 
     if (choice == C.FirstItem) {
       navigationService.navigateTo('/posts');
@@ -195,12 +191,12 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   }
 
   void navigatePosts() {
-    this.timer.cancel();
+//    this.timer.cancel();
     navigationService.navigateTo('/posts');
   }
 
   Future _logout() async{
-    this.timer.cancel();
+//    this.timer.cancel();
     final prefs = await SharedPreferences.getInstance();
     final session = prefs.get(C.SESSION);
 
@@ -214,7 +210,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
     );
   }
 
-  String getLatestPosts(){
+  String getLatestPosts(latestPosts){
     print("get latest posts" + latestPosts?.length.toString());
     if(latestPosts != null && latestPosts?.length.toString() != "0"){
       return latestPosts.length.toString();
