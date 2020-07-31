@@ -59,10 +59,10 @@ class PostsFutureBuilder extends StatelessWidget {
                           child: Container(
                               margin: EdgeInsets.fromLTRB(0, 0, 0, 13),
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Color(0xffefefef)
+                                border: Border.fromBorderSide(
+                                  BorderSide( color: Color(0xffefefef))
                                 ),
-                                color: Color(0xfff7f7f1),
+                                color: Color(0xffff4f3f2),
                               ),
                               child: Column(
                                   children: <Widget>[

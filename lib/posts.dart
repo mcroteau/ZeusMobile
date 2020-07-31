@@ -34,7 +34,7 @@ class _PostsState extends BaseState<Posts>{
       body: new Stack(
         children: <Widget>[
           Container(
-            color:Colors.white,
+            color:Color(0xffffffff),
             child: PostsFutureBuilder(),
           ),
           Positioned(

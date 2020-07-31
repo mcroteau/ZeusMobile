@@ -107,7 +107,6 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
                                     Container(
                                       child: Icon(Zeus.icon, size: 23),
                                     ),
-                                    Text(latestPosts)
                                   ],
                                 )
                             ),
@@ -145,23 +144,6 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
       print("set " + data['id'].toString());
 
       GetStorage().write(C.ID, data['id'].toString());
-
-      http.Response respDos = await http.get(
-          C.API_URI + "profile/data",
-          headers: {
-            "content-type": "application/json",
-            "accept": "application/json",
-            "cookie": this.session
-          }
-      );
-//
-      Map<String, dynamic> dataDos = jsonDecode(respDos.body.toString());
-//      print("data:" + dataDos.toString());
-//
-//      setState(() {
-//        latestPosts = dataDos['latestPosts']?.length.toString();
-//      });
-      latestPosts = dataDos['latestPosts']?.length.toString();
 
       return data;
 
