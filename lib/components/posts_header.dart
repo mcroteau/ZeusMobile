@@ -120,13 +120,16 @@ class PostsHeader extends StatelessWidget{
   }
 
   void choiceAction(String choice) {
+
     if (choice == C.FirstItem) {
+      navigationService.navigateTo('/posts');
+    } else if (choice == C.SecondItem) {
       setProf().then((data){
         navigationService.navigateTo('/profile');
       });
-    } else if (choice == C.SecondItem) {
-      navigationService.navigateTo('/invitations');
     } else if (choice == C.ThirdItem) {
+      navigationService.navigateTo('/invitations');
+    } else if (choice == C.FourthItem) {
       _logout().then((data){
         navigationService.navigateTo('/');
       });
