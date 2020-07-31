@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -116,7 +117,7 @@ class _AuthenticateState extends BaseState<Authenticate>{
         return false;
       }
 
-      http.Response response = await http.post(
+      http.Response resp = await http.post(
           C.API_URI + "authenticate_mobile",
           headers: {"Content-Type": "application/json"},
           body: json.encode({
@@ -124,16 +125,16 @@ class _AuthenticateState extends BaseState<Authenticate>{
             "password": passwordController.text
           }));
 
-      print(response.toString());
+      print(resp.toString());
       var session = "";
-      response.headers.forEach((key, value) {
+      resp.headers.forEach((key, value) {
         if(key == "set-cookie")session = value.split(";")[0];
       });
-      print(response.body.toString());
+      print(resp.body.toString());
       print("session: $session");
 
 
-      dynamic account = jsonDecode(response.body.toString());
+      dynamic account = jsonDecode(resp.body.toString());
 
       if(account['profile']['disabled']){
 //        navigationService.navigateTo('/suspended');
@@ -146,16 +147,19 @@ class _AuthenticateState extends BaseState<Authenticate>{
       }
     }catch(e){
       print("error : $e");
-      navigationService.navigateTo('/');
+//      navigationService.navigateTo('');
+      Get.to(Authenticate());
     }
   }
 
   Future _setSession(session) async {
-    Get.find<ZeusData>().setSession(session);
+//    Get.find<ZeusData>().setSession(session);
+    GetStorage().write(C.SESSION, session);
   }
 
   Future _setProfileId(id) async{
-    Get.find<ZeusData>().setId(id);
+//    Get.find<ZeusData>().setId(id);
+    GetStorage().write(C.ID, id);
   }
 
   void _navigateRegister() {

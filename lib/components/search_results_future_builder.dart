@@ -3,6 +3,7 @@ import 'dart:collection';
 
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:video_box/video_box.dart';
@@ -146,7 +147,8 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
 //    this.session = prefs.get(C.SESSION);
 //    this.q = prefs.get(C.Q);
 //    navigationService = Modular.get<NavigationService>();
-    this.q = Get.find<ZeusData>().q;
+    var storage = GetStorage();
+    this.q = storage.read("q");
     this.session = Get.find<ZeusData>().session;
   }
 

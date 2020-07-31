@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/authenticate.dart';
 import 'package:zeus/base.dart';
@@ -43,17 +44,18 @@ class _ProfileState extends BaseState<Profile>{
   @override
   void initState(){
     super.initState();
-    _setSession().then((data){
-      setState(() {});
+    setState(() {
+
     });
   }
 
   @override
   Widget build(BuildContext context) {
 //    this.navigationService = Modular.get<NavigationService>();
-    this.zeusData = Get.find<ZeusData>();
-    print("setting zeus data: " + zeusData?.id.toString());
-    print("profile build : " + zeusData?.id.toString());
+//    this.zeusData = Get.find<ZeusData>();
+    _setSession();
+    print("setting zeus data: " + this.id.toString());
+    print("profile build : " + this.id.toString());
     return Scaffold(
       body: new FutureBuilder(
         future: _fetch(),
@@ -173,18 +175,20 @@ class _ProfileState extends BaseState<Profile>{
 
   Future _storeProfileId(String id) async{
     print("set id $id ");
-    Get.find<ZeusData>().setId(id);
+//    Get.find<ZeusData>().setId(id);
   }
 
 
   Future _setSession() async{
-    this.id = Get.find<ZeusData>().id;
-    this.session = Get.find<ZeusData>().session;
+//    this.id = Get.find<ZeusData>().id;
+//    this.session = Get.find<ZeusData>().session;
+    this.id = GetStorage().read(C.ID);
+    this.session = GetStorage().read(C.SESSION);
   }
 
   Future<dynamic> _fetch() async {
     http.Response profileData = await http.get(
-        C.API_URI + "profile/" + zeusData.id.toString(),
+        C.API_URI + "profile/" + this.id,
         headers : {
           "content-type": "application/json",
           "accept": "application/json",

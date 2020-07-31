@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/authenticate.dart';
 import 'package:zeus/model/zeus_data.dart';
@@ -86,7 +87,8 @@ class _ZeroState extends State<Zero> {
     setAuthenticated().then((date) {
       if(session != null) {
 //        navigationService.navigateTo('/posts');
-        Get.to(Posts());
+//        Get.to(Posts());
+        Get.to(Authenticate());
       }else{
 //        navigationService.navigateTo('/authenticate');
         Get.to(Authenticate());
@@ -96,8 +98,9 @@ class _ZeroState extends State<Zero> {
   }
 
   Future setAuthenticated() async {
-    final prefs = await SharedPreferences.getInstance();
-    final sesh = prefs.get(C.SESSION);
+//    final prefs = await SharedPreferences.getInstance();
+//    final sesh = prefs.get(C.SESSION);
+    final sesh = GetStorage().read(C.ID);
     if(session != ""){
        session = sesh;
     }

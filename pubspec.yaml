@@ -30,6 +30,7 @@ dependencies:
   image_picker: 0.6.7+3
   file_picker:
   video_box:
+  get_storage:
   get_it:
   http:
   get:

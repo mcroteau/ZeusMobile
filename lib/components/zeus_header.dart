@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -40,13 +41,13 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   @override
   void initState(){
     super.initState();
-    _setSession();
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     _fetch();
+    _setSession();
     this.controller = new TextEditingController();
 //    this.navigationService = Modular.get<NavigationService>();
 //    this.zeusData = Modular.get<ZeusData>();
@@ -130,19 +131,22 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   }
 
   Future _setSession() async{
-    this.session = Get.find<ZeusData>().session;
+//    this.session = Get.find<ZeusData>().session;
+    this.session = GetStorage().read(C.SESSION);
   }
 
   Future _storeProfileId(id) async{
     this.id = id;
-    Get.find<ZeusData>().setId(id);
+//    Get.find<ZeusData>().setId(id);
+    GetStorage().write(C.ID, id);
   }
 
   Future<dynamic> _search(BuildContext context, TextEditingController controller) async {
     print("search " + controller.text);
 //    var prefs = await SharedPreferences.getInstance();
 //    prefs.setString(C.Q, controller.text);
-    Get.find<ZeusData>().setQ(controller.text);
+//    Get.find<ZeusData>().setQ(controller.text);
+    GetStorage().write(C.Q, controller.text);
   }
 
   Future<dynamic> _fetch() async {
@@ -159,7 +163,8 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
       print(postResponse.body.toString());
       var data = jsonDecode(postResponse.body.toString());
       print("set " + data['id'].toString());
-      Get.find<ZeusData>().id = data['id'];
+//      Get.find<ZeusData>().id = data['id'];
+      GetStorage().write(C.ID, data['id'].toString());
       return data;
     }catch(e){
       print("error $e");
