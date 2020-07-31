@@ -7,24 +7,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/assets/zeus_icons.dart';
+import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/services/navigation_service.dart';
 
-class PostsHeader extends StatelessWidget{
+class ZeusHeader extends StatefulWidget {
+  _ZeusHeaderState createState() => _ZeusHeaderState();
+}
+
+class _ZeusHeaderState extends BaseState<ZeusHeader>{
 
   var id;
 
   TextEditingController controller;
   NavigationService navigationService;
 
-  PostsHeader(){
-    this.controller = new TextEditingController();
-    this.navigationService = Modular.get<NavigationService>();
-  }
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width * .8;
+    this.controller = new TextEditingController();
+    this.navigationService = Modular.get<NavigationService>();
     return Stack(
         children: <Widget>[
           Container(

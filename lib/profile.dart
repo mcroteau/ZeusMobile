@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/base.dart';
 import 'package:http/http.dart' as http;
 import 'package:zeus/common/c.dart';
+import 'package:zeus/components/zeus_header.dart';
+import 'package:zeus/components/zeus_highlight.dart';
 import 'package:zeus/services/navigation_service.dart';
 import 'dart:convert';
 
@@ -129,8 +131,20 @@ class _ProfileState extends BaseState<Profile>{
                           ]
                         ),
                     ),
-                    SearchBox(true)
+                    Positioned(
+                      top:0,
+                      left:0,
+                      right: 0,
+                      child : ZeusHeader(),
+                    ),
+                    Positioned(
+                      bottom:0,
+                      left:0,
+                      right: 0,
+                      child: ZeusHighlight(),
+                    ),
                   ],
+
                 ),
               color: Colors.white,
             );

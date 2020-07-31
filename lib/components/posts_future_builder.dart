@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/posts_bottom_content.dart';
-import 'package:zeus/components/posts_header.dart';
+import 'package:zeus/components/zeus_header.dart';
 import 'package:zeus/services/navigation_service.dart';
 
 
@@ -42,9 +42,9 @@ class PostsFutureBuilder extends StatelessWidget {
             return new ListView(
                 padding: EdgeInsets.fromLTRB(0, 0, 0, 171),
                 children: <Widget>[
-                  PostsHeader(),
+                  ZeusHeader(),
                   Container(
-                    padding: EdgeInsets.fromLTRB(7, 9, 0, 0),
+                    padding: EdgeInsets.fromLTRB(7, 12, 0, 20),
                     child: Text("Latest Posts", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
                   ),
                   for (var p in snapshot.data)
@@ -182,7 +182,7 @@ class PostsFutureBuilder extends StatelessWidget {
                           ),
                         margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                         elevation: 0,
-                      )
+                      ),
                 ]
             );
           } else if (snapshot.hasError) {

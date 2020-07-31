@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
-import 'package:zeus/components/posts_header.dart';
+import 'package:zeus/components/zeus_header.dart';
 import 'package:zeus/components/searchbox.dart';
 import 'package:zeus/services/navigation_service.dart';
 
@@ -43,7 +43,7 @@ class _InvitationsState extends BaseState<Invitations> {
                 if(snapshot.hasData && snapshot.data.length > 0) {
                   return new ListView(
                     children:<Widget> [
-                      PostsHeader(),
+                      ZeusHeader(),
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 9, 0, 0),
                         child: Text("Latest Posts", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
@@ -105,7 +105,7 @@ class _InvitationsState extends BaseState<Invitations> {
                 }else{
                   return Column(
                     children: <Widget>[
-                      PostsHeader(),
+                      ZeusHeader(),
                       Container(
                           padding: EdgeInsets.fromLTRB(10, 101, 10, 10),
                           child: Text("No invitations as of now!"))
