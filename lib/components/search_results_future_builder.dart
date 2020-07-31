@@ -14,7 +14,6 @@ import 'package:zeus/base.dart';
 import 'dart:convert';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/zeus_header.dart';
-import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/services/navigation_service.dart';
 
 
@@ -36,16 +35,16 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
   @override
   void initState(){
     super.initState();
-    _setQuery().then((data) {
-      setState(() {});
-    });
   }
 
   @override
   Widget build(context) {
+    this.q = GetStorage().read(C.Q);
+    this.session = GetStorage().read(C.SESSION);
+
     this.context = context;
     this.mediaQuery = MediaQuery.of(context);
-    this.data = ModalRoute.of(context).settings.arguments;
+
     return new FutureBuilder<dynamic>(
         future: _fetch(),
         builder: (context, snapshot) {
@@ -142,20 +141,9 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
     return data;
   }
 
-  Future _setQuery() async{
-//    final prefs = await SharedPreferences.getInstance();
-//    this.session = prefs.get(C.SESSION);
-//    this.q = prefs.get(C.Q);
-//    navigationService = Modular.get<NavigationService>();
-    var storage = GetStorage();
-    this.q = storage.read("q");
-    this.session = Get.find<ZeusData>().session;
-  }
 
   Future _storeProfileId(String id) async{
-//    final prefs = await SharedPreferences.getInstance();
-//    prefs.setString(C.ID, id);
-    Get.find<ZeusData>().setId(id);
+    GetStorage().write(C.ID, id);
   }
 
 }

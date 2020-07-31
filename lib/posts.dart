@@ -7,7 +7,6 @@ import 'package:zeus/components/posts_future_builder.dart';
 import 'package:zeus/components/searchbox.dart';
 import 'package:zeus/components/zeus_header.dart';
 import 'package:zeus/components/zeus_highlight.dart';
-import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/publish.dart';
 import 'package:zeus/base.dart';
 import 'package:zeus/services/navigation_service.dart';
@@ -55,7 +54,8 @@ class _PostsState extends BaseState<Posts>{
           margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
           child: RaisedButton(
             onPressed: () => {
-                navigationService.navigateTo('/publish')
+//                navigationService.navigateTo('/publish')
+                Get.to(Publish())
               },
               focusColor: Colors.pinkAccent,
               elevation: 10.0,

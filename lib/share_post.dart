@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
+import 'package:zeus/posts.dart';
 import 'package:zeus/services/navigation_service.dart';
 
 class SharePost extends StatefulWidget{
@@ -16,23 +19,24 @@ class SharePost extends StatefulWidget{
 class _SharePostState extends BaseState<SharePost>{
 
   dynamic post;
-  String postId;
+
+  int postId;
   String session;
 
-  TextEditingController _controller;
+  TextEditingController controller;
   NavigationService navigationService;
 
   @override
   void initState(){
     super.initState();
-    setSession().then((data){
-      setState(() {});
-    });
   }
 
   @override 
   Widget build(BuildContext context){
-    _controller = new TextEditingController();
+    this.postId = GetStorage().read(C.POST_ID);
+    this.session = GetStorage().read(C.SESSION);
+    this.controller = new TextEditingController();
+    this.session = GetStorage().read(C.SESSION);
     return Scaffold(
       appBar: new AppBar(
         elevation: 0,
@@ -75,7 +79,7 @@ class _SharePostState extends BaseState<SharePost>{
                                   decoration: InputDecoration(
                                       hintText: "What do you want to say?"
                                   ),
-                                  controller: _controller,
+                                  controller: controller,
                                 ),
                               ),
                             ]
@@ -116,7 +120,7 @@ class _SharePostState extends BaseState<SharePost>{
 
   FutureOr _fetchPost() async{
     http.Response getResponse = await http.get(
-        C.API_URI + "post/" + this.postId,
+        C.API_URI + "post/" + this.postId.toString(),
         headers : {
           "cookie" : session
         }
@@ -127,27 +131,23 @@ class _SharePostState extends BaseState<SharePost>{
   }
 
 
-  Future setSession() async {
-    final prefs = await SharedPreferences.getInstance();
-    this.session = prefs.get(C.SESSION);
-    this.postId = prefs.get(C.POST_ID);
-    navigationService = Modular.get<NavigationService>();
-  }
-
   Future _share() async {
-    print("_share " + this.postId);
-    var req = http.MultipartRequest('post', Uri.parse(C.API_URI + "post/share_post/" + this.postId));
+    print("_share " + this.postId.toString());
+
+    var req = http.MultipartRequest('post', Uri.parse(C.API_URI + "post/share_post/" + this.postId.toString()));
+
     req.headers['cookie'] = session;
     req.headers['Content-Type'] = "application/json";
     req.headers['Accept'] = "application/json";
-    print("controller: $_controller.text");
-    req.fields['comment'] = _controller.text;
+
+    print("controller: $controller.text");
+    req.fields['comment'] = controller.text;
 
     var response;
 
     try {
-      http.StreamedResponse res = await req.send();
-      response = await res.stream.bytesToString();
+      http.StreamedResponse resp = await req.send();
+      response = await resp.stream.bytesToString();
       print("response $response");
 
       var json = jsonDecode(response);
@@ -155,7 +155,7 @@ class _SharePostState extends BaseState<SharePost>{
         super.showGlobalDialog("Please let us know, something went wrong", null);
       }
       else{
-        _controller.text = "";
+        controller.text = "";
         super.showGlobalDialog("Successfully shared... check it.", _navigatePosts);
       }
 
@@ -165,6 +165,7 @@ class _SharePostState extends BaseState<SharePost>{
   }
 
   _navigatePosts() {
-    navigationService.navigateTo('/posts');
+//    navigationService.navigateTo('/posts');
+    Get.to(Posts());
   }
 }

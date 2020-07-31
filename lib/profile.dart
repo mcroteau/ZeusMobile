@@ -12,7 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/zeus_header.dart';
 import 'package:zeus/components/zeus_highlight.dart';
-import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/services/navigation_service.dart';
 import 'dart:convert';
 
@@ -24,15 +23,13 @@ class Profile extends StatefulWidget{
 
 class _ProfileState extends BaseState<Profile>{
 
-  _ProfileState({Key key, @required this.zeusData});
+  _ProfileState({Key key, @required this.id});
 
   var radius = 70.0;
   var topHeight = 170.0;
 
   var id;
   var session;
-
-  ZeusData zeusData;
 
   dynamic profile;
   var friends = [];
@@ -44,18 +41,15 @@ class _ProfileState extends BaseState<Profile>{
   @override
   void initState(){
     super.initState();
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-//    this.navigationService = Modular.get<NavigationService>();
-//    this.zeusData = Get.find<ZeusData>();
-    _setSession();
-    print("setting zeus data: " + this.id.toString());
-    print("profile build : " + this.id.toString());
+    this.id = GetStorage().read(C.ID);
+    this.session = GetStorage().read(C.SESSION);
+    print("profile id : " + this.id.toString());
+    print("profile session : " + this.session.toString());
     return Scaffold(
       body: new FutureBuilder(
         future: _fetch(),
@@ -172,18 +166,8 @@ class _ProfileState extends BaseState<Profile>{
     );
   }
 
-
-  Future _storeProfileId(String id) async{
-    print("set id $id ");
-//    Get.find<ZeusData>().setId(id);
-  }
-
-
-  Future _setSession() async{
-//    this.id = Get.find<ZeusData>().id;
-//    this.session = Get.find<ZeusData>().session;
-    this.id = GetStorage().read(C.ID);
-    this.session = GetStorage().read(C.SESSION);
+  Future _storeProfileId(id){
+    GetStorage().write(C.ID, id);
   }
 
   Future<dynamic> _fetch() async {

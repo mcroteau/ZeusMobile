@@ -12,7 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zeus/assets/zeus_icons.dart';
 import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
-import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/posts.dart';
 import 'package:zeus/profile.dart';
 import 'package:zeus/search.dart';
@@ -32,8 +31,6 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   var latestPosts;
   var invitationsCount;
 
-  ZeusData zeusData;
-
   TextEditingController controller;
 //  NavigationService navigationService;
 
@@ -47,7 +44,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   @override
   Widget build(BuildContext context) {
     _fetch();
-    _setSession();
+    this.session = GetStorage().read(C.SESSION);
     this.controller = new TextEditingController();
 //    this.navigationService = Modular.get<NavigationService>();
 //    this.zeusData = Modular.get<ZeusData>();
@@ -70,9 +67,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 //                        _search(context, controller).then((data) {
 //                    navigationService.navigateTo('/search');
                           print("searching... $value");
-                          Get.find<ZeusData>().setQ(controller.text);
                           Get.to(Search());
-                          _fetch();
 //                        });
                       },
                     )
@@ -130,11 +125,6 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
     );
   }
 
-  Future _setSession() async{
-//    this.session = Get.find<ZeusData>().session;
-    this.session = GetStorage().read(C.SESSION);
-  }
-
   Future _storeProfileId(id) async{
     this.id = id;
 //    Get.find<ZeusData>().setId(id);
@@ -151,7 +141,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 
   Future<dynamic> _fetch() async {
     try {
-      http.Response postResponse = await http.get(
+      http.Response resp = await http.get(
           C.API_URI + "account/info",
           headers: {
             "content-type": "application/json",
@@ -160,12 +150,13 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
           }
       );
 
-      print(postResponse.body.toString());
-      var data = jsonDecode(postResponse.body.toString());
+      var data = jsonDecode(resp.body.toString());
       print("set " + data['id'].toString());
-//      Get.find<ZeusData>().id = data['id'];
+
       GetStorage().write(C.ID, data['id'].toString());
+
       return data;
+
     }catch(e){
       print("error $e");
     }
@@ -180,7 +171,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 //      navigationService.navigateTo('/posts');
       Get.to(Posts());
     } else if (choice == C.SecondItem) {
-      print("z: " + zeusData.toString());
+      print("z: " + GetStorage().read(C.ID));
 //      navigationService.navigateTo('/profile');
       Get.to(Profile());
     } else if (choice == C.ThirdItem) {

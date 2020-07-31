@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,7 +9,6 @@ import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/zeus_header.dart';
 import 'package:zeus/components/searchbox.dart';
-import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/services/navigation_service.dart';
 
 class Invitations extends StatefulWidget{
@@ -27,13 +27,12 @@ class _InvitationsState extends BaseState<Invitations> {
   @override
   void initState(){
     super.initState();
-    _setSession().then((data){
-      setState(() {});
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context){
+    this.session = GetStorage().read(C.SESSION);
     return new Scaffold(
       body: Stack(
         children: <Widget> [
@@ -202,11 +201,6 @@ class _InvitationsState extends BaseState<Invitations> {
       print("error $e");
     }
     return null;
-  }
-
-
-  Future _setSession() async{
-    this.session = Get.find<ZeusData>().session;
   }
 
 }

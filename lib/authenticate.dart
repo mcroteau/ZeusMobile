@@ -8,7 +8,6 @@ import 'package:zeus/assets/zeus_icons.dart';
 import 'package:zeus/base.dart';
 import 'dart:convert';
 import 'package:zeus/common/c.dart';
-import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/posts.dart';
 import 'package:zeus/register.dart';
 import 'package:zeus/services/navigation_service.dart';
@@ -133,6 +132,7 @@ class _AuthenticateState extends BaseState<Authenticate>{
       print(resp.body.toString());
       print("session: $session");
 
+      GetStorage().write(C.SESSION, session);
 
       dynamic account = jsonDecode(resp.body.toString());
 
@@ -140,21 +140,14 @@ class _AuthenticateState extends BaseState<Authenticate>{
 //        navigationService.navigateTo('/suspended');
         Get.to(Suspended());
       }else{
-        _setSession(session).then((data){
 //          navigationService.navigateTo('/posts');
           Get.to(Posts());
-        });
       }
     }catch(e){
       print("error : $e");
 //      navigationService.navigateTo('');
       Get.to(Authenticate());
     }
-  }
-
-  Future _setSession(session) async {
-//    Get.find<ZeusData>().setSession(session);
-    GetStorage().write(C.SESSION, session);
   }
 
   Future _setProfileId(id) async{

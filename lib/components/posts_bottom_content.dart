@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:zeus/common/c.dart';
-import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/posts.dart';
 import 'package:zeus/profile.dart';
 import 'package:zeus/services/navigation_service.dart';
@@ -16,6 +16,9 @@ import 'package:zeus/share_post.dart';
 class PostsBottomContent extends StatelessWidget {
 
   dynamic post;
+
+  String session;
+
   BuildContext context;
   NavigationService navigationService;
 
@@ -27,6 +30,7 @@ class PostsBottomContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     this.context = context;
+    this.session = GetStorage().read(C.SESSION);
     return Stack(
       alignment: Alignment.topLeft,
       children: <Widget>[
@@ -105,7 +109,7 @@ class PostsBottomContent extends StatelessWidget {
                          padding: EdgeInsets.fromLTRB(0, 7, 0, 0),
                          child: GestureDetector(
                            onTap: () {
-                             _setPostId(post['id']).then((data){
+                             _storePostId(post['id']).then((data){
 //                               navigationService.navigateTo('/share_post');
                                Get.to(SharePost());
                              });
@@ -133,7 +137,9 @@ class PostsBottomContent extends StatelessWidget {
                           onTap: () {
                             _like(post['id']).then((data){
 //                              navigationService.navigateTo('/posts');
-                              Get.to(Posts());
+//                              Get.to(Posts());
+
+                              Get.toNamed('/posts');
                             });
                           },
                           child: Text("π", style: TextStyle( fontSize: 32, fontWeight: FontWeight.w700, color: Colors.lightBlue)),
@@ -221,23 +227,20 @@ class PostsBottomContent extends StatelessWidget {
     );
   }
 
-  Future _setPostId(id) async{
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(C.POST_ID, id.toString());
+  Future _storePostId(id) async{
+    GetStorage().write(C.POST_ID, id);
   }
 
 
   Future _like(id) async {
 
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
     http.Response getResponse;
 
     try {
       getResponse = await http.post(
           C.API_URI + "post/like/" + id.toString(),
           headers: {
-            "cookie": session
+            "cookie": this.session
           }
       );
       print(getResponse.body.toString());
@@ -253,24 +256,19 @@ class PostsBottomContent extends StatelessWidget {
 
 
   Future _setProfileId(id) async{
-    Get.find<ZeusData>().setId(id);
+    GetStorage().write(C.ID, id);
   }
 
-//  Future _setProfileId(id) async {
-//    final prefs = await SharedPreferences.getInstance();
-//    prefs.setString(C.ID, id.toString());
-//  }
 
   Future deletePost(id) async {
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
+
     http.Response getResponse;
 
     try {
       getResponse = await http.delete(
           C.API_URI + "post/remove/$id",
           headers: {
-            "cookie": session
+            "cookie": this.session
           }
       );
       print(getResponse.body.toString());
@@ -279,7 +277,8 @@ class PostsBottomContent extends StatelessWidget {
       }
 
 //      navigationService.navigateTo('/posts');
-      Get.to(Posts());
+//      Get.to(Posts());
+      Get.toNamed('/posts');
 
     }catch(e){
       print("error $e");
@@ -290,24 +289,23 @@ class PostsBottomContent extends StatelessWidget {
 
   Future unshare(id) async {
     print("unshare");
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
-    http.Response getResponse;
+
+    http.Response resp;
 
     try {
-      getResponse = await http.delete(
+      resp = await http.delete(
           C.API_URI + "post/unshare/$id",
           headers: {
-            "cookie": session
+            "cookie": this.session
           }
       );
-      print(getResponse.body.toString());
-      dynamic status = jsonDecode(getResponse.body.toString());
+      print(resp.body.toString());
+      dynamic status = jsonDecode(resp.body.toString());
       if(status['success']){
       }
 //      navigationService.navigateTo('/posts');
-      Get.to(Posts());
-
+//      Get.to(Posts());
+      Get.toNamed('/posts');
     }catch(e){
       print("error $e");
     }
@@ -316,15 +314,14 @@ class PostsBottomContent extends StatelessWidget {
 
   Future _flag(id, shared) async {
     print("flag post/flag/$id/$shared");
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
+
     http.Response getResponse;
 
     try {
       getResponse = await http.post(
           C.API_URI + "post/flag/$id/$shared",
           headers: {
-            "cookie": session
+            "cookie": this.session
           }
       );
       print(getResponse.body.toString());
@@ -339,8 +336,9 @@ class PostsBottomContent extends StatelessWidget {
   }
 
   void navigatePosts(){
-//    navigationService.navigateTo('/posts');
-    Get.to(Posts());
+    navigationService.navigateTo('/posts');
+//    Get.to(Posts());
+//    Get.toNamed('/posts');
   }
 
   void showGlobalDialog(String content, Function funct){

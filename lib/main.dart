@@ -4,7 +4,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:zeus/common/c.dart';
-import 'package:zeus/model/zeus_data.dart';
 import 'package:zeus/register.dart';
 import 'package:zeus/share_post.dart';
 import 'package:zeus/suspended.dart';
@@ -22,7 +21,20 @@ import 'invitations.dart';
 Future<void> main() async {
 //  runApp(ModularApp(module: InitModule()));
   await GetStorage.init();
-  runApp(GetMaterialApp(home: ZeusApp()));
+  runApp(GetMaterialApp(
+    home: ZeusApp(),
+//    initialRoute: '/',
+//    getPages: [
+//      GetPage(name: '/', page: () => Zero()),
+//      GetPage(name: '/posts', page: () => Posts()),
+//      GetPage(name: '/search', page: () => Search(), transition: Transition.fadeIn),
+//      GetPage(
+//          name: '/profile',
+//          page: () => Profile(),
+//          transition: Transition.zoom
+//      ),
+//    ],
+  ));
 }
 
 class ZeusApp extends StatefulWidget {
@@ -31,7 +43,7 @@ class ZeusApp extends StatefulWidget {
 
 class ZeusAppState extends State<ZeusApp>{
 
-//  final ZeusData zeusData = Get.put(ZeusData());
+  final NavigationService navigationService = Get.put(NavigationService());
 
   @override
   void initState(){
@@ -43,6 +55,30 @@ class ZeusAppState extends State<ZeusApp>{
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Zero(),
+      onGenerateRoute: (routeSettings) {
+        switch (routeSettings.name) {
+          case '/':
+            return MaterialPageRoute(builder: (context) => Zero());
+          case '/search':
+            return MaterialPageRoute(builder: (context) => Search());
+          case '/posts':
+            return MaterialPageRoute(builder: (context) => Posts());
+          case '/share_post':
+            return MaterialPageRoute(builder: (context) => SharePost());
+          case '/profile':
+            return MaterialPageRoute(builder: (context) => Profile());
+          case '/invitations':
+            return MaterialPageRoute(builder: (context) => Invitations());
+          case '/authenticate':
+            return MaterialPageRoute(builder: (context) => Authenticate());
+          case '/register':
+            return MaterialPageRoute(builder: (context) => Register());
+          case '/suspended':
+            return MaterialPageRoute(builder: (context) => Suspended());
+          default:
+            return MaterialPageRoute(builder: (context) => Zero());
+        }
+      }
     );
   }
 

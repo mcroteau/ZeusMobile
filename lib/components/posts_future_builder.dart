@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:video_box/video_box.dart';
@@ -13,12 +14,12 @@ import 'dart:convert';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/posts_bottom_content.dart';
 import 'package:zeus/components/zeus_header.dart';
-import 'package:zeus/model/zeus_data.dart';
 //import 'package:zeus/services/navigation_service.dart';
 
 
 class PostsFutureBuilder extends StatelessWidget {
 
+  String session;
   BuildContext context;
   MediaQueryData mediaQuery;
   TextEditingController controller;
@@ -26,15 +27,18 @@ class PostsFutureBuilder extends StatelessWidget {
 
   PostsFutureBuilder(){
 //    navigationService = Modular.get<NavigationService>();
-    ZeusData zeusData = Get.find();
   }
 
 
   @override
   Widget build(context) {
+
     this.context = context;
+    this.session = GetStorage().read(C.SESSION);
+
     this.mediaQuery = MediaQuery.of(context);
     this.controller = new TextEditingController();
+
     double _width = MediaQuery.of(context).size.width*0.57;
     return new FutureBuilder<dynamic>(
         future: _fetch(),
@@ -51,135 +55,135 @@ class PostsFutureBuilder extends StatelessWidget {
                   for (var p in snapshot.data)
                     if(!p['hidden'] && !p['flagged'])
                       Card(
-                              child: Container(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 13),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Color(0xffefefef)
-                                    ),
-                                    color: Color(0xfff7f7f1),
-                                  ),
-                                  child: Column(
-                                      children: <Widget>[
-                                        if(p['shared'])
-                                          Container(
-                                            child: Column(
+                          child: Container(
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 13),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Color(0xffefefef)
+                                ),
+                                color: Color(0xfff7f7f1),
+                              ),
+                              child: Column(
+                                  children: <Widget>[
+                                    if(p['shared'])
+                                      Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Row(
                                               children: <Widget>[
-                                                Row(
-                                                  children: <Widget>[
-                                                     Align(
-                                                         child:Container(
-                                                           width:70,
-                                                           padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
-                                                           child: GestureDetector(
-                                                              child:  Image.network(C.API_URI + p['sharedImageUri'], width: 50),
-                                                              onTap: () => {
-                                                                _setProfileId(p['sharedAccountId']).then((data){
+                                                 Align(
+                                                     child:Container(
+                                                       width:70,
+                                                       padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                                                       child: GestureDetector(
+                                                          child:  Image.network(C.API_URI + p['sharedImageUri'], width: 50),
+                                                          onTap: () => {
+                                                            _setProfileId(p['sharedAccountId']).then((data){
 //                                                                  navigationService.navigateTo('/profile');
-                                                                })
-                                                              },
-                                                            )
+                                                            })
+                                                          },
+                                                        )
+                                                    ),
+                                                   alignment: Alignment.topLeft,
+                                                ),
+                                                Align(
+                                                  child: Column(
+                                                    children: <Widget> [
+                                                      Container(
+                                                        padding:EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                                        child: GestureDetector(
+                                                          child:Text(p['sharedAccount'], style: TextStyle( color: Colors.white ),textAlign: TextAlign.left,),
+                                                          onTap: () => {
+                                                            _setProfileId(p['sharedAccountId']).then((data){
+//                                                                  navigationService.navigateTo('/profile');
+                                                            })
+                                                          },
                                                         ),
-                                                       alignment: Alignment.topLeft,
-                                                    ),
-                                                    Align(
-                                                      child: Column(
-                                                        children: <Widget> [
-                                                          Container(
-                                                            padding:EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                                            child: GestureDetector(
-                                                              child:Text(p['sharedAccount'], style: TextStyle( color: Colors.white ),textAlign: TextAlign.left,),
-                                                              onTap: () => {
-                                                                _setProfileId(p['sharedAccountId']).then((data){
-//                                                                  navigationService.navigateTo('/profile');
-                                                                })
-                                                              },
-                                                            ),
-                                                            alignment: Alignment.centerLeft,
-                                                          ),
-                                                          Container(
-                                                              padding:EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                                              child: Text(p['timeSharedAgo'], style: TextStyle( color: Colors.white ), textAlign: TextAlign.left,),
-                                                              alignment: Alignment.centerLeft,
-                                                          ),
-                                                          Container(
-                                                              width: _width,
-                                                              padding:EdgeInsets.fromLTRB(0, 0, 10, 20),
-                                                              child: Text(p['sharedComment'], style: TextStyle( color: Colors.white ), textAlign: TextAlign.left,),
-                                                              alignment: Alignment.centerLeft,
-                                                          )
-                                                        ],
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                          crossAxisAlignment: CrossAxisAlignment.start
+                                                        alignment: Alignment.centerLeft,
                                                       ),
-                                                    ),
-                                                    Align(
-                                                      child: Container(
-                                                          width: 70,
-                                                          padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
-                                                          child: Text("Shared", style: TextStyle(color: Colors.white, fontSize:10), textAlign: TextAlign.right,)
+                                                      Container(
+                                                          padding:EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                                          child: Text(p['timeSharedAgo'], style: TextStyle( color: Colors.white ), textAlign: TextAlign.left,),
+                                                          alignment: Alignment.centerLeft,
                                                       ),
-                                                      alignment: Alignment.topRight,
-                                                    ),
-                                                  ],
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  )
-                                                ],
-                                            ),
+                                                      Container(
+                                                          width: _width,
+                                                          padding:EdgeInsets.fromLTRB(0, 0, 10, 20),
+                                                          child: Text(p['sharedComment'], style: TextStyle( color: Colors.white ), textAlign: TextAlign.left,),
+                                                          alignment: Alignment.centerLeft,
+                                                      )
+                                                    ],
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start
+                                                  ),
+                                                ),
+                                                Align(
+                                                  child: Container(
+                                                      width: 70,
+                                                      padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
+                                                      child: Text("Shared", style: TextStyle(color: Colors.white, fontSize:10), textAlign: TextAlign.right,)
+                                                  ),
+                                                  alignment: Alignment.topRight,
+                                                ),
+                                              ],
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              )
+                                            ],
+                                        ),
+                                        color: Colors.lightBlue,
+                                      ),
+                                    if(p['videoFileUri'] != null)
+                                      Container(
+                                        child: AspectRatio(
+                                          aspectRatio: _calculateAspectRatio(context),
+                                          child: new VideoBox(controller: _getVideoController(C.API_URI + p['videoFileUri'])),
+                                        ),
+                                      ),
+                                    if(p['imageFileUris'] != null)
+                                      for(var imageUri in p['imageFileUris'])
+                                        Container( child: Image.network(C.API_URI + imageUri, fit: BoxFit.cover, width: mediaQuery.size.width)),
+                                    if(p['content'] != null)
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          padding: EdgeInsets.fromLTRB(0, 15, 20, 21),
+                                          child: Html(
+                                            data: p['content'],
+                                            style: {
+                                              "a" : Style( fontSize: FontSize.xLarge ),
+                                              "html" : Style( fontSize: FontSize.xLarge, fontWeight: FontWeight.w300)
+                                            },
+                                          )
+                                        ),
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                          flex: 6, // 60% of space => (6/(6 + 4))
+                                          child: Container(
+                                            height: 5,
                                             color: Colors.lightBlue,
                                           ),
-                                        if(p['videoFileUri'] != null)
-                                          Container(
-                                            child: AspectRatio(
-                                              aspectRatio: _calculateAspectRatio(context),
-                                              child: new VideoBox(controller: _getVideoController(C.API_URI + p['videoFileUri'])),
-                                            ),
-                                          ),
-                                        if(p['imageFileUris'] != null)
-                                          for(var imageUri in p['imageFileUris'])
-                                            Container( child: Image.network(C.API_URI + imageUri, fit: BoxFit.cover, width: mediaQuery.size.width)),
-                                        if(p['content'] != null)
-                                            Container(
-                                              alignment: Alignment.centerLeft,
-                                              padding: EdgeInsets.fromLTRB(0, 15, 20, 21),
-                                              child: Html(
-                                                data: p['content'],
-                                                style: {
-                                                  "a" : Style( fontSize: FontSize.xLarge ),
-                                                  "html" : Style( fontSize: FontSize.xLarge, fontWeight: FontWeight.w300)
-                                                },
-                                              )
-                                            ),
-                                        Row(
-                                          children: <Widget>[
-                                            Expanded(
-                                              flex: 6, // 60% of space => (6/(6 + 4))
-                                              child: Container(
-                                                height: 5,
-                                                color: Colors.lightBlue,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 3, // 60% of space => (6/(6 + 4))
-                                              child: Container(
-                                                height: 5,
-                                                color: Colors.lightGreen,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1, // 60% of space => (6/(6 + 4))
-                                              child: Container(
-                                                height: 5,
-                                                color: Colors.yellow,
-                                              ),
-                                            )
-                                          ],
                                         ),
-                                        PostsBottomContent(p),
-                                      ]
-                                  ),
-//                              )
+                                        Expanded(
+                                          flex: 3, // 60% of space => (6/(6 + 4))
+                                          child: Container(
+                                            height: 5,
+                                            color: Colors.lightGreen,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1, // 60% of space => (6/(6 + 4))
+                                          child: Container(
+                                            height: 5,
+                                            color: Colors.yellow,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    PostsBottomContent(p),
+                                  ]
+                              ),
+//                           )
                           ),
                         margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
                         elevation: 0,
@@ -229,19 +233,18 @@ class PostsFutureBuilder extends StatelessWidget {
 
    Future<List<dynamic>> _fetch() async {
 
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
-    http.Response postResponse;
+    http.Response resp;
 
     try {
-      postResponse = await http.get(
+      resp = await http.get(
           C.API_URI + "posts",
           headers: {
-            "cookie": session
+            "cookie": this.session
           }
       );
 
-      List<dynamic> posts = jsonDecode(postResponse.body.toString());
+//      print("posts: "+ resp.body.toString());
+      List<dynamic> posts = jsonDecode(resp.body.toString());
       return posts;
 
     }catch(e){
@@ -261,8 +264,7 @@ class PostsFutureBuilder extends StatelessWidget {
   }
 
   Future _setProfileId(id) async {
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString(C.ID, id.toString());
+      GetStorage().write(C.ID, id);
   }
 
 
