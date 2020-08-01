@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/searchbox_content.dart';

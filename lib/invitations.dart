@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/zeus_header.dart';

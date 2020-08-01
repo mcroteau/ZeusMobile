@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/services/navigation_service.dart';
 import 'package:http/http.dart' as http;
@@ -10,6 +10,7 @@ import 'package:zeus/assets/zeus_icons.dart';
 class SearchBoxContent extends StatelessWidget{
 
   var id;
+  String session;
 
   TextEditingController controller;
   NavigationService navigationService;
@@ -17,6 +18,7 @@ class SearchBoxContent extends StatelessWidget{
   SearchBoxContent(){
     this.controller = new TextEditingController();
     this.navigationService = Modular.get<NavigationService>();
+    this.session = GetStorage().read(C.SESSION);
   }
 
   @override
@@ -122,26 +124,22 @@ class SearchBoxContent extends StatelessWidget{
   }
 
   Future setProfileId() async{
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(C.ID, id.toString());
+    GetStorage().write(C.ID, id);
   }
 
   Future<dynamic> _search(BuildContext context, TextEditingController controller) async {
     print("search " + controller.text);
-    var prefs = await SharedPreferences.getInstance();
-    prefs.setString(C.Q, controller.text);
+    GetStorage().write(C.Q, controller.text);
   }
 
   Future<dynamic> _fetch() async {
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
 
     http.Response postResponse = await http.get(
         C.API_URI + "account/info",
         headers : {
           "content-type": "application/json",
           "accept": "application/json",
-          "cookie" : session
+          "cookie" : this.session
         }
     );
 
@@ -167,15 +165,13 @@ class SearchBoxContent extends StatelessWidget{
 
   Future _logout() async{
     print("logout");
-    final prefs = await SharedPreferences.getInstance();
-    final session = prefs.get(C.SESSION);
 
     http.Response postResponse = await http.get(
         C.API_URI + "logout",
         headers : {
           "content-type": "application/json",
           "accept": "application/json",
-          "cookie" : session
+          "cookie" : this.session
         }
     );
   }

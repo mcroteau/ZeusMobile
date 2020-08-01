@@ -2,7 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:flutter/material.dart';
 import 'package:zeus/assets/zeus_icons.dart';
 import 'package:zeus/base.dart';
@@ -82,6 +82,7 @@ class _AuthenticateState extends BaseState<Authenticate>{
                 child: TextField(
                   decoration: InputDecoration(hintText: "Password"),
                   controller: passwordController,
+                  obscureText: true,
                )
              ),
              Container(
