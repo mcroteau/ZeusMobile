@@ -29,6 +29,7 @@ class _SharePostState extends BaseState<SharePost>{
   @override
   void initState(){
     super.initState();
+
   }
 
   @override 
@@ -37,6 +38,7 @@ class _SharePostState extends BaseState<SharePost>{
     this.session = GetStorage().read(C.SESSION);
     this.controller = new TextEditingController();
     this.session = GetStorage().read(C.SESSION);
+    this.navigationService = Modular.get<NavigationService>();
     return Scaffold(
       appBar: new AppBar(
         elevation: 0,
@@ -46,8 +48,8 @@ class _SharePostState extends BaseState<SharePost>{
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            navigationService.navigateTo("/posts");
+          onPressed: () => {
+            navigationService.navigateTo("/posts")
           },
         ),
       ),

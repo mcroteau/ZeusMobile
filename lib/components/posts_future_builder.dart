@@ -2,7 +2,6 @@ import 'package:flutter_html/style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'package:flutter/material.dart';
@@ -55,14 +54,16 @@ class PostsFutureBuilder extends StatelessWidget {
                   ),
                   for (var p in snapshot.data)
                     if(!p['hidden'] && !p['flagged'])
-                      Card(
-                          child: Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 0, 13),
+//                      Card(
+//                          child:
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0, 10, 0, 13),
                               decoration: BoxDecoration(
-                                border: Border.fromBorderSide(
-                                  BorderSide( color: Color(0xffefefef))
+                                border: Border(
+                                  top : BorderSide( color: Color(0xffefefef)),
+                                  bottom : BorderSide( color: Color(0xffe9e9e9)),
                                 ),
-                                color: Color(0xffff4f3f2),
+                                color: Color(0xffe5e5e5),
                               ),
                               child: Column(
                                   children: <Widget>[
@@ -147,7 +148,7 @@ class PostsFutureBuilder extends StatelessWidget {
                                     if(p['content'] != null)
                                         Container(
                                           alignment: Alignment.centerLeft,
-                                          padding: EdgeInsets.fromLTRB(0, 15, 20, 21),
+                                          padding: EdgeInsets.fromLTRB(3, 25, 20, 21),
                                           child: Html(
                                             data: p['content'],
                                             style: {
@@ -185,9 +186,9 @@ class PostsFutureBuilder extends StatelessWidget {
                                   ]
                               ),
 //                           )
-                          ),
-                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        elevation: 0,
+//                          ),
+//                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+//                        elevation: 0,
                       ),
                 ]
             );

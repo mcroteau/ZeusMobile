@@ -92,7 +92,11 @@ class _AuthenticateState extends BaseState<Authenticate>{
                   _signin()
                 },
                 color: Colors.lightBlue,
-                child: new Text("Signin", style: TextStyle(color: Colors.white)),
+                child: new Text("Signin!", style: TextStyle(color: Colors.white)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(28.0),
+                    side: BorderSide(color: Colors.white, width: 3)
+                ),
               ),
             ),
             Container(

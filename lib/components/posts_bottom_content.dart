@@ -44,7 +44,7 @@ class PostsBottomContent extends StatelessWidget {
               })
             },
             child: Container(
-              padding: EdgeInsets.fromLTRB(4, 13, 0, 0),
+              padding: EdgeInsets.fromLTRB(11, 13, 0, 0),
               child: Image.network(C.API_URI + post['imageUri'], width: 50),
             ),
           ),
@@ -58,7 +58,7 @@ class PostsBottomContent extends StatelessWidget {
                 })
               },
               child: Container(
-                padding: EdgeInsets.fromLTRB(67, 13, 0, 0),
+                padding: EdgeInsets.fromLTRB(71, 13, 0, 0),
                 child: GestureDetector(
                   child: Text(post['name'], style: TextStyle( fontSize: 19, fontWeight: FontWeight.w700 )),
                   onTap: () => {
@@ -79,7 +79,7 @@ class PostsBottomContent extends StatelessWidget {
                 });
               },
               child: Container(
-                padding: EdgeInsets.fromLTRB(67, 36, 0, 0),
+                padding: EdgeInsets.fromLTRB(71, 36, 0, 0),
                 child: Text(post['timeAgo'], style: TextStyle(fontSize: 16))
               )
           )
@@ -147,74 +147,104 @@ class PostsBottomContent extends StatelessWidget {
         ),
         if(post['shared'] && post['deletable'])
           Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget> [
               Container(
-                  padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
+                  padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
                   child: MaterialButton(
                     child: Text("x", style: TextStyle(fontSize: 19,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black26)),
+                        color: Colors.white)),
                     onPressed: () =>
                     {
                       unshare(post['postShareId'])
                     },
-                    minWidth: 15,
+                    minWidth: 10,
                   )
-              ),
-              Container(
-                  padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
-                  child: MaterialButton(
-                    child: Icon(Icons.flag, size: 13, color: Colors.black12),
-                    onPressed: () =>
-                    {
-                      _confirmation("Are you sure you would like to flag this post?")
-                    },
-                    minWidth: 15,
-                  )
-              )
+                ),
+                Container(
+                    padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
+                    child: MaterialButton(
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.flag, size: 13, color:Colors.white),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
+                            child: Text("Report", style: TextStyle(color: Colors.white)),
+                          )
+                        ],
+                      ),
+                      onPressed: () =>
+                      {
+                        _confirmation("Are you sure you would like to flag this post?")
+                      },
+                      minWidth: 15,
+                    )
+                ),
             ],
-            mainAxisAlignment: MainAxisAlignment.start,
           )
         else if(post['deletable'])
           Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
+                  padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
                   child: MaterialButton(
                     child: Text("x", style: TextStyle(fontSize: 19,
                         fontWeight: FontWeight.w700,
-                        color: Colors.black26)),
+                        color: Colors.white)),
                     onPressed: () =>
                     {
                       deletePost(post['id'])
                     },
-                    minWidth: 15,
+                    minWidth: 10,
                   )
-              ),
-              Container(
-                  padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
-                  child: MaterialButton(
-                    child: Icon(Icons.flag, size: 13, color: Colors.black12),
-                    onPressed: () =>
-                    {
-                      _confirmation("Are you sure you would like to flag this post?")
-                    },
-                    minWidth: 15,
-                  )
-                )
+                ),
+                Container(
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
+                    child: MaterialButton(
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.flag, size: 13, color:Colors.white),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
+                            child: Text("Report", style: TextStyle(color: Colors.white)),
+                          )
+                        ],
+                      ),
+                      onPressed: () =>
+                      {
+                        _confirmation("Are you sure you would like to flag this post?")
+                      },
+                    )
+                ),
               ]
           )
         else
-          Container(
-              padding: EdgeInsets.fromLTRB(0, 110, 0, 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget> [
+            Container(
+              padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
               child: MaterialButton(
-                child: Icon(Icons.flag, size: 13, color:Colors.black12),
+                child: Row(
+                    children: <Widget>[
+                        Icon(Icons.flag, size: 13, color:Colors.white),
+                        Container(
+                          margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
+                          child: Text("Report", style: TextStyle(color: Colors.white)),
+                        )
+                    ],
+                  ),
                 onPressed: () =>
-                {
+                  {
                   _confirmation("Are you sure you would like to flag this post?")
-                },
-                minWidth: 15,
-              )
+                  },
+                  minWidth: 15,
+                )
+              ),
+            ]
           )
       ]
     );

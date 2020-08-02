@@ -35,7 +35,6 @@ class _ZeroState extends State<Zero> {
     return new Scaffold(
       body: Container(
         padding: EdgeInsets.fromLTRB(30, 67, 30, 0),
-        color: Colors.yellowAccent,
         child: Column(
           children: <Widget>[
             Container(
@@ -44,7 +43,7 @@ class _ZeroState extends State<Zero> {
                 Ink(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white, width: 4.0),
-                    color: Colors.yellowAccent,
+                    color: Colors.white,
                     shape: BoxShape.rectangle,
                   ),
                   child: InkWell(
@@ -63,14 +62,19 @@ class _ZeroState extends State<Zero> {
                 ),
             ),
             Container(
-                padding: EdgeInsets.fromLTRB(30, 100, 30, 20),
+                padding: EdgeInsets.fromLTRB(30, 63, 30, 20),
                 child: Text("Welcome to Zeus")
             ),
             Container(
               child: RaisedButton(
                 onPressed: () => _navigateAway(),
-                color: Colors.white,
-                child: new Text("Start Sharing", style: TextStyle(color: Colors.black)),
+                color: Colors.yellowAccent,
+                child: new Text("Start Sharing!", style: TextStyle(fontSize:17, fontWeight: FontWeight.w700, color: Colors.black)),
+                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(28.0),
+                  side: BorderSide(color: Colors.white, width: 3)
+                ),
               ),
             )
           ],
