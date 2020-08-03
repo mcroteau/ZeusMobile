@@ -67,6 +67,11 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
                                 child: Row(
                                     children: <Widget>[
                                       Container(
+                                        child: Text(""),
+                                        width: 3,
+                                        color: Colors.pinkAccent
+                                      ),
+                                      Container(
                                         padding: const EdgeInsets.all(10),
                                           child: GestureDetector(
                                             onTap: (){
@@ -92,7 +97,7 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
                                                     navigationService.navigateTo('/profile');
                                                   });
                                                 },
-                                                child: Text(p['name'], overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400))
+                                                child: Text(p['name'], overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
                                               )
                                           ),
 

@@ -31,8 +31,9 @@ class _ProfileState extends BaseState<Profile>{
   var id;
   var session;
 
-  dynamic profile;
   var friends = [];
+  dynamic profile;
+  dynamic viewsData;
 
   var requestSent = false;
 
@@ -70,7 +71,7 @@ class _ProfileState extends BaseState<Profile>{
                         padding: EdgeInsets.fromLTRB(0, 270, 0, 0),
                         child: Column(
                           children: [
-                            Text(snapshot.data['profile']['name'], style: TextStyle(color: Colors.black, fontSize: 27, fontWeight: FontWeight.w700, decoration: TextDecoration.none, fontFamily: "Roboto")),
+                            Text(snapshot.data['profile']['name'], style: TextStyle(color: Colors.black, fontSize: 27, fontWeight: FontWeight.w900, decoration: TextDecoration.none, fontFamily: "Roboto")),
                             Container(
                               child: Text(snapshot.data['profile']['location'] != null ? snapshot.data['profile']['location'] : "", style: TextStyle(color: Colors.black, fontSize: 14, decoration: TextDecoration.none))
                             ),
@@ -90,6 +91,51 @@ class _ProfileState extends BaseState<Profile>{
                                     onPressed: !requestSent ? () => _sendReq(snapshot.data['profile']['id'].toString()) : null
                                 )
                               ),
+
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          child:Text(viewsData['week'].toString())
+                                        ),
+                                        Text("Week Visits")
+                                      ],
+                                    )
+                                  )
+                                ),
+                                Expanded(
+                                    flex: 4,
+                                    child: Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Container(
+                                                child:Text(viewsData['month'].toString())
+                                            ),
+                                            Text("Month Visits")
+                                          ],
+                                        )
+                                    )
+                                ),
+                                Expanded(
+                                    flex: 3,
+                                    child: Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Container(
+                                                child:Text(viewsData['all'].toString())
+                                            ),
+                                            Text("All Time Visits")
+                                          ],
+                                        )
+                                    )
+                                )
+                              ],
+                            ),
+
 
                             if(snapshot.data['friends'].length > 0)
                               Container(
@@ -181,6 +227,18 @@ class _ProfileState extends BaseState<Profile>{
     var data = jsonDecode(profileData.body.toString());
     profile = data['profile'];
     friends = data['friends'];
+
+    if(profile['isOwnersAccount']) {
+      http.Response viewsResp = await http.get(
+          C.API_URI + "profile/data/views",
+          headers: {
+            "content-type": "application/json",
+            "accept": "application/json",
+            "cookie": this.session
+          }
+      );
+      viewsData = jsonDecode(viewsResp.body.toString());
+    }
 
     if(data['error'] != null){
       navigationService.navigateTo('/authenticate');
