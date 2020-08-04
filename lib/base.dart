@@ -55,6 +55,34 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
     );
   }
 
+  void confirmation(message, funct){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Message"),
+            content: new Text(message),
+            actions: <Widget>[
+              new FlatButton(
+                  child: new Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }
+              ),
+              new FlatButton(
+                child: new Text("Okay!"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  if(funct != null)
+                    funct.call();
+                },
+              ),
+            ],
+          );
+        }
+    );
+  }
 
   void poll(event) {
     print("polling");

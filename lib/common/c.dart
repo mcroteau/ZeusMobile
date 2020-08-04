@@ -4,6 +4,7 @@ class C {
 
   static const Q = "q";
   static const ID = "id";
+  static const PROFILE_ID = "profile_id";
   static const POST_ID = "post_id";
   static const SESSION = "session";
 
@@ -29,8 +30,8 @@ class C {
     FourthItem,
   ];
 
-  static const API_URI = "http://zeus.social/b/";
+//  static const API_URI = "http://zeus.social/b/";
 //  static const API_URI = "http://192.168.1.20:8080/b/";
-//  static const API_URI = "http://192.168.1.76:8080/b/";
+  static const API_URI = "http://192.168.1.76:8080/b/";
 //  static const API_URI = "http://192.168.227.12:8080/b/";
 }

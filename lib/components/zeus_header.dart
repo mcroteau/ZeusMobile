@@ -125,7 +125,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 
   Future _storeProfileId(id) async{
     this.id = id;
-    GetStorage().write(C.ID, id);
+    GetStorage().write(C.PROFILE_ID, id);
   }
 
 
