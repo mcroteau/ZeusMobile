@@ -63,8 +63,6 @@ PODS:
     - SDWebImage/Core (~> 5.6)
   - sensors (0.0.1):
     - Flutter
-  - shared_preferences (0.0.1):
-    - Flutter
   - video_player (0.0.1):
     - Flutter
   - video_player_web (0.0.1):
@@ -87,7 +85,6 @@ DEPENDENCIES:
   - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
   - screen (from `.symlinks/plugins/screen/ios`)
   - sensors (from `.symlinks/plugins/sensors/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - video_player_web (from `.symlinks/plugins/video_player_web/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
@@ -127,8 +124,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/screen/ios"
   sensors:
     :path: ".symlinks/plugins/sensors/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
   video_player:
     :path: ".symlinks/plugins/video_player/ios"
   video_player_web:
@@ -157,7 +152,6 @@ SPEC CHECKSUMS:
   SDWebImage: cf6922231e95550934da2ada0f20f2becf2ceba9
   SDWebImageFLPlugin: 6c2295fb1242d44467c6c87dc5db6b0a13228fd8
   sensors: 84eb7a30e47a649e4172b71d6e81be614c280336
-  shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
   video_player: 9cc823b1d9da7e8427ee591e8438bfbcde500e6e
   video_player_web: da8cadb8274ed4f8dbee8d7171b420dedd437ce7
   wakelock: 0d4a70faf8950410735e3f61fb15d517c8a6efc4
