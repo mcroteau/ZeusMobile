@@ -21,7 +21,10 @@ class Profile extends StatefulWidget{
   _ProfileState createState() => _ProfileState();
 }
 
-class _ProfileState extends BaseState<Profile>{
+class _ProfileState extends BaseState<Profile> with AutomaticKeepAliveClientMixin<Profile>{
+
+  @override
+  bool get wantKeepAlive => true;
 
   _ProfileState({Key key, @required this.data});
 
@@ -40,22 +43,26 @@ class _ProfileState extends BaseState<Profile>{
   bool blocked = false;
   String blockedText = "Block Person";
 
+  Future<dynamic> _loadingProfile;
+
   NavigationService navigationService;
 
   @override
   void initState(){
+    _loadingProfile = _fetchProfile();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context){
+    super.build(context);
     this.session = GetStorage().read(C.SESSION);
     this.navigationService = Modular.get<NavigationService>();
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body:
       FutureBuilder(
-          future: _fetchProfile(),
+          future: _loadingProfile,
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
@@ -181,10 +188,12 @@ class _ProfileState extends BaseState<Profile>{
                           Column(
                             children: <Widget> [
                               Container(
+                                  margin: EdgeInsets.fromLTRB(0, 49, 0, 0),
                                   child:  RaisedButton(
+                                      color: Colors.white,
                                       child: Text(blockedText),
                                       elevation: 3,
-                                      onPressed: !blocked ? () => _block() : null
+                                      onPressed: () =>  _block(profile['id'])
                                   )
                               ),
                             ]
@@ -271,21 +280,30 @@ class _ProfileState extends BaseState<Profile>{
     print('profile' + profile.toString());
     if(profile != null && profile['blocked']){
       print("blocked!");
-//      setState(() {
+      setState(() {
+        blocked = true;
         blockedText = "Blocked!";
-//      });
+      });
     }
   }
 
-  Future<dynamic> _block() async {
-    this.id = id;
-    super.confirmation("Are you sure you want to block this person? He/she will not be able view your profile and you will not show up in searches by this user. Is this ok?", _performBlock);
+  Future<dynamic> _block(id) async {
+    await GetStorage().write(C.ID, id);
+    if(blocked) {
+      super.confirmation(
+          "Are you sure you want to unblock this person?",
+          _performBlock);
+    }else{
+      super.confirmation(
+          "Are you sure you want to block this person? He/she will not be able view your profile and you will not show up in searches by this user. Is this ok?",
+          _performBlock);
+    }
   }
 
   Future<dynamic> _performBlock() async{
-    GetStorage().write(C.ID, this.id.toString());
+    var id = await GetStorage().read(C.ID);
     http.Response req = await http.post(
-        C.API_URI + "profile/block/" + this.id.toString(),
+        C.API_URI + "profile/block/" + id.toString(),
         headers: {
           "content-type": "application/json",
           "accept": "application/json",
@@ -296,12 +314,20 @@ class _ProfileState extends BaseState<Profile>{
     print(req.body.toString());
     var data = jsonDecode(req.body.toString());
 
-    if(data['success']){
-      super.showGlobalDialog("Success", null);
-      setState(() {
-        blocked = true;
-        blockedText = "Blocked!";
-      });
+    if(data['success'] != null){
+
+      if(data['success'] == "blocked") {
+        super.showGlobalDialog("Blocked person.", null);
+        setState(() {
+          blocked = true;
+          blockedText = "Blocked!";
+        });
+      }else{
+        setState(() {
+          blocked = true;
+          blockedText = "Block Person";
+        });
+      }
     }else{
       super.showGlobalDialog("Whoa, apologies, there was an issue, please try again...", null);
       return null;

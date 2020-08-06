@@ -59,68 +59,69 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
                     child: Text("Search Results", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
                   ),
                   for (var p in snapshot.data['accounts'])
-                    Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Card(
-                            elevation: 1,
-                            child: Align(
-                                child: Row(
-                                    children: <Widget>[
-                                      Container(
-                                        child: Text(""),
-                                        width: 3,
-                                        color: Colors.pinkAccent
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                          child: GestureDetector(
-                                            onTap: (){
-                                              _storeProfileId(p['id'].toString()).then((data){
-                                                 navigationService.navigateTo('/profile');
-                                              });
-                                            },
-                                            child: CircleAvatar(
-                                              backgroundImage: NetworkImage(C.API_URI + p['imageUri']),
-                                              radius: 40,
-                                            )
-                                          ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: <Widget>[
-                                            Container(
-                                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                                              child:  GestureDetector(
-                                                onTap: (){
-                                                  _storeProfileId(p['id'].toString()).then((data){
-                                                    navigationService.navigateTo('/profile');
-                                                  });
-                                                },
-                                                child: Text(p['name'], overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                    if(!p['hidden'])
+                      Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Card(
+                              elevation: 1,
+                              child: Align(
+                                  child: Row(
+                                      children: <Widget>[
+                                        Container(
+                                          child: Text(""),
+                                          width: 3,
+                                          color: Colors.pinkAccent
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                            child: GestureDetector(
+                                              onTap: (){
+                                                _storeProfileId(p['id'].toString()).then((data){
+                                                   navigationService.navigateTo('/profile');
+                                                });
+                                              },
+                                              child: CircleAvatar(
+                                                backgroundImage: NetworkImage(C.API_URI + p['imageUri']),
+                                                radius: 40,
                                               )
-                                          ),
-
-                                          if(p['location'] != null)
-                                            Container(
-                                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                            ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: <Widget>[
+                                              Container(
+                                                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                                                 child:  GestureDetector(
-                                                    child: Text(p['location'], textAlign: TextAlign.left)
+                                                  onTap: (){
+                                                    _storeProfileId(p['id'].toString()).then((data){
+                                                      navigationService.navigateTo('/profile');
+                                                    });
+                                                  },
+                                                  child: Text(p['name'], overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
                                                 )
                                             ),
 
-                                          if(p['isFriend'])
-                                            Container(
-                                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                              child: Text("Friends", style: TextStyle(fontSize:10)),
-                                            )
+                                            if(p['location'] != null)
+                                              Container(
+                                                  padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                                  child:  GestureDetector(
+                                                      child: Text(p['location'], textAlign: TextAlign.left)
+                                                  )
+                                              ),
 
-                                    ],
-                                  )
-                                ],
-                            )
-                        )
-                    ),
+                                            if(p['isFriend'])
+                                              Container(
+                                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                                child: Text("Friends", style: TextStyle(fontSize:10)),
+                                              )
+
+                                      ],
+                                    )
+                                  ],
+                              )
+                          )
+                      ),
                  ),
                 ]
             );

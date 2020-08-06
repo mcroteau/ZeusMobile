@@ -23,7 +23,10 @@ class ZeusHeader extends StatefulWidget {
   _ZeusHeaderState createState() => _ZeusHeaderState();
 }
 
-class _ZeusHeaderState extends BaseState<ZeusHeader>{
+class _ZeusHeaderState extends BaseState<ZeusHeader> with AutomaticKeepAliveClientMixin<ZeusHeader>{
+
+  @override
+  bool get wantKeepAlive => true;
 
   var id;
   var timer;
@@ -39,7 +42,6 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
   @override
   void initState(){
     super.initState();
-    setState(() {});
   }
 
   @override
@@ -136,7 +138,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
       var data = jsonDecode(resp.body.toString());
       print("set " + data['id'].toString());
 
-      GetStorage().write(C.PROFILE_ID, data['id'].toString());
+      await GetStorage().write(C.PROFILE_ID, data['id'].toString());
 
       return data;
 
