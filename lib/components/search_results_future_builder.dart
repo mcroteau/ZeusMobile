@@ -39,7 +39,6 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
 
   @override
   Widget build(context) {
-    this.q = GetStorage().read(C.Q);
     this.session = GetStorage().read(C.SESSION);
 
     this.context = context;
@@ -137,6 +136,7 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
   }
 
   FutureOr<dynamic> _fetch() async {
+    var q = await GetStorage().read(C.Q);
     print("_fetch $q");
     http.Response resp = await http.get(
         C.API_URI + "search?q=" + q,
@@ -151,8 +151,7 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
 
 
   Future _storeProfileId(String id) async{
-    GetStorage().write(C.ID, id);
-    GetStorage().write(C.NAVIGATING_MY_PROFILE, false);
+    await GetStorage().write(C.ID, id);
   }
 
 }

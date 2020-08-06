@@ -152,7 +152,10 @@ class _ProfileState extends BaseState<Profile> with AutomaticKeepAliveClientMixi
                                 ]
                               )
                             ),
-
+                        Container(
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
+                          child:Text(""),
+                        ),
                         for(var friend in friends)
                             Row(
                               children: <Widget>[

@@ -22,6 +22,8 @@ class PostsBottomContent extends StatelessWidget {
   BuildContext context;
   NavigationService navigationService;
 
+  var hrefColor = Colors.black12;
+
   PostsBottomContent(post){
     this.post = post;
     navigationService = Modular.get<NavigationService>();
@@ -154,7 +156,7 @@ class PostsBottomContent extends StatelessWidget {
                   child: MaterialButton(
                     child: Text("x", style: TextStyle(fontSize: 19,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white)),
+                        color: hrefColor)),
                     onPressed: () =>
                     {
                       unshare(post['postShareId'])
@@ -162,25 +164,40 @@ class PostsBottomContent extends StatelessWidget {
                     minWidth: 10,
                   )
                 ),
-                Container(
-                    padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
-                    child: MaterialButton(
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.flag, size: 13, color:Colors.white),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
-                            child: Text("Report", style: TextStyle(color: Colors.white)),
+                Row(
+                    children: <Widget> [
+                      Container(
+                          padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
+                          child: MaterialButton(
+                            child: Text("Hide", style: TextStyle(color: hrefColor)),
+                            onPressed: () =>
+                            {
+                              _confirmationHidePost("Are you sure you would like to hide this post?")
+                            },
+                            minWidth: 15,
                           )
-                        ],
                       ),
-                      onPressed: () =>
-                      {
-                        _confirmation("Are you sure you would like to flag this post?")
-                      },
-                      minWidth: 15,
-                    )
-                ),
+                      Container(
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
+                          child: MaterialButton(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(Icons.flag, size: 13, color:hrefColor),
+                                Container(
+                                  margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
+                                  child: Text("Report", style: TextStyle(color: hrefColor)),
+                                )
+                              ],
+                            ),
+                            onPressed: () =>
+                            {
+                              _confirmationFlagPost("Are you sure you would like to flag this post?")
+                            },
+                          )
+                      ),
+                    ]
+                )
             ],
           )
         else if(post['deletable'])
@@ -192,7 +209,7 @@ class PostsBottomContent extends StatelessWidget {
                   child: MaterialButton(
                     child: Text("x", style: TextStyle(fontSize: 19,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white)),
+                        color: hrefColor)),
                     onPressed: () =>
                     {
                       deletePost(post['id'])
@@ -200,50 +217,76 @@ class PostsBottomContent extends StatelessWidget {
                     minWidth: 10,
                   )
                 ),
-                Container(
-                    alignment: Alignment.centerRight,
-                    padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
-                    child: MaterialButton(
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.flag, size: 13, color:Colors.white),
-                          Container(
-                            margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
-                            child: Text("Report", style: TextStyle(color: Colors.white)),
-                          )
-                        ],
+                Row(
+                  children: <Widget> [
+                    Container(
+                        padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
+                        child: MaterialButton(
+                          child: Text("Hide", style: TextStyle(color: hrefColor)),
+                          onPressed: () =>
+                          {
+                            _confirmationHidePost("Are you sure you would like to hide this post?")
+                          },
+                          minWidth: 15,
+                        )
+                    ),
+                    Container(
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
+                        child: MaterialButton(
+                          child: Row(
+                            children: <Widget>[
+                              Icon(Icons.flag, size: 13, color: hrefColor),
+                              Container(
+                                margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
+                                child: Text("Report", style: TextStyle(color: hrefColor)),
+                              )
+                            ],
+                          ),
+                          onPressed: () =>
+                          {
+                            _confirmationFlagPost("Are you sure you would like to flag this post?")
+                          },
+                        )
                       ),
-                      onPressed: () =>
-                      {
-                        _confirmation("Are you sure you would like to flag this post?")
-                      },
-                    )
-                ),
+                    ]
+                )
               ]
           )
         else
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget> [
-            Container(
-              padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
-              child: MaterialButton(
-                child: Row(
-                    children: <Widget>[
-                        Icon(Icons.flag, size: 13, color:Colors.white),
-                        Container(
-                          margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
-                          child: Text("Report", style: TextStyle(color: Colors.white)),
-                        )
-                    ],
-                  ),
-                onPressed: () =>
-                  {
-                  _confirmation("Are you sure you would like to flag this post?")
-                  },
-                  minWidth: 15,
-                )
+              Container(
+                  padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
+                  child: MaterialButton(
+                      child: Text("Hide", style: TextStyle(color: hrefColor)),
+                    onPressed: () =>
+                    {
+                      _confirmationHidePost("Are you sure you would like to hide this post?")
+                    },
+                    minWidth: 15,
+                  )
               ),
+              Container(
+                padding: EdgeInsets.fromLTRB(0, 130, 0, 3),
+                child: MaterialButton(
+                  child: Row(
+                      children: <Widget>[
+                          Icon(Icons.flag, size: 13, color: hrefColor),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(3, 0, 0, 0),
+                            child: Text("Report", style: TextStyle(color: hrefColor)),
+                          )
+                      ],
+                    ),
+                  onPressed: () =>
+                    {
+                    _confirmationFlagPost("Are you sure you would like to flag this post?")
+                    },
+                    minWidth: 15,
+                  )
+                ),
             ]
           )
       ]
@@ -354,6 +397,29 @@ class PostsBottomContent extends StatelessWidget {
     return null;
   }
 
+  Future _hidePost(id) async {
+    print("hide post/hide/$id");
+
+    http.Response resp;
+
+    try {
+      resp = await http.post(
+          C.API_URI + "post/hide/$id",
+          headers: {
+            "cookie": this.session
+          }
+      );
+      print(resp.body.toString());
+      dynamic status = jsonDecode(resp.body.toString());
+      if(status['success']){
+        navigatePosts();
+      }
+    }catch(e){
+      print("error $e");
+    }
+    return null;
+  }
+
   void navigatePosts(){
     navigationService.navigateTo('/posts');
   }
@@ -382,7 +448,7 @@ class PostsBottomContent extends StatelessWidget {
       );
   }
 
-  void _confirmation(message){
+  void _confirmationFlagPost(message){
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -402,6 +468,34 @@ class PostsBottomContent extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                   _flag(post['id'], false);
+                },
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+  void _confirmationHidePost(message){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Message"),
+            content: new Text(message),
+            actions: <Widget>[
+              new FlatButton(
+                  child: new Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }
+              ),
+              new FlatButton(
+                child: new Text("Hide Post!"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _hidePost(post['id']);
                 },
               ),
             ],
