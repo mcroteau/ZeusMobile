@@ -7,6 +7,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:zeus/assets/zeus_icons.dart';
 import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
 import 'package:zeus/components/searchbox.dart';
@@ -70,8 +71,16 @@ class _PublishState extends BaseState<Publish>{
                   ),
                  Container(
                       alignment: Alignment.topLeft,
-                      margin: EdgeInsets.fromLTRB(20, 30, 30, 30),
-                      child: Text("Publish Post", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 29))
+                      margin: EdgeInsets.fromLTRB(20, 30, 30, 40),
+                      child: Row(
+                          children: <Widget> [
+//                            Container(
+//                              margin: EdgeInsets.fromLTRB(0, 0, 30, 0),
+//                              child: Icon(Zeus.icon, size:21, color: Colors.lightBlue,),
+//                            ),
+                            Text("Publish Post", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 29))
+                          ]
+                      )
                  ),
                  Row(
                      children: <Widget>[
@@ -84,7 +93,7 @@ class _PublishState extends BaseState<Publish>{
                        ),
                        Expanded(
                          child: Container(
-                           padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                           padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
                            child: TextField(
                              decoration: InputDecoration(
                                  hintText: "What's on your mind?",
@@ -218,7 +227,7 @@ class _PublishState extends BaseState<Publish>{
             )
         );
       }
-      
+
       var response;
 
       try {
