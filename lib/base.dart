@@ -55,6 +55,19 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
     );
   }
 
+  void showGlobalDialogNoOkay(String content, Function funct){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // return object of type Dialog
+          return AlertDialog(
+            title: new Text("Message"),
+            content: new Text(content),
+          );
+        }
+    );
+  }
+
   void confirmation(message, funct){
     showDialog(
         context: context,

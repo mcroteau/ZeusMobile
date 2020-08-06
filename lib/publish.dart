@@ -25,6 +25,8 @@ class _PublishState extends BaseState<Publish>{
   String message = "";
   String session;
 
+  bool publishing = false;
+
   TextEditingController controller;
   NavigationService navigationService;
 
@@ -44,19 +46,6 @@ class _PublishState extends BaseState<Publish>{
     this.navigationService = Modular.get<NavigationService>();
 
     return new Scaffold(
-      appBar: new AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(
-          color: Colors.black, //change your color here
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            navigationService.navigateTo("/posts");
-          },
-        ),
-      ),
       body:getBody(),
       backgroundColor: Colors.white,
     );
@@ -69,10 +58,25 @@ class _PublishState extends BaseState<Publish>{
            if(snapshot.hasData)
              return Column(
                children: <Widget>[
+                  Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.fromLTRB(20, 60, 30, 30),
+                      child: GestureDetector(
+                        child: Icon(Icons.arrow_back),
+                        onTap: () => {
+                          navigationService.goBack()
+                        },
+                      )
+                  ),
+                 Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.fromLTRB(20, 30, 30, 30),
+                      child: Text("Publish Post", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 29))
+                 ),
                  Row(
                      children: <Widget>[
                        Container(
-                           padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                           padding: EdgeInsets.fromLTRB(20, 0, 10, 10),
                            child: CircleAvatar(
                              backgroundImage: NetworkImage(C.API_URI + snapshot.data['imageUri']),
                              radius: 20,
@@ -95,7 +99,7 @@ class _PublishState extends BaseState<Publish>{
                      ]
                  ),
                  Container(
-                   padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                   padding: EdgeInsets.fromLTRB(7, 30, 0, 10),
                    child: MaterialButton(
                        onPressed: () =>
                            _openImageExplorer(),
@@ -115,8 +119,13 @@ class _PublishState extends BaseState<Publish>{
                          height: 50,
                          child: RaisedButton(
                            onPressed: () => _publish(),
-                           color: Colors.lightBlue,
-                           child: new Text("Publish Post!", style: TextStyle(color:Colors.white)),
+                           color: Colors.yellowAccent,
+                           child: new Text("Share!", style: TextStyle(fontSize:17, fontWeight: FontWeight.w700, color: Colors.black)),
+                           padding: EdgeInsets.fromLTRB(49, 15, 49, 15),
+                           shape: RoundedRectangleBorder(
+                               borderRadius: BorderRadius.circular(28.0),
+                               side: BorderSide(color: Colors.white, width: 3)
+                           ),
                          ),
                        ),
                        alignment: Alignment.topRight,
@@ -169,55 +178,75 @@ class _PublishState extends BaseState<Publish>{
 
   Future _publish() async {
     print("publish $_image");
-    
-    var req = http.MultipartRequest('post', Uri.parse(C.API_URI + "post/share"));
-    req.headers['cookie'] = this.session;
-    req.headers['Content-Type'] = "application/json";
-    req.headers['Accept'] = "application/json";
-    
-    print("controller: $controller.text");
-    
-    req.fields['content'] = controller.text;
-    
-    if(_image != null) {
-      req.files.add(
-          http.MultipartFile(
-              'imageFiles',
-              _image.readAsBytes().asStream(),
-              _image.lengthSync(),
-              filename: _image
-                  .toString()
-                  .split("/")
-                  .last
-          )
-      );
-    }
 
-    if(controller.text == "" &&
-        _image == null &&
-          _video == null){
-      super.showGlobalDialog("You didn't say anything, what's up?", null);
-      return false;
-    }
 
-    var response;
+    if(!publishing) {
 
-    try {
-      http.StreamedResponse resp = await req.send();
-      response = await resp.stream.bytesToString();
-      print("response $response");
-
-      var json = jsonDecode(response);
-      if(json['error'] != null){
-        super.showGlobalDialog("Something went wrong. Images must be either jpg, png or gif", null);
-      }
-      else{
-        controller.text = "";
-        super.showGlobalDialog("Successfully published post... check it.", navigatePosts);
+      if (controller.text == "" &&
+          _image == null &&
+          _video == null) {
+        super.showGlobalDialog("You didn't say anything, what's up?", null);
+        return false;
       }
 
-    }catch(e){
-      print("error $e");
+      setState(() {
+        publishing = true;
+      });
+
+      super.showGlobalDialogNoOkay("Publishing, please wait... it has to go through the internets and stuff.", null);
+
+      var req = http.MultipartRequest(
+          'post', Uri.parse(C.API_URI + "post/share"));
+      req.headers['cookie'] = this.session;
+      req.headers['Content-Type'] = "application/json";
+      req.headers['Accept'] = "application/json";
+
+      print("controller: $controller.text");
+
+      req.fields['content'] = controller.text;
+
+      if (_image != null) {
+        req.files.add(
+            http.MultipartFile(
+                'imageFiles',
+                _image.readAsBytes().asStream(),
+                _image.lengthSync(),
+                filename: _image
+                    .toString()
+                    .split("/")
+                    .last
+            )
+        );
+      }
+      
+      var response;
+
+      try {
+        http.StreamedResponse resp = await req.send();
+        response = await resp.stream.bytesToString();
+        print("response $response");
+
+        var json = jsonDecode(response);
+        if (json['error'] != null) {
+          navigationService.goBack();
+          super.showGlobalDialog(
+              "Something went wrong. Images must be either jpg, png or gif",
+              null);
+        }
+        else {
+          navigationService.goBack();
+          controller.text = "";
+          super.showGlobalDialog(
+              "Successfully published post... check it.", navigatePosts);
+        }
+
+        setState(() {
+          publishing = false;
+        });
+
+      } catch (e) {
+        print("error $e");
+      }
     }
 
   }
