@@ -79,6 +79,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader> with AutomaticKeepAliveClie
                             Container(
                               padding: EdgeInsets.fromLTRB(0, 12, 0, 0),
                               child: PopupMenuButton<String>(
+                                elevation: 3,
                                 icon: Icon(Icons.menu, color: Colors.black12),
                                 onSelected: choiceAction,
                                 itemBuilder: (BuildContext context) {

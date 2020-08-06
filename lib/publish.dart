@@ -60,8 +60,12 @@ class _PublishState extends BaseState<Publish>{
              return Column(
                children: <Widget>[
                   Container(
+                    height:40,
+                    color:Colors.lightBlue,
+                  ),
+                  Container(
                       alignment: Alignment.topLeft,
-                      margin: EdgeInsets.fromLTRB(20, 60, 30, 30),
+                      margin: EdgeInsets.fromLTRB(20, 49, 30, 30),
                       child: GestureDetector(
                         child: Icon(Icons.arrow_back),
                         onTap: () => {
