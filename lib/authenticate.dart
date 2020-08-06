@@ -99,24 +99,24 @@ class _AuthenticateState extends BaseState<Authenticate>{
                 ),
               ),
             ),
-             Container(
-               padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-               child: RaisedButton(
-                 onPressed: () => {
-                   _signinAdmin()
-                 },
-                 child: new Text("Admin!", style: TextStyle(color: Colors.white)),
-               ),
-             ),
-             Container(
-               padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-               child: RaisedButton(
-                 onPressed: () => {
-                   _signinGuest()
-                 },
-                 child: new Text("Guest!", style: TextStyle(color: Colors.white)),
-               ),
-             ),
+//             Container(
+//               padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+//               child: RaisedButton(
+//                 onPressed: () => {
+//                   _signinAdmin()
+//                 },
+//                 child: new Text("Admin!", style: TextStyle(color: Colors.white)),
+//               ),
+//             ),
+//             Container(
+//               padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+//               child: RaisedButton(
+//                 onPressed: () => {
+//                   _signinGuest()
+//                 },
+//                 child: new Text("Guest!", style: TextStyle(color: Colors.white)),
+//               ),
+//             ),
             Container(
                 padding: EdgeInsets.fromLTRB(30, 50, 0, 0),
                 child: GestureDetector(
