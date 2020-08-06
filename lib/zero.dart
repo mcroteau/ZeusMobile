@@ -39,37 +39,25 @@ class _ZeroState extends State<Zero> {
           children: <Widget>[
             Container(
               alignment: Alignment.center,
-              child:
-                Ink(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 4.0),
-                    color: Colors.white,
-                    shape: BoxShape.rectangle,
-                  ),
-                  child: InkWell(
-                    //This keeps the splash effect within the circle
-                    borderRadius: BorderRadius.circular(10.0), //Something large to ensure a circle
-                    onTap: ()=>{},
-                    child: Padding(
+              child: Padding(
                       padding:EdgeInsets.all(59.0),
                       child: Icon(
                         Zeus.icon,
                         size: 62.0,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
-                  ),
-                ),
             ),
             Container(
-                padding: EdgeInsets.fromLTRB(30, 63, 30, 20),
-                child: Text("Welcome to Zeus")
+                padding: EdgeInsets.fromLTRB(30, 43, 30, 70),
+                child: Text("Welcome!", style: TextStyle(color: Colors.white, fontSize: 29, fontWeight: FontWeight.w900))
             ),
             Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: RaisedButton(
                 onPressed: () => _navigateAway(),
-                color: Colors.yellowAccent,
-                child: new Text("Start Sharing!", style: TextStyle(fontSize:17, fontWeight: FontWeight.w700, color: Colors.black)),
+                color: Colors.lightBlue,
+                child: new Text("Start Sharing!", style: TextStyle(fontSize:17, fontWeight: FontWeight.w700, color: Colors.white)),
                 padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(28.0),
@@ -80,7 +68,7 @@ class _ZeroState extends State<Zero> {
           ],
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black87,
     );
   }
 
@@ -98,9 +86,7 @@ class _ZeroState extends State<Zero> {
   }
 
   Future setAuthenticated() async {
-//    final prefs = await SharedPreferences.getInstance();
-//    final sesh = prefs.get(C.SESSION);
-    final sesh = GetStorage().read(C.SESSION);
+    final sesh = await GetStorage().read(C.SESSION);
     if(session != ""){
        session = sesh;
     }

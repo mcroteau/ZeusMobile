@@ -119,7 +119,8 @@ class _ZeusHeaderState extends BaseState<ZeusHeader> with AutomaticKeepAliveClie
               ]
           );
         else
-          return Center(child: CircularProgressIndicator());
+//          return Center(child: CircularProgressIndicator());
+          return Text("");
       }
     );
   }

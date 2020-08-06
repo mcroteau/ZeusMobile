@@ -34,7 +34,10 @@ class PostsBottomContent extends StatelessWidget {
   Widget build(BuildContext context) {
     this.context = context;
     this.session = GetStorage().read(C.SESSION);
-    return Stack(
+    return
+      Container(
+      child:
+      Stack(
       alignment: Alignment.topLeft,
       children: <Widget>[
         Align(
@@ -192,7 +195,7 @@ class PostsBottomContent extends StatelessWidget {
                             ),
                             onPressed: () =>
                             {
-                              _confirmationFlagPost("Are you sure you would like to flag this post?")
+                              _confirmationFlagPost("Are you sure you would like to report this post?")
                             },
                           )
                       ),
@@ -245,7 +248,7 @@ class PostsBottomContent extends StatelessWidget {
                           ),
                           onPressed: () =>
                           {
-                            _confirmationFlagPost("Are you sure you would like to flag this post?")
+                            _confirmationFlagPost("Are you sure you would like to report this post?")
                           },
                         )
                       ),
@@ -282,7 +285,7 @@ class PostsBottomContent extends StatelessWidget {
                     ),
                   onPressed: () =>
                     {
-                    _confirmationFlagPost("Are you sure you would like to flag this post?")
+                    _confirmationFlagPost("Are you sure you would like to report this post?")
                     },
                     minWidth: 15,
                   )
@@ -290,6 +293,8 @@ class PostsBottomContent extends StatelessWidget {
             ]
           )
       ]
+      ),
+        color: Color(0xfff9f9f9),
     );
   }
 
@@ -464,7 +469,7 @@ class PostsBottomContent extends StatelessWidget {
                 }
               ),
               new FlatButton(
-                child: new Text("Flag Post!"),
+                child: new Text("Report!"),
                 onPressed: () {
                   Navigator.of(context).pop();
                   _flag(post['id'], false);

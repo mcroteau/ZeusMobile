@@ -69,6 +69,7 @@ class _PostsState extends BaseState<Posts>{
               ),
           ),
         ),
+      backgroundColor: Colors.white,
     );
   }
 }

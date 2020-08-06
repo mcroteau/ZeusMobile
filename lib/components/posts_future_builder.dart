@@ -59,10 +59,10 @@ class PostsFutureBuilder extends StatelessWidget {
                               margin: EdgeInsets.fromLTRB(0, 10, 0, 13),
                               decoration: BoxDecoration(
                                 border: Border(
-                                  top : BorderSide( color: Color(0xffefefef)),
+                                  top : BorderSide( color: Color(0xffffffff)),
                                   bottom : BorderSide( color: Color(0xffe9e9e9)),
                                 ),
-                                color: Color(0xffe5e5e5),
+                                color: Color(0xfff9f9f9),
                               ),
                               child: Column(
                                   children: <Widget>[
@@ -217,7 +217,7 @@ class PostsFutureBuilder extends StatelessWidget {
               ),
             );
           }
-          return Center( child: CircularProgressIndicator());
+//          return Center( child: CircularProgressIndicator());
         }
     );
   }

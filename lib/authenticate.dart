@@ -47,8 +47,8 @@ class _AuthenticateState extends BaseState<Authenticate>{
                child:
                Ink(
                  decoration: BoxDecoration(
-                   border: Border.all(color: Colors.white, width: 4.0),
-                   color: Colors.yellowAccent,
+                   border: Border.all(color: Colors.white10, width: 4.0),
+                   color: Colors.white10,
                    shape: BoxShape.circle,
                  ),
                  child: InkWell(
@@ -108,15 +108,15 @@ class _AuthenticateState extends BaseState<Authenticate>{
 //                 child: new Text("Admin!", style: TextStyle(color: Colors.white)),
 //               ),
 //             ),
-//             Container(
-//               padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-//               child: RaisedButton(
-//                 onPressed: () => {
-//                   _signinGuest()
-//                 },
-//                 child: new Text("Guest!", style: TextStyle(color: Colors.white)),
-//               ),
-//             ),
+             Container(
+               padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+               child: RaisedButton(
+                 onPressed: () => {
+                   _signinGuest()
+                 },
+                 child: new Text("Guest!", style: TextStyle(color: Colors.white)),
+               ),
+             ),
             Container(
                 padding: EdgeInsets.fromLTRB(30, 50, 0, 0),
                 child: GestureDetector(
@@ -128,7 +128,8 @@ class _AuthenticateState extends BaseState<Authenticate>{
               )
           ],
         direction: Axis.vertical,
-        )
+        ),
+      backgroundColor: Colors.white,
     );
   }
 
