@@ -151,6 +151,7 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
 
   Future _storeProfileId(String id) async{
     GetStorage().write(C.ID, id);
+    GetStorage().write(C.NAVIGATING_MY_PROFILE, false);
   }
 
 }

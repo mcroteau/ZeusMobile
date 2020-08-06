@@ -100,7 +100,7 @@ class _ZeroState extends State<Zero> {
   Future setAuthenticated() async {
 //    final prefs = await SharedPreferences.getInstance();
 //    final sesh = prefs.get(C.SESSION);
-    final sesh = GetStorage().read(C.ID);
+    final sesh = GetStorage().read(C.SESSION);
     if(session != ""){
        session = sesh;
     }

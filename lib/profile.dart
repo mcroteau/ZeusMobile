@@ -23,7 +23,7 @@ class Profile extends StatefulWidget{
 
 class _ProfileState extends BaseState<Profile>{
 
-  _ProfileState({Key key, @required this.id});
+  _ProfileState({Key key, @required this.data});
 
   var radius = 70.0;
   var topHeight = 170.0;
@@ -34,6 +34,7 @@ class _ProfileState extends BaseState<Profile>{
   var friends = [];
   dynamic profile;
   dynamic viewsData;
+  dynamic data;
 
   bool requestSent = false;
   bool blocked = false;
@@ -47,51 +48,53 @@ class _ProfileState extends BaseState<Profile>{
   }
 
   @override
-  Widget build(BuildContext context) {
-
-    this.id = GetStorage().read(C.ID);
+  Widget build(BuildContext context){
     this.session = GetStorage().read(C.SESSION);
     this.navigationService = Modular.get<NavigationService>();
     double height = MediaQuery.of(context).size.height;
-
-    print("profile id : " + this.id.toString());
-    print("profile session : " + this.session.toString());
-
     return Scaffold(
-      body: FutureBuilder(
-          future: _fetch(),
+      body:
+      FutureBuilder(
+          future: _fetchProfile(),
           builder: (context, snapshot) {
-            if(snapshot.hasData && snapshot.data['profile'] != null)
-                 return ListView(
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return new Center(child: CircularProgressIndicator());
+              default:
+                if (snapshot.hasError)
+                  return new Text('Error: ${snapshot.error}');
+                else
+                  return new ListView(
                       shrinkWrap: true,
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 101),
                       children: <Widget>[
                         ZeusHeader(),
                         Container(
                           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Image.network(C.API_URI + snapshot.data['profile']['imageUri'], width: 50)
+                          child: Image.network(C.API_URI + profile['imageUri'], width: 50)
                         ),
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
                         child: Column(
                           children: [
-                            Text(snapshot.data['profile']['name'], style: TextStyle(color: Colors.black, fontSize: 27, fontWeight: FontWeight.w900, decoration: TextDecoration.none, fontFamily: "Roboto")),
+                            Text(profile['name'], style: TextStyle(color: Colors.black, fontSize: 27, fontWeight: FontWeight.w900, decoration: TextDecoration.none, fontFamily: "Roboto")),
                             Container(
-                              child: Text(snapshot.data['profile']['location'] != null ? snapshot.data['profile']['location'] : "", style: TextStyle(color: Colors.black, fontSize: 14, decoration: TextDecoration.none))
+                              child: Text(profile['location'] != null ? profile['location'] : "", style: TextStyle(color: Colors.black, fontSize: 14, decoration: TextDecoration.none))
                             ),
 
-                            if(snapshot.data['profile']['isFriend'])
+                            if(profile['isFriend'])
                               Container(
                                   child: Text("Friends")
                               ),
 
-                            if(!snapshot.data['profile']['isFriend'] && !snapshot.data['profile']['isOwnersAccount'])
+                            if(!profile['isFriend'] && !profile['isOwnersAccount'])
                               Container(
                                 child:  RaisedButton(
                                     child: Text("Send Buddy Request"),
                                     elevation: 3,
                                     color: Colors.yellow,
                                     textColor: Colors.black,
-                                    onPressed: !requestSent ? () => _sendReq(snapshot.data['profile']['id'].toString()) : null
+                                    onPressed: !requestSent ? () => _sendReq(profile['id'].toString()) : null
                                 )
                               ),
 
@@ -143,7 +146,7 @@ class _ProfileState extends BaseState<Profile>{
                               )
                             ),
 
-                        for(var friend in snapshot.data['friends'])
+                        for(var friend in friends)
                             Row(
                               children: <Widget>[
                                 Container(
@@ -167,7 +170,6 @@ class _ProfileState extends BaseState<Profile>{
                                       _storeProfileId(friend['friendId'].toString()).then((data){
                                         navigationService.navigateTo('/profile');
                                       });
-
                                     },
                                     child: Text(friend['name'], style: TextStyle(fontSize: 17, fontWeight: FontWeight.normal, fontFamily: "Roboto", decoration: TextDecoration.none)),
                                 )
@@ -175,7 +177,7 @@ class _ProfileState extends BaseState<Profile>{
                             ],
                           ),
 
-                        if(!snapshot.data['profile']['isOwnersAccount'])
+                        if(!profile['isOwnersAccount'])
                           Column(
                             children: <Widget> [
                               Container(
@@ -189,183 +191,23 @@ class _ProfileState extends BaseState<Profile>{
                           )
                       ]
                   );
-            else if(snapshot.hasError)
-              return Text("$snapshot.error");
-            else
-              return new Center(child: CircularProgressIndicator());
+            }
           }
       )
     );
-
-
-
-//      Scaffold(
-//      body: new FutureBuilder(
-//        future: _fetch(),
-//        builder: (context, snapshot) {
-//          if (snapshot.hasData && snapshot.data['profile'] != null) {
-//            return new Container(
-//                child: new Stack(
-//                  alignment: Alignment.topCenter,
-//                  children: <Widget>[
-//                    Container(
-//                      padding: EdgeInsets.fromLTRB(0, 110, 0, 0),
-//                      child: new CircleAvatar(
-//                          radius: radius,
-//                          backgroundImage: NetworkImage(C.API_URI + snapshot.data['profile']['imageUri'])
-//                      ),
-//                    ),
-//                    Container(
-//                        padding: EdgeInsets.fromLTRB(0, 270, 0, 0),
-//                        child: Column(
-//                          children: [
-//                            Text(snapshot.data['profile']['name'], style: TextStyle(color: Colors.black, fontSize: 27, fontWeight: FontWeight.w900, decoration: TextDecoration.none, fontFamily: "Roboto")),
-//                            Container(
-//                              child: Text(snapshot.data['profile']['location'] != null ? snapshot.data['profile']['location'] : "", style: TextStyle(color: Colors.black, fontSize: 14, decoration: TextDecoration.none))
-//                            ),
-//
-//                            if(snapshot.data['profile']['isFriend'])
-//                              Container(
-//                                  child: Text("Friends")
-//                              ),
-//
-//                            if(!snapshot.data['profile']['isFriend'] && !snapshot.data['profile']['isOwnersAccount'])
-//                              Container(
-//                                child:  RaisedButton(
-//                                    child: Text("Send Buddy Request"),
-//                                    elevation: 3,
-//                                    color: Colors.yellow,
-//                                    textColor: Colors.black,
-//                                    onPressed: !requestSent ? () => _sendReq(snapshot.data['profile']['id'].toString()) : null
-//                                )
-//                              ),
-//
-//                            if(viewsData != null)
-//                              Row(
-//                                children: <Widget>[
-//                                  Expanded(
-//                                    flex: 3,
-//                                    child: Container(
-//                                      child: Column(
-//                                        children: <Widget>[
-//                                          Container(
-//                                            child:Text(viewsData['week'].toString())
-//                                          ),
-//                                          Text("Week Visits")
-//                                        ],
-//                                      )
-//                                    )
-//                                  ),
-//                                  Expanded(
-//                                      flex: 4,
-//                                      child: Container(
-//                                          child: Column(
-//                                            children: <Widget>[
-//                                              Container(
-//                                                  child:Text(viewsData['month'].toString())
-//                                              ),
-//                                              Text("Month Visits")
-//                                            ],
-//                                          )
-//                                      )
-//                                  ),
-//                                  Expanded(
-//                                      flex: 3,
-//                                      child: Container(
-//                                          child: Column(
-//                                            children: <Widget>[
-//                                              Container(
-//                                                  child:Text(viewsData['all'].toString())
-//                                              ),
-//                                              Text("All Time Visits")
-//                                            ],
-//                                          )
-//                                      )
-//                                  )
-//                                ],
-//                              ),
-//
-//
-//                            if(snapshot.data['friends'].length > 0)
-//                              Container(
-//                                padding: EdgeInsets.fromLTRB(30, 20, 0, 0),
-//                                alignment: Alignment.centerLeft,
-//                                child:Text("Friends", textAlign: TextAlign.left, style: TextStyle(fontSize:14, fontWeight: FontWeight.normal, color: Colors.black26, fontFamily:"Roboto", decoration: TextDecoration.none))
-//                              ),
-//
-//                            Expanded(
-//                              child: ListView(
-//                                children: <Widget>[
-//                                  for(var friend in snapshot.data['friends'])
-//                                    Row(
-//                                    children: <Widget>[
-//                                      Container(
-//                                        padding: EdgeInsets.fromLTRB(30, 10, 0, 0),
-//                                        child: GestureDetector(
-//                                          onTap: (){
-//                                            _storeProfileId(friend['friendId'].toString()).then((data){
-//                                              navigationService.navigateTo('/profile');
-//                                            });
-//                                          },
-//                                          child: CircleAvatar(
-//                                            radius: 20,
-//                                            backgroundImage: NetworkImage(C.API_URI + friend['imageUri']),
-//                                          ),
-//                                        ),
-//                                      ),
-//                                      Container(
-//                                          padding: EdgeInsets.fromLTRB(40, 10, 0, 0),
-//                                          child: GestureDetector(
-//                                            onTap: (){
-//                                              _storeProfileId(friend['friendId'].toString()).then((data){
-//                                                navigationService.navigateTo('/profile');
-//                                              });
-//
-//                                            },
-//                                            child: Text(friend['name'], style: TextStyle(fontSize: 17, fontWeight: FontWeight.normal, fontFamily: "Roboto", decoration: TextDecoration.none)),
-//                                        )
-//                                      )
-//                                    ],
-//                                  )
-//                              ],
-//                            ),
-//                            ),
-//                          ]
-//                        ),
-//                    ),
-//                    Positioned(
-//                      top:0,
-//                      left:0,
-//                      right: 0,
-//                      child : ZeusHeader(),
-//                    ),
-//                    Positioned(
-//                      bottom:0,
-//                      left:0,
-//                      right: 0,
-//                      child: ZeusHighlight(),
-//                    ),
-//                  ],
-//
-//                ),
-//              color: Colors.white,
-//            );
-//          } else if(snapshot.hasError)
-//            return Text("$snapshot.error");
-//          else
-//            return new Center(child: CircularProgressIndicator());
-//        }
-//      )
-//    );
   }
+
 
   Future _storeProfileId(id) async{
     GetStorage().write(C.ID, id);
   }
 
-  Future<dynamic> _fetch() async {
+  FutureOr<dynamic> _fetchProfile() async{
+    var id = await GetStorage().read(C.ID);
+    print("profile id : " + this.id.toString());
+
     http.Response profileData = await http.get(
-        C.API_URI + "profile/" + this.id.toString(),
+        C.API_URI + "profile/" + id.toString(),
         headers : {
           "content-type": "application/json",
           "accept": "application/json",
@@ -376,6 +218,7 @@ class _ProfileState extends BaseState<Profile>{
     var data = jsonDecode(profileData.body.toString());
     profile = data['profile'];
     friends = data['friends'];
+
     setBlockedButton();
 
     if(profile['isOwnersAccount']) {
@@ -394,6 +237,7 @@ class _ProfileState extends BaseState<Profile>{
       navigationService.navigateTo('/authenticate');
     }
 
+    this.data = data;
     return data;
   }
 
@@ -411,8 +255,6 @@ class _ProfileState extends BaseState<Profile>{
     print(req.body.toString());
     var data = jsonDecode(req.body.toString());
 
-    GetStorage().write(C.ID, this.id);
-
     if(data['success']){
       super.showGlobalDialog("Successfully sent buddy request.", null);
       setState(() {
@@ -425,6 +267,7 @@ class _ProfileState extends BaseState<Profile>{
   }
 
   void setBlockedButton(){
+
     print('profile' + profile.toString());
     if(profile != null && profile['blocked']){
       print("blocked!");

@@ -44,12 +44,11 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
 
   @override
   Widget build(BuildContext context) {
-    _fetch();
     this.session = GetStorage().read(C.SESSION);
     this.controller = new TextEditingController();
     this.navigationService = Modular.get<NavigationService>();
     return FutureBuilder(
-      future:_fetch(),
+      future:_fetchProfileInfo(),
       builder: (context, snapshot) {
         if (snapshot.hasData)
           return Stack(
@@ -123,13 +122,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
     );
   }
 
-  Future _storeProfileId(id) async{
-    this.id = id;
-    GetStorage().write(C.PROFILE_ID, id);
-  }
-
-
-  Future<Map<String, dynamic>> _fetch() async {
+  Future<Map<String, dynamic>> _fetchProfileInfo() async {
     try {
       http.Response resp = await http.get(
           C.API_URI + "account/info",
@@ -143,7 +136,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
       var data = jsonDecode(resp.body.toString());
       print("set " + data['id'].toString());
 
-      GetStorage().write(C.ID, data['id'].toString());
+      GetStorage().write(C.PROFILE_ID, data['id'].toString());
 
       return data;
 
@@ -160,8 +153,11 @@ class _ZeusHeaderState extends BaseState<ZeusHeader>{
     if (choice == C.FirstItem) {
       navigationService.navigateTo('/posts');
     } else if (choice == C.SecondItem) {
-      print("z: " + GetStorage().read(C.ID));
-      navigationService.navigateTo('/profile');
+      _fetchProfileInfo().then((data){
+        GetStorage().write(C.ID, data['id']);
+        print("navigation my profile : " + GetStorage().read(C.PROFILE_ID));
+        navigationService.navigateTo('/profile');
+      });
     } else if (choice == C.ThirdItem) {
       navigationService.navigateTo('/invitations');
     } else if (choice == C.FourthItem) {

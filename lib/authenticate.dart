@@ -99,6 +99,24 @@ class _AuthenticateState extends BaseState<Authenticate>{
                 ),
               ),
             ),
+             Container(
+               padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+               child: RaisedButton(
+                 onPressed: () => {
+                   _signinAdmin()
+                 },
+                 child: new Text("Admin!", style: TextStyle(color: Colors.white)),
+               ),
+             ),
+             Container(
+               padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+               child: RaisedButton(
+                 onPressed: () => {
+                   _signinGuest()
+                 },
+                 child: new Text("Guest!", style: TextStyle(color: Colors.white)),
+               ),
+             ),
             Container(
                 padding: EdgeInsets.fromLTRB(30, 50, 0, 0),
                 child: GestureDetector(
@@ -146,6 +164,74 @@ class _AuthenticateState extends BaseState<Authenticate>{
         navigationService.navigateTo('/suspended');
       }else{
           navigationService.navigateTo('/posts');
+      }
+    }catch(e){
+      print("error : $e");
+      navigationService.navigateTo('/authenticate');
+    }
+  }
+
+  Future _signinAdmin() async{
+    try {
+
+      http.Response resp = await http.post(
+          C.API_URI + "authenticate_mobile",
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            "username": "croteau.mike+admin@gmail.com",
+            "password": "password"
+          }));
+
+      print(resp.toString());
+      var session = "";
+      resp.headers.forEach((key, value) {
+        if(key == "set-cookie")session = value.split(";")[0];
+      });
+      print(resp.body.toString());
+      print("session: $session");
+
+      GetStorage().write(C.SESSION, session);
+
+      dynamic account = jsonDecode(resp.body.toString());
+
+      if(account['profile']['disabled']){
+        navigationService.navigateTo('/suspended');
+      }else{
+        navigationService.navigateTo('/posts');
+      }
+    }catch(e){
+      print("error : $e");
+      navigationService.navigateTo('/authenticate');
+    }
+  }
+
+  Future _signinGuest() async{
+    try {
+
+      http.Response resp = await http.post(
+          C.API_URI + "authenticate_mobile",
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            "username": "mjackson.guest@outlook.com",
+            "password": "guest123"
+          }));
+
+      print(resp.toString());
+      var session = "";
+      resp.headers.forEach((key, value) {
+        if(key == "set-cookie")session = value.split(";")[0];
+      });
+      print(resp.body.toString());
+      print("session: $session");
+
+      GetStorage().write(C.SESSION, session);
+
+      dynamic account = jsonDecode(resp.body.toString());
+
+      if(account['profile']['disabled']){
+        navigationService.navigateTo('/suspended');
+      }else{
+        navigationService.navigateTo('/posts');
       }
     }catch(e){
       print("error : $e");

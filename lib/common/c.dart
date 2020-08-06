@@ -7,6 +7,7 @@ class C {
   static const PROFILE_ID = "profile_id";
   static const POST_ID = "post_id";
   static const SESSION = "session";
+  static const NAVIGATING_MY_PROFILE = "navigating_profile";
 
   static const GO = TextStyle(fontSize: 23, fontWeight: FontWeight.bold, color: Colors.white);
   static const ZEUS = TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Color.fromRGBO(0, 182, 255, 1.0));
