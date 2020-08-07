@@ -3,7 +3,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -12,12 +11,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:zeus/assets/zeus_icons.dart';
 import 'package:zeus/base.dart';
 import 'package:zeus/common/c.dart';
-import 'package:zeus/posts.dart';
-import 'package:zeus/profile.dart';
-import 'package:zeus/search.dart';
 import 'package:zeus/services/navigation_service.dart';
-import 'package:zeus/zero.dart';
-//import 'package:zeus/services/navigation_service.dart';
 
 class ZeusHeader extends StatefulWidget {
   _ZeusHeaderState createState() => _ZeusHeaderState();
