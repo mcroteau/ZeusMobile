@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
@@ -31,10 +32,14 @@ class _ZeroState extends State<Zero> {
 
   @override
   Widget build(BuildContext context) {
-    this.navigationService = Modular.get<NavigationService>();
+//    new Future.delayed(const Duration(milliseconds: 200), navigateAway);
     return new Scaffold(
-      body: Container(
-        padding: EdgeInsets.fromLTRB(30, 67, 30, 0),
+      body: GestureDetector(
+        onTap: () => navigateAway(),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.fromLTRB(30, 72, 30, 0),
         child: Column(
           children: <Widget>[
             Container(
@@ -44,38 +49,48 @@ class _ZeroState extends State<Zero> {
                       child: Icon(
                         Zeus.icon,
                         size: 62.0,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
             ),
             Container(
-                padding: EdgeInsets.fromLTRB(30, 43, 30, 70),
-                child: Text("Welcome!", style: TextStyle(color: Colors.white, fontSize: 29, fontWeight: FontWeight.w900))
+                padding: EdgeInsets.fromLTRB(30, 63, 30, 70),
+                child: Text("Welcome!", style: TextStyle(color: Colors.black, fontSize: 29, fontWeight: FontWeight.w900))
             ),
             Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: RaisedButton(
-                onPressed: () => _navigateAway(),
-                color: Colors.lightBlue,
-                child: new Text("Start Sharing!", style: TextStyle(fontSize:17, fontWeight: FontWeight.w700, color: Colors.white)),
-                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(28.0),
-                  side: BorderSide(color: Colors.white, width: 3)
-                ),
-              ),
-            )
+                padding: EdgeInsets.fromLTRB(30, 23, 30, 70),
+                child: Text("Like. Share. Obey!", style: TextStyle(color: Colors.black, fontSize: 19, fontWeight: FontWeight.w300))
+            ),
+            Container(
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.fromLTRB(30, 0, 30, 10),
+                child: Text("Continue...", textAlign:TextAlign.right, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.w300, decoration: TextDecoration.underline))
+            ),
+//            Container(
+//              margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+//              child: RaisedButton(
+//                onPressed: () => _navigateAway(),
+//                color: Colors.lightBlue,
+//                child: new Text("Start Sharing!", style: TextStyle(fontSize:17, fontWeight: FontWeight.w700, color: Colors.white)),
+//                padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+//                shape: RoundedRectangleBorder(
+//                  borderRadius: BorderRadius.circular(28.0),
+//                  side: BorderSide(color: Colors.white, width: 3)
+//                ),
+//              ),
+//            )
           ],
         ),
       ),
-      backgroundColor: Colors.black87,
+      ),
+      backgroundColor: Colors.yellowAccent,
     );
   }
 
 
-  void _navigateAway(){
+  void navigateAway(){
     print('navigate authenticate');
-    setAuthenticated().then((date) {
+    getSession().then((date) {
       if(session != null) {
         navigationService.navigateTo('/posts');
       }else{
@@ -85,7 +100,7 @@ class _ZeroState extends State<Zero> {
 
   }
 
-  Future setAuthenticated() async {
+  Future getSession() async {
     final sesh = await GetStorage().read(C.SESSION);
     if(session != ""){
        session = sesh;

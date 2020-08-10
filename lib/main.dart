@@ -93,7 +93,6 @@ class ZeusAppState extends State<ZeusApp>{
   }
 }
 
-
 class InitModule extends MainModule {
 
   @override
@@ -105,5 +104,6 @@ class InitModule extends MainModule {
   List<Router> get routers => [];
 
   Widget get bootstrap => ZeusApp();
+
 }
 
