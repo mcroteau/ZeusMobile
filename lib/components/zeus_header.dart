@@ -50,7 +50,7 @@ class _ZeusHeaderState extends BaseState<ZeusHeader> with AutomaticKeepAliveClie
           return Stack(
               children: <Widget>[
                 Container(
-                    padding: EdgeInsets.fromLTRB(3, 42, 5, 0),
+                    padding: EdgeInsets.fromLTRB(7, 42, 5, 0),
                     child: TextField(
                       style: TextStyle( fontSize: 24, fontWeight: FontWeight.w300),
                       decoration: InputDecoration(

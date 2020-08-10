@@ -22,6 +22,7 @@ class _ZeroState extends State<Zero> {
 
 
   String session;
+  Future future;
   NavigationService navigationService;
 
   @override
@@ -32,7 +33,8 @@ class _ZeroState extends State<Zero> {
 
   @override
   Widget build(BuildContext context) {
-//    new Future.delayed(const Duration(milliseconds: 200), navigateAway);
+    this.navigationService = Modular.get<NavigationService>();
+//    this.future = new Future.delayed(const Duration(milliseconds: 3000), navigateAway);
     return new Scaffold(
       body: GestureDetector(
         onTap: () => navigateAway(),

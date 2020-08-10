@@ -49,7 +49,7 @@ class PostsFutureBuilder extends StatelessWidget {
                   ZeusHeader(),
                   Container(
                     padding: EdgeInsets.fromLTRB(7, 12, 0, 20),
-                    child: Text("Latest Posts", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
+                    child: Text("Latest Posts", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.w900)),
                   ),
                   for (var p in snapshot.data)
                     if(!p['hidden'] && !p['flagged'])

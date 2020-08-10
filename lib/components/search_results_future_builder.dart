@@ -55,7 +55,7 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
                   ZeusHeader(),
                   Container(
                     padding: EdgeInsets.all(10),
-                    child: Text("Search Results", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.bold)),
+                    child: Text("Search Results", style: TextStyle(fontSize: 32, fontFamily: 'Roboto', fontWeight: FontWeight.w900)),
                   ),
                   for (var p in snapshot.data['accounts'])
                     if(!p['hidden'])

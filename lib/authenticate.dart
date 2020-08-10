@@ -39,63 +39,57 @@ class _AuthenticateState extends BaseState<Authenticate>{
     this.navigationService = Modular.get<NavigationService>();
 
     return new Scaffold(
-      body: Flex(
+        resizeToAvoidBottomInset: false,
+        body: Flex (
            children: <Widget>[
-             Container(
-               padding: EdgeInsets.fromLTRB(10, 72, 53, 0),
-               alignment: Alignment.center,
-               child:
-               Ink(
-                 decoration: BoxDecoration(
-                   border: Border.all(color: Colors.white10, width: 4.0),
-                   color: Colors.white10,
-                   shape: BoxShape.circle,
-                 ),
-                 child: InkWell(
-                   //This keeps the splash effect within the circle
-                   borderRadius: BorderRadius.circular(10.0), //Something large to ensure a circle
-                   onTap: ()=>{},
-                   child: Padding(
-                     padding:EdgeInsets.all(19.0),
-                     child: Icon(
-                       Zeus.icon,
-                       size: 19.0,
-                       color: Colors.black,
-                     ),
-                   ),
-                 ),
-               ),
+//             Container(
+//               padding: EdgeInsets.fromLTRB(10, 72, 53, 0),
+//               alignment: Alignment.center,
+//               child: Icon(
+//                       Zeus.icon,
+//                       size: 19.0,
+//                       color: Colors.yellowAccent,
+//                     ),
+//             ),
+             Row(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(53, 92, 3, 0),
+                  child: Icon(Zeus.icon, size: 19, color: Colors.black),
+                ),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 92, 53, 0),
+                  child: Text("Signin", style: TextStyle( fontSize: 29, fontWeight: FontWeight.w900, color: Colors.black))
+                  ),
+                ]
              ),
              Container(
-                 padding: EdgeInsets.fromLTRB(10, 20, 53, 0),
-                 child: Text("Signin", style: TextStyle( fontSize: 42))
-             ),
-             Container(
-               padding: EdgeInsets.fromLTRB(10, 20, 72, 0),
+               padding: EdgeInsets.fromLTRB(30, 31, 72, 0),
                 child: TextField(
-                  decoration: InputDecoration(hintText: "Email"),
+                  decoration: InputDecoration(hintText: "Email address", hintStyle: TextStyle(color: Colors.black87)),
                   controller: emailController,
+                  cursorColor: Colors.white,
+                  style: TextStyle(color:Colors.white, fontSize: 21, fontWeight: FontWeight.w200),
                 ),
              ),
              Container(
-                 padding: EdgeInsets.fromLTRB(10, 10, 72, 0),
+                 padding: EdgeInsets.fromLTRB(30, 10, 72, 0),
                 child: TextField(
-                  decoration: InputDecoration(hintText: "Password"),
+                  decoration: InputDecoration(hintText: "Password", hintStyle: TextStyle(color: Colors.black87)),
                   controller: passwordController,
                   obscureText: true,
+                  style: TextStyle(color:Colors.white, fontSize: 21, fontWeight: FontWeight.w200),
                )
              ),
              Container(
               padding: EdgeInsets.fromLTRB(30, 50, 0, 0),
               child: RaisedButton(
-                onPressed: () => {
-                  _signin()
-                },
-                color: Colors.lightBlue,
-                child: new Text("Signin!", style: TextStyle(color: Colors.white)),
+                onPressed: () =>  _signin(),
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                color: Colors.yellowAccent,
+                child: new Text("Signin", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14, color: Colors.black)),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(28.0),
-                    side: BorderSide(color: Colors.white, width: 3)
+                    borderRadius: BorderRadius.circular(3.0),
                 ),
               ),
             ),
@@ -108,19 +102,19 @@ class _AuthenticateState extends BaseState<Authenticate>{
 //                 child: new Text("Admin!", style: TextStyle(color: Colors.white)),
 //               ),
 //             ),
-             Container(
-               padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-               child: RaisedButton(
-                 onPressed: () => {
-                   _signinGuest()
-                 },
-                 child: new Text("Guest!", style: TextStyle(color: Colors.white)),
-               ),
-             ),
+//             Container(
+//               padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+//               child: RaisedButton(
+//                 onPressed: () => {
+//                   _signinGuest()
+//                 },
+//                 child: new Text("Guest!", style: TextStyle(color: Colors.white)),
+//               ),
+//             ),
             Container(
                 padding: EdgeInsets.fromLTRB(30, 50, 0, 0),
                 child: GestureDetector(
-                  child: Text("Signup Account!", style: TextStyle(color: Colors.blueAccent)),
+                  child: Text("Signup Account!", style: TextStyle(color: Colors.blue)),
                   onTap: () => {
                     _navigateRegister()
                   },

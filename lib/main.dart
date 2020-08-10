@@ -44,8 +44,8 @@ class ZeusAppState extends State<ZeusApp>{
     return MaterialApp(
       navigatorKey: navigationService.navigatorKey,
       debugShowCheckedModeBanner: false,
-      onGenerateRoute: (routeSettings) {
-        if (routeSettings.name == "/posts") {
+      onGenerateRoute: (settings) {
+        if (settings.name == "/posts") {
           return PageRouteBuilder(
             pageBuilder: (_, __, ___) => Posts(),
             transitionsBuilder: (_, anim, __, child) {
@@ -53,7 +53,7 @@ class ZeusAppState extends State<ZeusApp>{
             },
           );
         }
-        switch (routeSettings.name) {
+        switch (settings.name) {
           case '/':
             return MaterialPageRoute(builder: (context) => Zero());
           case '/search':
