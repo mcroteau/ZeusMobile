@@ -97,7 +97,7 @@ class _SearchResultsBuilderState extends BaseState<SearchResultsFutureBuilder>{
                                                       navigationService.navigateTo('/profile');
                                                     });
                                                   },
-                                                  child: Text(p['name'], overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                                                  child: Text(p['name'], overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold))
                                                 )
                                             ),
 

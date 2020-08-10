@@ -64,7 +64,7 @@ class _AuthenticateState extends BaseState<Authenticate>{
                 ]
              ),
              Container(
-               padding: EdgeInsets.fromLTRB(30, 31, 72, 0),
+               padding: EdgeInsets.fromLTRB(30, 47, 72, 0),
                 child: TextField(
                   decoration: InputDecoration(hintText: "Email address", hintStyle: TextStyle(color: Colors.black87)),
                   controller: emailController,
@@ -87,7 +87,7 @@ class _AuthenticateState extends BaseState<Authenticate>{
                 onPressed: () =>  _signin(),
                 padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                 color: Colors.yellowAccent,
-                child: new Text("Signin", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14, color: Colors.black)),
+                child: new Text("Signin!", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14, color: Colors.black)),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(3.0),
                 ),

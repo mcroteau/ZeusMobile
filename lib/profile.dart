@@ -77,8 +77,9 @@ class _ProfileState extends BaseState<Profile> with AutomaticKeepAliveClientMixi
                       children: <Widget>[
                         ZeusHeader(),
                         Container(
+                          width: MediaQuery.of(context).size.width,
                           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Image.network(C.API_URI + profile['imageUri'], width: 50)
+                          child: Image.network(C.API_URI + profile['imageUri'], fit: BoxFit.cover)
                         ),
                       Container(
                         padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
